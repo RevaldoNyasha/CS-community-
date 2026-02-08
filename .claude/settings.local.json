@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__laravel-boost__application-info",
+      "mcp__laravel-boost__database-schema",
+      "mcp__laravel-boost__list-routes",
+      "Bash(php artisan:*)",
+      "Bash(\"/c/Users/Revaldo/.config/herd/bin/php.bat\" artisan make:migration add_is_admin_to_users_table --no-interaction)",
+      "Bash(\"/c/Users/Revaldo/.config/herd/bin/php.bat\" artisan make:controller DashboardController --no-interaction)",
+      "Bash(\"/c/Users/Revaldo/.config/herd/bin/php.bat\" artisan make:model Announcement -mfs --no-interaction)",
+      "Bash(\"/c/Users/Revaldo/.config/herd/bin/php.bat\" artisan make:controller AnnouncementController --resource --no-interaction)"
+    ]
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "laravel-boost"
+  ]
+}
