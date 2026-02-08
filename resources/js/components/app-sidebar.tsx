@@ -1,5 +1,15 @@
 import { Link } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid } from 'lucide-react';
+import {
+    BookOpen,
+    Briefcase,
+    Folder,
+    GraduationCap,
+    LayoutGrid,
+    Megaphone,
+    MessageSquare,
+    Trophy,
+    Video,
+} from 'lucide-react';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
@@ -13,19 +23,49 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
-import type { NavItem } from '@/types';
+import type { NavGroup, NavItem } from '@/types';
 import AppLogo from './app-logo';
 
-const mainNavItems: NavItem[] = [
+const mainNavItems: (NavItem | NavGroup)[] = [
     {
         title: 'Dashboard',
         href: dashboard(),
         icon: LayoutGrid,
     },
     {
-        title: 'Dashboard',
-        href: dashboard(),
-        icon: LayoutGrid,
+        title: 'Announcements',
+        href: '/announcements',
+        icon: Megaphone,
+    },
+    {
+        title: 'Study Resources',
+        icon: GraduationCap,
+        items: [
+            { title: 'All Resources', href: '/study-resources' },
+            { title: 'Past Exams', href: '/study-resources?type=past_exam' },
+            { title: 'Lecture Notes', href: '/study-resources?type=lecture_note' },
+            { title: 'Modules', href: '/study-resources?type=module' },
+        ],
+    },
+    {
+        title: 'Tutorials',
+        href: '/tutorials',
+        icon: Video,
+    },
+    {
+        title: 'Community Forum',
+        href: '/forum',
+        icon: MessageSquare,
+    },
+    {
+        title: 'Career Guidance',
+        href: '/career-guidance',
+        icon: Briefcase,
+    },
+    {
+        title: 'Achievements & Alumni',
+        href: '/achievements',
+        icon: Trophy,
     },
 ];
 
