@@ -21,6 +21,7 @@ Route::get('/', function () {
 })->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
+    // updated
     Route::get('dashboard', DashboardController::class)->name('dashboard');
 
     Route::resource('announcements', AnnouncementController::class)->except(['show']);
@@ -42,4 +43,4 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('testimonials', TestimonialController::class)->only(['store', 'destroy']);
 });
 
-require __DIR__.'/settings.php';
+require __DIR__ . '/settings.php';
