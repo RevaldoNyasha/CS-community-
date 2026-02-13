@@ -19,7 +19,7 @@ test('regular users are redirected to welcome page after login', function () {
     ]);
 
     $this->assertAuthenticated();
-    $response->assertRedirect('/');
+    $response->assertRedirect(route('dashboard'));
 });
 
 test('admin users are redirected to admin dashboard after login', function () {

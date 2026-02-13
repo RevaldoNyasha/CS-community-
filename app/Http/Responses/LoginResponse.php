@@ -10,9 +10,9 @@ class LoginResponse implements LoginResponseContract
     public function toResponse($request): mixed
     {
         if ($request->user()->role === UserRole::Admin) {
-            return redirect()->intended('/admin');
+            return redirect()->intended(route('admin.dashboard'));
         }
 
-        return redirect()->intended('/');
+        return redirect()->intended(route('dashboard'));
     }
 }
