@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Enums\UserRole;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -23,7 +23,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'is_admin',
+        'role',
     ];
 
     /**
@@ -49,52 +49,27 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'two_factor_confirmed_at' => 'datetime',
-            'is_admin' => 'boolean',
+            'role' => UserRole::class,
         ];
     }
 
     public function isAdmin(): bool
     {
-        return $this->is_admin;
+        return $this->role === UserRole::Admin;
     }
 
-    public function announcements(): HasMany
+    public function posts(): HasMany
     {
-        return $this->hasMany(Announcement::class);
+        return $this->hasMany(Post::class);
     }
 
-    public function studyResources(): HasMany
+    public function comments(): HasMany
     {
-        return $this->hasMany(StudyResource::class);
+        return $this->hasMany(Comment::class);
     }
 
-    public function tutorials(): HasMany
+    public function suggestions(): HasMany
     {
-        return $this->hasMany(Tutorial::class);
-    }
-
-    public function forumPosts(): HasMany
-    {
-        return $this->hasMany(ForumPost::class);
-    }
-
-    public function forumComments(): HasMany
-    {
-        return $this->hasMany(ForumComment::class);
-    }
-
-    public function achievements(): HasMany
-    {
-        return $this->hasMany(Achievement::class);
-    }
-
-    public function achievementRatings(): HasMany
-    {
-        return $this->hasMany(AchievementRating::class);
-    }
-
-    public function testimonials(): HasMany
-    {
-        return $this->hasMany(Testimonial::class);
+        return $this->hasMany(Suggestion::class);
     }
 }

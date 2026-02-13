@@ -1,15 +1,16 @@
 <?php
 
-use App\Http\Controllers\AchievementController;
-use App\Http\Controllers\AchievementRatingController;
-use App\Http\Controllers\AnnouncementController;
-use App\Http\Controllers\CareerResourceController;
+use App\Http\Controllers\Admin\AdminAnnouncementController;
+use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\AdminPendingController;
+use App\Http\Controllers\Admin\AdminPostController;
+use App\Http\Controllers\Admin\AdminSettingsController;
+use App\Http\Controllers\Admin\AdminSuggestionController;
+use App\Http\Controllers\Admin\AdminUserController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\ForumCommentController;
-use App\Http\Controllers\ForumPostController;
-use App\Http\Controllers\StudyResourceController;
-use App\Http\Controllers\TestimonialController;
-use App\Http\Controllers\TutorialController;
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\SuggestionController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
@@ -20,27 +21,52 @@ Route::get('/', function () {
     ]);
 })->name('home');
 
+// User routes
 Route::middleware(['auth', 'verified'])->group(function () {
-    // updated
     Route::get('dashboard', DashboardController::class)->name('dashboard');
 
-    Route::resource('announcements', AnnouncementController::class)->except(['show']);
+    Route::get('resources', [PostController::class, 'index'])
+        ->name('resources.index')
+        ->defaults('type', 'resource');
 
-    Route::resource('study-resources', StudyResourceController::class);
+    Route::get('hackathons', [PostController::class, 'index'])
+        ->name('hackathons.index')
+        ->defaults('type', 'hackathon');
 
-    Route::resource('tutorials', TutorialController::class);
+    Route::get('posts/create', [PostController::class, 'create'])->name('posts.create');
+    Route::post('posts', [PostController::class, 'store'])->name('posts.store');
+    Route::get('posts/{post}', [PostController::class, 'show'])->name('posts.show');
+    Route::get('posts/{post}/download', [PostController::class, 'download'])->name('posts.download');
 
-    Route::resource('forum', ForumPostController::class)->parameters(['forum' => 'forumPost']);
-    Route::post('forum/{forumPost}/comments', [ForumCommentController::class, 'store'])->name('forum.comments.store');
-    Route::put('forum/comments/{forumComment}', [ForumCommentController::class, 'update'])->name('forum.comments.update');
-    Route::delete('forum/comments/{forumComment}', [ForumCommentController::class, 'destroy'])->name('forum.comments.destroy');
+    Route::post('posts/{post}/comments', [CommentController::class, 'store'])->name('comments.store');
+    Route::delete('comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 
-    Route::resource('career-guidance', CareerResourceController::class)->parameters(['career-guidance' => 'careerResource']);
-
-    Route::resource('achievements', AchievementController::class);
-    Route::post('achievements/{achievement}/rate', [AchievementRatingController::class, 'store'])->name('achievements.rate');
-
-    Route::resource('testimonials', TestimonialController::class)->only(['store', 'destroy']);
+    Route::get('suggestions', [SuggestionController::class, 'index'])->name('suggestions.index');
+    Route::post('suggestions', [SuggestionController::class, 'store'])->name('suggestions.store');
 });
 
-require __DIR__ . '/settings.php';
+// Admin routes
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/', AdminDashboardController::class)->name('dashboard');
+
+    Route::get('users', [AdminUserController::class, 'index'])->name('users.index');
+    Route::delete('users/{user}', [AdminUserController::class, 'destroy'])->name('users.destroy');
+    Route::post('users/{user}/promote', [AdminUserController::class, 'promote'])->name('users.promote');
+    Route::post('users/{user}/demote', [AdminUserController::class, 'demote'])->name('users.demote');
+
+    Route::get('posts', [AdminPostController::class, 'index'])->name('posts.index');
+    Route::post('posts/{post}/approve', [AdminPostController::class, 'approve'])->name('posts.approve');
+    Route::delete('posts/{post}', [AdminPostController::class, 'destroy'])->name('posts.destroy');
+
+    Route::get('pending', [AdminPendingController::class, 'index'])->name('pending.index');
+
+    Route::get('suggestions', [AdminSuggestionController::class, 'index'])->name('suggestions.index');
+
+    Route::get('announcements', [AdminAnnouncementController::class, 'index'])->name('announcements.index');
+    Route::post('announcements', [AdminAnnouncementController::class, 'store'])->name('announcements.store');
+    Route::delete('announcements/{post}', [AdminAnnouncementController::class, 'destroy'])->name('announcements.destroy');
+
+    Route::get('settings', AdminSettingsController::class)->name('settings');
+});
+
+require __DIR__.'/settings.php';

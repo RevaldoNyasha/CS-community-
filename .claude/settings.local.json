@@ -8,7 +8,13 @@
       "Bash(\"/c/Users/Revaldo/.config/herd/bin/php.bat\" artisan make:migration add_is_admin_to_users_table --no-interaction)",
       "Bash(\"/c/Users/Revaldo/.config/herd/bin/php.bat\" artisan make:controller DashboardController --no-interaction)",
       "Bash(\"/c/Users/Revaldo/.config/herd/bin/php.bat\" artisan make:model Announcement -mfs --no-interaction)",
-      "Bash(\"/c/Users/Revaldo/.config/herd/bin/php.bat\" artisan make:controller AnnouncementController --resource --no-interaction)"
+      "Bash(\"/c/Users/Revaldo/.config/herd/bin/php.bat\" artisan make:controller AnnouncementController --resource --no-interaction)",
+      "mcp__laravel-boost__search-docs",
+      "Bash(where:*)",
+      "Bash(C:UsersRevaldo.configherdbinphp.bat artisan make:migration:*)",
+      "Bash(\"/c/Users/Revaldo/.config/herd/bin/php.bat\" artisan make:migration replace_is_admin_with_role_on_users_table --table=users --no-interaction)",
+      "Bash(\"/c/Users/Revaldo/.config/herd/bin/php.bat\" artisan make:migration drop_old_content_tables --no-interaction)",
+      "Bash(\"/c/Users/Revaldo/.config/herd/bin/php.bat\" artisan make:migration create_posts_table --no-interaction)"
     ]
   },
   "enableAllProjectMcpServers": true,

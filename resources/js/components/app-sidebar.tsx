@@ -1,14 +1,17 @@
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import {
     BookOpen,
-    Briefcase,
+    Clock,
+    FileText,
     Folder,
-    GraduationCap,
     LayoutGrid,
+    Lightbulb,
     Megaphone,
-    MessageSquare,
+    PenSquare,
+    Settings,
+    ShieldCheck,
     Trophy,
-    Video,
+    Users,
 } from 'lucide-react';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
@@ -23,51 +26,71 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
-import type { NavGroup, NavItem } from '@/types';
+import type { NavGroup, NavItem, SharedData } from '@/types';
 import AppLogo from './app-logo';
 
-const mainNavItems: (NavItem | NavGroup)[] = [
+const mainNavItems: NavItem[] = [
     {
         title: 'Dashboard',
         href: dashboard(),
         icon: LayoutGrid,
     },
     {
-        title: 'Announcements',
-        href: '/announcements',
-        icon: Megaphone,
+        title: 'Resources',
+        href: '/resources',
+        icon: BookOpen,
     },
     {
-        title: 'Study Resources',
-        icon: GraduationCap,
-        items: [
-            { title: 'All Resources', href: '/study-resources' },
-            { title: 'Past Exams', href: '/study-resources?type=past_exam' },
-            { title: 'Lecture Notes', href: '/study-resources?type=lecture_note' },
-            { title: 'Modules', href: '/study-resources?type=module' },
-        ],
-    },
-    {
-        title: 'Tutorials',
-        href: '/tutorials',
-        icon: Video,
-    },
-    {
-        title: 'Community Forum',
-        href: '/forum',
-        icon: MessageSquare,
-    },
-    {
-        title: 'Career Guidance',
-        href: '/career-guidance',
-        icon: Briefcase,
-    },
-    {
-        title: 'Achievements & Alumni',
-        href: '/achievements',
+        title: 'Hackathons',
+        href: '/hackathons',
         icon: Trophy,
     },
+    {
+        title: 'Submit Post',
+        href: '/posts/create',
+        icon: PenSquare,
+    },
+    {
+        title: 'Suggestions',
+        href: '/suggestions',
+        icon: Lightbulb,
+    },
 ];
+
+const adminNavGroup: NavGroup = {
+    title: 'Admin Settings',
+    icon: ShieldCheck,
+    items: [
+        {
+            title: 'Admin Dashboard',
+            href: '/admin',
+        },
+        {
+            title: 'Users',
+            href: '/admin/users',
+        },
+        {
+            title: 'Posts',
+            href: '/admin/posts',
+        },
+        {
+            title: 'Pending Approvals',
+            href: '/admin/pending',
+        },
+        {
+            title: 'Suggestions',
+            href: '/admin/suggestions',
+        },
+        {
+            title: 'Announcements',
+            href: '/admin/announcements',
+        },
+        {
+            title: 'Settings',
+            href: '/admin/settings',
+        },
+    ],
+};
 
 const footerNavItems: NavItem[] = [
     {
@@ -75,14 +98,14 @@ const footerNavItems: NavItem[] = [
         href: 'https://github.com/laravel/react-starter-kit',
         icon: Folder,
     },
-    {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#react',
-        icon: BookOpen,
-    },
 ];
 
 export function AppSidebar() {
+    const { auth } = usePage<SharedData>().props;
+    const items: (NavItem | NavGroup)[] = auth.isAdmin
+        ? [...mainNavItems, adminNavGroup]
+        : mainNavItems;
+
     return (
         <Sidebar collapsible="icon" variant="inset">
             <SidebarHeader>
@@ -98,7 +121,7 @@ export function AppSidebar() {
             </SidebarHeader>
 
             <SidebarContent>
-                <NavMain items={mainNavItems} />
+                <NavMain items={items} />
             </SidebarContent>
 
             <SidebarFooter>

@@ -6,10 +6,8 @@ import { Dialog, DialogPanel } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 
 const navigation = [
-  { name: 'Study Resources', href: '/study-resources' },
-  { name: 'Tutorials', href: '/tutorials' },
-  { name: 'Forum', href: '#' },
-  { name: 'Career', href: '#' },
+  { name: 'Resources', href: '/resources' },
+  { name: 'Hackathons', href: '/hackathons' },
 ];
 
 export default function Welcome({
@@ -22,7 +20,7 @@ export default function Welcome({
 
     return (
         <>
-            <Head title="Welcome - NUST">
+            <Head title="Welcome - CS Community">
                 <link rel="preconnect" href="https://fonts.bunny.net" />
                 <link
                     href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600"
@@ -33,11 +31,11 @@ export default function Welcome({
                         margin: 0;
                         padding: 0;
                         height: 100vh;
-                        overflow-x: hidden;
+                        overflow: hidden;
                     }
                     #app {
                         height: 100vh;
-                        overflow-x: hidden;
+                        overflow: hidden;
                     }
                 `}</style>
             </Head>
@@ -46,8 +44,8 @@ export default function Welcome({
                     <nav aria-label="Global" className="flex items-center justify-between p-6 lg:px-8">
                         <div className="flex lg:flex-1">
                             <Link href="/" className="-m-1.5 p-1.5">
-                                <span className="sr-only">NUST</span>
-                                <span className="text-2xl font-bold text-white">NUST</span>
+                                <span className="sr-only">CS Community</span>
+                                <span className="text-2xl font-bold text-white">CS Community</span>
                             </Link>
                         </div>
                         <div className="flex lg:hidden">
@@ -100,8 +98,8 @@ export default function Welcome({
                         <DialogPanel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-gray-900 p-6 sm:max-w-sm sm:ring-1 sm:ring-gray-100/10">
                             <div className="flex items-center justify-between">
                                 <Link href="/" className="-m-1.5 p-1.5">
-                                    <span className="sr-only">NUST</span>
-                                    <span className="text-2xl font-bold text-white">NUST</span>
+                                    <span className="sr-only">CS Community</span>
+                                    <span className="text-2xl font-bold text-white">CS Community</span>
                                 </Link>
                                 <button
                                     type="button"
@@ -174,7 +172,7 @@ export default function Welcome({
                     <div className="mx-auto max-w-2xl py-16 sm:py-24 lg:py-32">
                         <div className="hidden sm:mb-8 sm:flex sm:justify-center">
                             <div className="relative rounded-full px-3 py-1 text-sm/6 text-gray-400 ring-1 ring-white/10 hover:ring-white/20">
-                                Welcome to NUST Learning Platform.{' '}
+                                Welcome to CS Community Learning Platform.{' '}
                                 <Link href={login()} className="font-semibold text-indigo-400">
                                     <span aria-hidden="true" className="absolute inset-0" />
                                     Get started <span aria-hidden="true">&rarr;</span>
@@ -186,7 +184,7 @@ export default function Welcome({
                                 Excellence in Education
                             </h1>
                             <p className="mt-8 text-lg font-medium text-pretty text-gray-400 sm:text-xl/8">
-                                Discover world-class resources, connect with fellow students, and advance your academic journey at NUST.
+                                Discover world-class resources, connect with fellow students, and advance your academic journey at CS Community.
                             </p>
                             <div className="mt-10 flex items-center justify-center gap-x-6">
                                 {auth.user ? (
