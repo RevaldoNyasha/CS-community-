@@ -1,17 +1,12 @@
 import { Link, usePage } from '@inertiajs/react';
 import {
     BookOpen,
-    Clock,
-    FileText,
     Folder,
     LayoutGrid,
     Lightbulb,
-    Megaphone,
     PenSquare,
-    Settings,
     ShieldCheck,
     Trophy,
-    Users,
 } from 'lucide-react';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';

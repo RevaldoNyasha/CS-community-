@@ -1,9 +1,9 @@
-import { Head, Link, usePage } from '@inertiajs/react';
-import { dashboard, login, register } from '@/routes';
-import type { SharedData } from '@/types';
-import { useState } from 'react'
 import { Dialog, DialogPanel } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
+import { Head, Link, usePage } from '@inertiajs/react';
+import { useState } from 'react'
+import { dashboard, login, register } from '@/routes';
+import type { SharedData } from '@/types';
 
 const navigation = [
   { name: 'Resources', href: '/resources' },

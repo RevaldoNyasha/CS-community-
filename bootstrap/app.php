@@ -23,7 +23,7 @@ return Application::configure(basePath: dirname(__DIR__))
             AddLinkHeadersForPreloadedAssets::class,
         ]);
 
-        $middleware->redirectUsersTo(route('dashboard'));
+        $middleware->redirectUsersTo('/dashboard');
 
         $middleware->alias([
             'admin' => AdminMiddleware::class,

@@ -1,6 +1,6 @@
 import { Head, Link, router, useForm } from '@inertiajs/react';
-import AdminLayout from '@/layouts/admin-layout';
 import { Button } from '@/components/ui/button';
+import AdminLayout from '@/layouts/admin-layout';
 import type { BreadcrumbItem, PaginatedData, Post } from '@/types';
 
 const breadcrumbs: BreadcrumbItem[] = [

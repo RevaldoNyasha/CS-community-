@@ -1,6 +1,6 @@
 import { Head, useForm } from '@inertiajs/react';
-import AppLayout from '@/layouts/app-layout';
 import { Button } from '@/components/ui/button';
+import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem, PaginatedData, Suggestion } from '@/types';
 
 const breadcrumbs: BreadcrumbItem[] = [
