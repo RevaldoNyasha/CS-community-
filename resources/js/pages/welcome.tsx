@@ -1,4 +1,5 @@
 import { Head, Link, usePage } from '@inertiajs/react';
+import { Menu, X } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { dashboard, login, register } from '@/routes';
 import type { SharedData } from '@/types';
@@ -15,6 +16,7 @@ export default function Welcome({
 }) {
     const { auth } = usePage<SharedData>().props;
     const [time, setTime] = useState(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -37,12 +39,18 @@ export default function Welcome({
                         height: 100vh;
                         overflow: hidden;
                     }
+                    @media (max-width: 640px) {
+                        html, body, #app {
+                            overflow: auto;
+                        }
+                    }
                 `}</style>
             </Head>
             <div className="min-h-screen bg-[#008080] flex flex-col text-black">
                 {/* Nav */}
-                <nav className="p-5 flex justify-between items-center w-full max-w-7xl mx-auto">
-                    <div className="flex space-x-8">
+                <nav className="p-3 sm:p-5 flex justify-between items-center w-full max-w-7xl mx-auto">
+                    {/* Desktop nav links */}
+                    <div className="hidden sm:flex space-x-8">
                         {navigation.map((item) => (
                             <Link
                                 key={item.name}
@@ -54,18 +62,28 @@ export default function Welcome({
                             </Link>
                         ))}
                     </div>
+
+                    {/* Mobile hamburger */}
+                    <button
+                        type="button"
+                        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                        className="sm:hidden mc-btn !p-1.5"
+                    >
+                        {mobileMenuOpen ? <X className="size-5" /> : <Menu className="size-5" />}
+                    </button>
+
                     <div>
                         {auth.user ? (
-                            <Link href={dashboard().url} className="mc-btn text-sm px-4 uppercase">
+                            <Link href={dashboard().url} className="mc-btn text-xs sm:text-sm px-3 sm:px-4 uppercase">
                                 Dashboard &rarr;
                             </Link>
                         ) : (
-                            <div className="flex items-center space-x-6">
-                                <Link href={login().url} className="text-sm tracking-wide text-white hover:text-gray-200 hover:underline uppercase cursor-pointer relative z-10" style={{ fontFamily: "'VT323', monospace" }}>
+                            <div className="flex items-center space-x-3 sm:space-x-6">
+                                <Link href={login().url} className="text-xs sm:text-sm tracking-wide text-white hover:text-gray-200 hover:underline uppercase cursor-pointer relative z-10" style={{ fontFamily: "'VT323', monospace" }}>
                                     Log in &rarr;
                                 </Link>
                                 {canRegister && (
-                                    <Link href={register().url} className="text-sm tracking-wide text-white hover:text-gray-200 hover:underline uppercase cursor-pointer relative z-10" style={{ fontFamily: "'VT323', monospace" }}>
+                                    <Link href={register().url} className="text-xs sm:text-sm tracking-wide text-white hover:text-gray-200 hover:underline uppercase cursor-pointer relative z-10" style={{ fontFamily: "'VT323', monospace" }}>
                                         Register &rarr;
                                     </Link>
                                 )}
@@ -74,11 +92,27 @@ export default function Welcome({
                     </div>
                 </nav>
 
+                {/* Mobile menu dropdown */}
+                {mobileMenuOpen && (
+                    <div className="sm:hidden bg-[#c0c0c0] win95-outset mx-3 mb-2 p-2 space-y-1">
+                        {navigation.map((item) => (
+                            <Link
+                                key={item.name}
+                                href={item.href}
+                                className="block px-3 py-1.5 text-sm uppercase font-bold hover:bg-[#000080] hover:text-white"
+                                style={{ fontFamily: "'VT323', monospace" }}
+                            >
+                                {item.name}
+                            </Link>
+                        ))}
+                    </div>
+                )}
+
                 {/* Main */}
-                <main className="flex-grow flex flex-col items-center justify-center px-4 -mt-10">
+                <main className="flex-grow flex flex-col items-center justify-center px-4 -mt-4 sm:-mt-10">
                     {/* Recessed welcome box */}
                     <div
-                        className="mb-10 text-center px-6 py-3"
+                        className="mb-6 sm:mb-10 text-center px-4 sm:px-6 py-2 sm:py-3 mx-2"
                         style={{
                             borderTop: '2px solid #004040',
                             borderLeft: '2px solid #004040',
@@ -86,7 +120,7 @@ export default function Welcome({
                             borderBottom: '2px solid #c0c0c0',
                         }}
                     >
-                        <p className="text-lg tracking-wide text-black" style={{ fontFamily: "'VT323', monospace" }}>
+                        <p className="text-sm sm:text-lg tracking-wide text-black" style={{ fontFamily: "'VT323', monospace" }}>
                             Welcome to DEV-CRAFT Community Platform.{' '}
                             <Link href={auth.user ? dashboard().url : login().url} className="opacity-70 hover:opacity-100">
                                 Get started &rarr;
@@ -95,9 +129,9 @@ export default function Welcome({
                     </div>
 
                     {/* Heading */}
-                    <div className="max-w-2xl text-center mb-10">
+                    <div className="max-w-2xl text-center mb-6 sm:mb-10 px-2">
                         <h1
-                            className="text-2xl md:text-3xl leading-tight tracking-wide text-black uppercase font-bold"
+                            className="text-lg sm:text-2xl md:text-3xl leading-tight tracking-wide text-black uppercase font-bold"
                             style={{ fontFamily: "'VT323', monospace" }}
                         >
                             Discover world-class resources, connect with fellow developers, and advance your coding journey at DEV-CRAFT.
@@ -110,14 +144,14 @@ export default function Welcome({
                         {auth.user ? (
                             <Link
                                 href={dashboard().url}
-                                className="mc-btn text-xl px-8 py-2 relative z-10 active:translate-x-0.5 active:translate-y-0.5 inline-block uppercase"
+                                className="mc-btn text-base sm:text-xl px-5 sm:px-8 py-2 relative z-10 active:translate-x-0.5 active:translate-y-0.5 inline-block uppercase"
                             >
                                 Go to Dashboard
                             </Link>
                         ) : (
                             <Link
                                 href={register().url}
-                                className="mc-btn text-xl px-8 py-2 relative z-10 active:translate-x-0.5 active:translate-y-0.5 inline-block uppercase"
+                                className="mc-btn text-base sm:text-xl px-5 sm:px-8 py-2 relative z-10 active:translate-x-0.5 active:translate-y-0.5 inline-block uppercase"
                             >
                                 Get Started
                             </Link>
@@ -128,7 +162,7 @@ export default function Welcome({
                 {/* Win95 Taskbar Footer */}
                 <footer className="p-1.5 border-t border-[#808080] bg-[#c0c0c0] flex items-center">
                     <div
-                        className="py-0.5 px-3 text-xs w-40"
+                        className="py-0.5 px-2 sm:px-3 text-[10px] sm:text-xs w-16 sm:w-40"
                         style={{
                             borderTop: '2px solid #004040',
                             borderLeft: '2px solid #004040',
@@ -139,7 +173,7 @@ export default function Welcome({
                         READY
                     </div>
                     <div
-                        className="py-0.5 px-3 text-xs flex-grow ml-1"
+                        className="py-0.5 px-2 sm:px-3 text-[10px] sm:text-xs flex-grow ml-1"
                         style={{
                             borderTop: '2px solid #004040',
                             borderLeft: '2px solid #004040',
@@ -147,10 +181,11 @@ export default function Welcome({
                             borderBottom: '2px solid #c0c0c0',
                         }}
                     >
-                        DEV-CRAFT v1.0.0
+                        <span className="hidden sm:inline">DEV-CRAFT v1.0.0</span>
+                        <span className="sm:hidden">DEV-CRAFT</span>
                     </div>
                     <div
-                        className="py-0.5 px-3 text-xs ml-1 w-28 text-right"
+                        className="py-0.5 px-2 sm:px-3 text-[10px] sm:text-xs ml-1 w-16 sm:w-28 text-right"
                         style={{
                             borderTop: '2px solid #004040',
                             borderLeft: '2px solid #004040',
