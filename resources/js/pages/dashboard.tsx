@@ -1,5 +1,5 @@
 import { Head, Link } from '@inertiajs/react';
-import { Bell, Clock, Minus, Plus, Square, X } from 'lucide-react';
+import { Bell, Clock, Plus, X } from 'lucide-react';
 import { useState } from 'react';
 import PostCard from '@/components/post-card';
 import AppLayout from '@/layouts/app-layout';
@@ -21,7 +21,7 @@ type Props = {
     recentHackathons: Post[];
 };
 
-export default function Dashboard({ recentPosts, announcements, pendingCount, popularTags, recentHackathons }: Props) {
+export default function Dashboard({ recentPosts, pendingCount, popularTags, recentHackathons }: Props) {
     const [showPending, setShowPending] = useState(pendingCount > 0);
 
     return (
