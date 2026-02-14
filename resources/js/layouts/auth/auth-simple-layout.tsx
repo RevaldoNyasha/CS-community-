@@ -12,7 +12,7 @@ export default function AuthSimpleLayout({
             <div className="w-full max-w-sm">
                 <div className="win95-window">
                     {/* Win95 Title Bar */}
-                    <div className="win95-titlebar flex items-center justify-between px-1 py-0.5 mb-1" style={{ background: 'linear-gradient(90deg, #000, #333)' }}>
+                    <div className="win95-titlebar flex items-center justify-between px-1 py-0.5 mb-1" style={{ background: 'linear-gradient(90deg, #808080, #b0b0b0)' }}>
                         <div className="flex items-center gap-1 px-0.5">
                             <svg className="w-3.5 h-3.5 text-white" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M12.65 10C11.83 7.67 9.61 6 7 6c-3.31 0-6 2.69-6 6s2.69 6 6 6c2.61 0 4.83-1.67 5.65-4H17v4h4v-4h2v-4H12.65zM7 14c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z" />

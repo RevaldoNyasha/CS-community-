@@ -263,7 +263,7 @@
 
 /* Win95 Title Bar */
 .win95-titlebar {
-    background: linear-gradient(90deg, #000000, #1084d0);
+    background: linear-gradient(90deg, #808080, #b0b0b0);
     color: #ffffff;
     padding: 2px 4px;
     font-weight: bold;
@@ -415,4 +415,65 @@
     border-left: 2px solid #ffffff;
     border-bottom: 2px solid #000000;
     border-right: 2px solid #000000;
+}
+
+/* Win95 Drop Shadow */
+.win-shadow {
+    box-shadow:
+        inset 1px 1px 0 #dfdfdf,
+        inset -1px -1px 0 #808080,
+        2px 2px 0 rgba(0, 0, 0, 0.5);
+}
+
+/* Win95 Inactive Title Bar */
+.win95-titlebar-inactive {
+    background: linear-gradient(90deg, #808080, #b0b0b0);
+    color: #c0c0c0;
+    padding: 2px 4px;
+    font-weight: bold;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    user-select: none;
+}
+
+/* Win95 Taskbar */
+.win95-taskbar {
+    background: #c0c0c0;
+    border-top: 2px solid #ffffff;
+    border-left: 2px solid #ffffff;
+    border-bottom: 2px solid #000000;
+    border-right: 2px solid #000000;
+    box-shadow: inset 1px 1px 0 #dfdfdf;
+}
+
+/* Win95 Outset border (for buttons/tags in the HTML reference) */
+.win95-outset {
+    border-top: 2px solid #ffffff;
+    border-left: 2px solid #ffffff;
+    border-right: 2px solid #808080;
+    border-bottom: 2px solid #808080;
+}
+
+/* Win95 Inset border (for inputs/panels) */
+.win95-inset {
+    border-top: 2px solid #808080;
+    border-left: 2px solid #808080;
+    border-right: 2px solid #ffffff;
+    border-bottom: 2px solid #ffffff;
+    background-color: #ffffff;
+}
+
+/* Win95 Sidebar overlay */
+.win95-sidebar-overlay {
+    transition: opacity 200ms ease;
+}
+
+/* Win95 Taskbar divider */
+.win95-taskbar-divider {
+    height: 24px;
+    width: 2px;
+    background: #808080;
+    border-left: 1px solid #ffffff;
+    margin: 0 4px;
 }

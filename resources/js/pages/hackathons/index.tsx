@@ -40,7 +40,7 @@ function HackathonCard({ post, variant }: { post: Post; variant: 'upcoming' | 'f
                 )}
             </div>
             <div className="p-3">
-                <h3 className="text-[13px] font-black uppercase text-[#000080] mb-2 line-clamp-2 group-hover:underline">
+                <h3 className="text-[13px] font-black uppercase text-black mb-2 line-clamp-2 group-hover:underline">
                     {post.title}
                 </h3>
                 <div className="win95-sunken bg-white p-2 mb-2">
@@ -157,7 +157,7 @@ export default function HackathonsIndex({ upcoming, finished, filters }: Props) 
                 {/* Upcoming Hackathons */}
                 <div>
                     <div className="win95-window mb-1">
-                        <div className="win95-titlebar" style={{ background: 'linear-gradient(90deg, #1a7a3a, #2ecc71)' }}>
+                        <div className="win95-titlebar">
                             <span className="text-[11px] mr-1.5">🟢</span>
                             <span className="text-[12px] font-bold uppercase">Upcoming Hackathons ({upcoming.length})</span>
                         </div>
@@ -178,7 +178,7 @@ export default function HackathonsIndex({ upcoming, finished, filters }: Props) 
                 {/* Finished Hackathons */}
                 <div>
                     <div className="win95-window mb-1">
-                        <div className="win95-titlebar" style={{ background: 'linear-gradient(90deg, #808080, #a0a0a0)' }}>
+                        <div className="win95-titlebar">
                             <span className="text-[11px] mr-1.5">⏹</span>
                             <span className="text-[12px] font-bold uppercase">Finished Hackathons ({finished.length})</span>
                         </div>

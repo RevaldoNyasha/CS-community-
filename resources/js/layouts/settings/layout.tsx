@@ -1,7 +1,7 @@
 import { Link } from '@inertiajs/react';
+import { KeyRound, Monitor, ShieldCheck, User } from 'lucide-react';
 import type { PropsWithChildren } from 'react';
 import Heading from '@/components/heading';
-import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { useCurrentUrl } from '@/hooks/use-current-url';
 import { cn, toUrl } from '@/lib/utils';
@@ -15,22 +15,22 @@ const sidebarNavItems: NavItem[] = [
     {
         title: 'Profile',
         href: edit(),
-        icon: null,
+        icon: User,
     },
     {
         title: 'Password',
         href: editPassword(),
-        icon: null,
+        icon: KeyRound,
     },
     {
         title: 'Two-Factor Auth',
         href: show(),
-        icon: null,
+        icon: ShieldCheck,
     },
     {
         title: 'Appearance',
         href: editAppearance(),
-        icon: null,
+        icon: Monitor,
     },
 ];
 
@@ -50,29 +50,31 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
             />
 
             <div className="flex flex-col lg:flex-row lg:space-x-12">
-                <aside className="w-full max-w-xl lg:w-48">
+                <aside className="w-full max-w-xl lg:w-52">
                     <nav
-                        className="flex flex-col space-y-1 space-x-0"
+                        className="flex flex-col space-y-1"
                         aria-label="Settings"
                     >
-                        {sidebarNavItems.map((item, index) => (
-                            <Button
-                                key={`${toUrl(item.href)}-${index}`}
-                                size="sm"
-                                variant="ghost"
-                                asChild
-                                className={cn('w-full justify-start uppercase tracking-wide', {
-                                    'bg-brutal-green/10 text-brutal-green border-2 border-brutal-green': isCurrentUrl(item.href),
-                                })}
-                            >
-                                <Link href={item.href}>
-                                    {item.icon && (
-                                        <item.icon className="h-4 w-4" />
+                        {sidebarNavItems.map((item, index) => {
+                            const active = isCurrentUrl(item.href);
+                            return (
+                                <Link
+                                    key={`${toUrl(item.href)}-${index}`}
+                                    href={item.href}
+                                    className={cn(
+                                        'mc-btn !justify-start gap-2 text-[12px] !py-1.5 !px-3 w-full',
+                                        active
+                                            ? '!bg-[#008080] !text-white !border-t-[#006060] !border-l-[#006060] !border-b-[#00a0a0] !border-r-[#00a0a0] !shadow-[inset_1px_1px_0_#005050,inset_-1px_-1px_0_#00b0b0]'
+                                            : 'hover:!bg-[#d4d4d4]',
                                     )}
-                                    {item.title}
+                                >
+                                    {item.icon && (
+                                        <item.icon className={cn('size-4 shrink-0', active ? 'text-white' : 'text-[#008080]')} />
+                                    )}
+                                    <span className="uppercase tracking-wide">{item.title}</span>
                                 </Link>
-                            </Button>
-                        ))}
+                            );
+                        })}
                     </nav>
                 </aside>
 

@@ -1,5 +1,5 @@
 import { Link, router } from '@inertiajs/react';
-import { Heart, MessageSquare, Share2, Square, User as UserIcon, X } from 'lucide-react';
+import { Heart, MessageSquare, Minus, Share2, Square, X } from 'lucide-react';
 import { useState } from 'react';
 import {
     Dialog,
@@ -15,6 +15,7 @@ type Props = {
 
 export default function PostCard({ post }: Props) {
     const [dismissed, setDismissed] = useState(false);
+    const [minimized, setMinimized] = useState(false);
     const [detailOpen, setDetailOpen] = useState(false);
 
     function handleLike(e: React.MouseEvent) {
@@ -40,102 +41,108 @@ export default function PostCard({ post }: Props) {
 
     return (
         <>
-            <div className="post-card">
-                {/* Win95 Title Bar */}
-                <div className="win95-titlebar mb-[2px]">
-                    <div className="flex items-center gap-2 flex-1 min-w-0">
-                        <span className="text-[11px]">📄</span>
-                        <span className="truncate text-[11px]">
-                            {post.user?.name ?? 'Unknown'} - {roleLabel} • {timeAgo(post.created_at)}
+            <article className="win95-outset bg-[#c0c0c0] win-shadow">
+                {/* Win95 Title Bar - active (blue) for first post, inactive (gray) for rest */}
+                <div className="bg-[#808080] flex justify-between items-center px-1 py-0.5">
+                    <div className="flex items-center gap-1 text-white text-[11px] min-w-0">
+                        <span className="text-[10px] shrink-0">&#128196;</span>
+                        <span className="font-bold truncate">
+                            {post.user?.name ?? 'Unknown'} - {roleLabel} &bull; {timeAgo(post.created_at)}
                         </span>
                     </div>
-                    <div className="flex items-center gap-[2px] ml-2">
+                    <div className="flex gap-[2px] shrink-0 ml-2">
+                        <button
+                            type="button"
+                            onClick={() => setMinimized(!minimized)}
+                            className="win95-outset bg-[#c0c0c0] w-4 h-4 flex items-center justify-center active:win95-inset"
+                            title={minimized ? 'Restore' : 'Minimize'}
+                        >
+                            <Minus className="size-[8px] text-black" strokeWidth={3} />
+                        </button>
                         <button
                             type="button"
                             onClick={() => setDetailOpen(true)}
-                            className="win95-raised size-[14px] flex items-center justify-center bg-[#c0c0c0]"
+                            className="win95-outset bg-[#c0c0c0] w-4 h-4 flex items-center justify-center active:win95-inset"
                             title="View post"
                         >
-                            <Square className="size-[7px] text-black" />
+                            <Square className="size-[7px] text-black" strokeWidth={3} />
                         </button>
                         <button
                             type="button"
                             onClick={() => setDismissed(true)}
-                            className="win95-raised size-[14px] flex items-center justify-center bg-[#c0c0c0]"
-                            title="Dismiss"
+                            className="win95-outset bg-[#c0c0c0] w-4 h-4 flex items-center justify-center active:win95-inset"
+                            title="Close"
                         >
-                            <X className="size-[8px] text-black" />
+                            <X className="size-[8px] text-black" strokeWidth={3} />
                         </button>
                     </div>
                 </div>
 
-                {/* Window Content */}
-                <div className="p-3">
-                    {/* Title */}
-                    <Link href={`/posts/${post.id}`} className="block">
-                        <h3 className="text-[14px] font-black uppercase tracking-wide mb-2 text-black hover:underline">
-                            {post.title}
-                        </h3>
-                    </Link>
-
-                    {/* Content snippet in sunken white panel */}
-                    <div className="win95-sunken bg-white p-2 mb-3">
-                        <p className="text-[12px] text-[#1a1a1a] font-semibold line-clamp-3 leading-relaxed">
-                            {post.content}
-                        </p>
-                    </div>
-
-                    {/* Tags */}
-                    {post.tags && post.tags.length > 0 && (
-                        <div className="flex flex-wrap gap-1.5 mb-3">
-                            {post.tags.map((tag) => (
-                                <span
-                                    key={tag.id}
-                                    className="win95-sunken inline-flex items-center bg-white px-2 py-0.5 text-[11px] font-bold text-[#000080]"
-                                >
-                                    #{tag.name}
-                                </span>
-                            ))}
-                        </div>
-                    )}
-
-                    {/* Footer: comments, likes, share — on the gray card surface */}
-                    <div className="flex items-center gap-4 pt-1 text-[11px] border-t border-[#808080]">
-                        <Link
-                            href={`/posts/${post.id}`}
-                            className="flex items-center gap-1 text-black hover:underline"
-                        >
-                            <MessageSquare className="size-3" />
-                            <span className="font-bold uppercase">
-                                {post.comments_count ?? 0} Comments
-                            </span>
+                {/* Window Content - collapsible */}
+                {!minimized && (
+                    <div className="p-3">
+                        {/* Title */}
+                        <Link href={`/posts/${post.id}`} className="block">
+                            <h2 className="text-lg font-bold mb-2 uppercase text-black hover:underline">
+                                {post.title}
+                            </h2>
                         </Link>
 
-                        <button
-                            type="button"
-                            onClick={handleLike}
-                            className={`flex items-center gap-1 ${post.is_liked
-                                ? 'text-[#c0392b]'
-                                : 'text-[#333] hover:text-[#c0392b]'
-                                }`}
-                        >
-                            <Heart className={`size-3 ${post.is_liked ? 'fill-current' : ''}`} />
-                            <span className="font-bold uppercase">
-                                {post.likes_count ?? 0} Likes
-                            </span>
-                        </button>
+                        {/* Content snippet in sunken white panel */}
+                        <div className="win95-inset p-3 mb-3 min-h-[60px] text-[12px]">
+                            <p className="text-[#1a1a1a] line-clamp-4 leading-relaxed">
+                                {post.content}
+                            </p>
+                        </div>
 
-                        <button
-                            type="button"
-                            onClick={handleShare}
-                            className="flex items-center gap-1 text-[#333] hover:text-black ml-auto"
-                        >
-                            <Share2 className="size-3" />
-                            <span className="font-bold uppercase">Share</span>
-                        </button>
+                        {/* Tags */}
+                        {post.tags && post.tags.length > 0 && (
+                            <div className="flex flex-wrap gap-2 mb-3">
+                                {post.tags.map((tag) => (
+                                    <span
+                                        key={tag.id}
+                                        className="win95-outset bg-[#c0c0c0] px-2 py-0.5 text-[11px] font-bold text-black"
+                                    >
+                                        #{tag.name}
+                                    </span>
+                                ))}
+                            </div>
+                        )}
+
+                        {/* Footer: comments, likes, share */}
+                        <div className="flex justify-between items-center border-t border-[#808080] pt-3">
+                            <div className="flex gap-4">
+                                <Link
+                                    href={`/posts/${post.id}`}
+                                    className="flex items-center gap-1 text-[11px] uppercase font-bold text-[#333] hover:text-black"
+                                >
+                                    <MessageSquare className="size-[14px]" />
+                                    {post.comments_count ?? 0} Comments
+                                </Link>
+                                <button
+                                    type="button"
+                                    onClick={handleLike}
+                                    className={`flex items-center gap-1 text-[11px] uppercase font-bold ${post.is_liked
+                                        ? 'text-[#c0392b]'
+                                        : 'text-[#c0392b] hover:text-[#a02020]'
+                                        }`}
+                                >
+                                    <Heart className={`size-[14px] ${post.is_liked ? 'fill-current' : ''}`} />
+                                    {post.likes_count ?? 0} Likes
+                                </button>
+                            </div>
+                            <button
+                                type="button"
+                                onClick={handleShare}
+                                className="mc-btn !py-1 !px-2 text-[11px] flex items-center gap-1"
+                            >
+                                <Share2 className="size-[14px]" />
+                                SHARE
+                            </button>
+                        </div>
                     </div>
-                </div>
-            </div>
+                )}
+            </article>
 
             {/* Detail Modal */}
             <Dialog open={detailOpen} onOpenChange={setDetailOpen}>
@@ -144,7 +151,7 @@ export default function PostCard({ post }: Props) {
 
                     {/* Modal Title Bar */}
                     <div className="win95-titlebar">
-                        <span className="text-[11px] mr-2">📄</span>
+                        <span className="text-[11px] mr-2">&#128196;</span>
                         <span className="text-[12px] font-bold uppercase flex-1 truncate">
                             {post.title}
                         </span>
@@ -163,12 +170,12 @@ export default function PostCard({ post }: Props) {
                         <div className="win95-sunken bg-white p-3 mb-3">
                             <div className="flex items-center gap-3">
                                 <div className="win95-raised flex size-10 shrink-0 items-center justify-center bg-[#c0c0c0]">
-                                    <UserIcon className="size-5 text-black" />
+                                    <span className="text-lg">&#128196;</span>
                                 </div>
                                 <div>
                                     <p className="font-bold text-[13px] text-black">{post.user?.name ?? 'Unknown'}</p>
                                     <p className="text-[11px] text-[#333]">
-                                        {roleLabel} • Posted {timeAgo(post.created_at)}
+                                        {roleLabel} &bull; Posted {timeAgo(post.created_at)}
                                     </p>
                                 </div>
                             </div>
@@ -192,7 +199,7 @@ export default function PostCard({ post }: Props) {
                                 {post.tags.map((tag) => (
                                     <span
                                         key={tag.id}
-                                        className="win95-sunken inline-flex items-center bg-white px-2 py-0.5 text-[11px] font-bold text-black"
+                                        className="win95-outset bg-[#c0c0c0] inline-flex items-center px-2 py-0.5 text-[11px] font-bold text-black"
                                     >
                                         #{tag.name}
                                     </span>

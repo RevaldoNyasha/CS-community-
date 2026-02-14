@@ -105,7 +105,7 @@ export default function ResourcesIndex({ posts, filters }: Props) {
                                 id="has_pdf"
                                 checked={hasPdf}
                                 onChange={(e) => setHasPdf(e.target.checked)}
-                                className="size-3.5 accent-[#000080]"
+                                className="size-3.5 accent-[#808080]"
                             />
                             <label htmlFor="has_pdf" className="text-[10px] font-bold uppercase text-[#333] cursor-pointer flex items-center gap-1">
                                 <FileText className="size-3 text-[#c0392b]" />
@@ -148,7 +148,7 @@ export default function ResourcesIndex({ posts, filters }: Props) {
                                     )}
                                 </div>
                                 <div className="p-3">
-                                    <h3 className="text-[13px] font-black uppercase text-[#000080] mb-2 line-clamp-2 group-hover:underline">
+                                    <h3 className="text-[13px] font-black uppercase text-black mb-2 line-clamp-2 group-hover:underline">
                                         {post.title}
                                     </h3>
                                     <div className="win95-sunken bg-white p-2 mb-2">
@@ -190,7 +190,7 @@ export default function ResourcesIndex({ posts, filters }: Props) {
                             <Link
                                 key={i}
                                 href={link.url ?? '#'}
-                                className={`mc-btn !py-1 !px-3 text-sm ${link.active ? 'bg-[#000080] !text-white' : ''
+                                className={`mc-btn !py-1 !px-3 text-sm ${link.active ? 'bg-[#808080] !text-white' : ''
                                     } ${!link.url ? 'pointer-events-none opacity-50' : ''}`}
                                 dangerouslySetInnerHTML={{ __html: link.label }}
                             />
