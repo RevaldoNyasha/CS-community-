@@ -17,23 +17,20 @@ export default function AdminSuggestionsIndex({ suggestions }: Props) {
             <Head title="User Suggestions" />
             <div className="flex h-full flex-1 flex-col gap-6 p-4">
                 <div>
-                    <h1 className="text-2xl font-bold tracking-tight">Suggestions</h1>
+                    <h1 className="text-3xl font-bold tracking-tight uppercase font-mono text-brutal-green">Suggestions</h1>
                     <p className="text-muted-foreground">User feedback and suggestions.</p>
                 </div>
 
                 {suggestions.data.length === 0 ? (
-                    <div className="rounded-xl border border-sidebar-border/70 p-8 text-center text-muted-foreground dark:border-sidebar-border">
+                    <div className="mc-container text-center text-muted-foreground">
                         No suggestions yet.
                     </div>
                 ) : (
                     <div className="space-y-3">
                         {suggestions.data.map((suggestion) => (
-                            <div
-                                key={suggestion.id}
-                                className="rounded-xl border border-sidebar-border/70 p-4 dark:border-sidebar-border"
-                            >
+                            <div key={suggestion.id} className="mc-container">
                                 <div className="flex items-center justify-between mb-2">
-                                    <span className="text-sm font-medium">{suggestion.user?.name ?? 'Unknown'}</span>
+                                    <span className="text-sm font-medium text-brutal-green font-mono">{suggestion.user?.name ?? 'Unknown'}</span>
                                     <span className="text-xs text-muted-foreground">
                                         {new Date(suggestion.created_at).toLocaleDateString()}
                                     </span>
@@ -50,10 +47,10 @@ export default function AdminSuggestionsIndex({ suggestions }: Props) {
                             <Link
                                 key={i}
                                 href={link.url ?? '#'}
-                                className={`rounded-lg border px-3 py-1 text-sm ${
+                                className={`mc-btn !py-1 !px-3 text-sm ${
                                     link.active
-                                        ? 'border-primary bg-primary text-primary-foreground'
-                                        : 'border-sidebar-border/70 hover:bg-accent'
+                                        ? 'mc-btn-gold'
+                                        : '!bg-card !border-brutal-border !text-foreground'
                                 } ${!link.url ? 'pointer-events-none opacity-50' : ''}`}
                                 dangerouslySetInnerHTML={{ __html: link.label }}
                             />

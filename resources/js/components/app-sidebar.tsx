@@ -102,8 +102,8 @@ export function AppSidebar() {
         : mainNavItems;
 
     return (
-        <Sidebar collapsible="icon" variant="inset">
-            <SidebarHeader>
+        <Sidebar collapsible="icon" variant="inset" style={{ fontFamily: "'JetBrains Mono', monospace" }} className="text-black">
+            <SidebarHeader className="border-b border-[#808080]">
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
@@ -119,7 +119,7 @@ export function AppSidebar() {
                 <NavMain items={items} />
             </SidebarContent>
 
-            <SidebarFooter>
+            <SidebarFooter className="border-t border-[#808080]">
                 <NavFooter items={footerNavItems} className="mt-auto" />
                 <NavUser />
             </SidebarFooter>

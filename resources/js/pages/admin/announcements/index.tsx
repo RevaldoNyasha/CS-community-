@@ -1,5 +1,4 @@
 import { Head, Link, router, useForm } from '@inertiajs/react';
-import { Button } from '@/components/ui/button';
 import AdminLayout from '@/layouts/admin-layout';
 import type { BreadcrumbItem, PaginatedData, Post } from '@/types';
 
@@ -36,51 +35,48 @@ export default function AdminAnnouncementsIndex({ announcements }: Props) {
             <Head title="Announcements" />
             <div className="flex h-full flex-1 flex-col gap-6 p-4">
                 <div>
-                    <h1 className="text-2xl font-bold tracking-tight">Announcements</h1>
+                    <h1 className="text-3xl font-bold tracking-tight uppercase font-mono text-brutal-green">Announcements</h1>
                     <p className="text-muted-foreground">Create and manage announcements visible to all users.</p>
                 </div>
 
-                <form onSubmit={handleSubmit} className="rounded-xl border border-sidebar-border/70 p-4 dark:border-sidebar-border">
-                    <h3 className="mb-3 font-semibold">New Announcement</h3>
+                <form onSubmit={handleSubmit} className="mc-container">
+                    <h3 className="mb-3 font-semibold uppercase text-brutal-green font-mono">New Announcement</h3>
                     <div className="space-y-3">
                         <div>
                             <input
                                 type="text"
                                 value={data.title}
                                 onChange={(e) => setData('title', e.target.value)}
-                                className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                                className="w-full mc-slot px-3 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-brutal-green"
                                 placeholder="Announcement title"
                             />
-                            {errors.title && <p className="mt-1 text-sm text-destructive">{errors.title}</p>}
+                            {errors.title && <p className="mt-1 text-sm text-red-400">{errors.title}</p>}
                         </div>
                         <div>
                             <textarea
                                 value={data.content}
                                 onChange={(e) => setData('content', e.target.value)}
-                                className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring min-h-[100px]"
+                                className="w-full mc-slot px-3 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-brutal-green min-h-[100px]"
                                 placeholder="Announcement content..."
                             />
-                            {errors.content && <p className="mt-1 text-sm text-destructive">{errors.content}</p>}
+                            {errors.content && <p className="mt-1 text-sm text-red-400">{errors.content}</p>}
                         </div>
-                        <Button type="submit" disabled={processing}>
+                        <button type="submit" disabled={processing} className="mc-btn disabled:opacity-50">
                             Post Announcement
-                        </Button>
+                        </button>
                     </div>
                 </form>
 
                 <div>
-                    <h2 className="mb-3 text-lg font-semibold">All Announcements</h2>
+                    <h2 className="mb-3 text-lg font-semibold uppercase font-mono text-brutal-green">All Announcements</h2>
                     {announcements.data.length === 0 ? (
-                        <div className="rounded-xl border border-sidebar-border/70 p-6 text-center text-muted-foreground dark:border-sidebar-border">
+                        <div className="mc-container text-center text-muted-foreground">
                             No announcements yet.
                         </div>
                     ) : (
                         <div className="space-y-3">
                             {announcements.data.map((announcement) => (
-                                <div
-                                    key={announcement.id}
-                                    className="rounded-xl border border-sidebar-border/70 p-4 dark:border-sidebar-border"
-                                >
+                                <div key={announcement.id} className="mc-container">
                                     <div className="flex items-start justify-between">
                                         <div className="flex-1">
                                             <h3 className="font-semibold">{announcement.title}</h3>
@@ -91,7 +87,7 @@ export default function AdminAnnouncementsIndex({ announcements }: Props) {
                                         </div>
                                         <button
                                             onClick={() => handleDelete(announcement)}
-                                            className="ml-4 text-xs text-destructive hover:underline"
+                                            className="ml-4 mc-btn mc-btn-danger text-xs !py-0.5 !px-2"
                                         >
                                             Delete
                                         </button>
@@ -108,10 +104,10 @@ export default function AdminAnnouncementsIndex({ announcements }: Props) {
                             <Link
                                 key={i}
                                 href={link.url ?? '#'}
-                                className={`rounded-lg border px-3 py-1 text-sm ${
+                                className={`mc-btn !py-1 !px-3 text-sm ${
                                     link.active
-                                        ? 'border-primary bg-primary text-primary-foreground'
-                                        : 'border-sidebar-border/70 hover:bg-accent'
+                                        ? 'mc-btn-gold'
+                                        : '!bg-card !border-brutal-border !text-foreground'
                                 } ${!link.url ? 'pointer-events-none opacity-50' : ''}`}
                                 dangerouslySetInnerHTML={{ __html: link.label }}
                             />

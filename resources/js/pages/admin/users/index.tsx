@@ -35,31 +35,31 @@ export default function AdminUsersIndex({ users }: Props) {
             <Head title="Manage Users" />
             <div className="flex h-full flex-1 flex-col gap-6 p-4">
                 <div>
-                    <h1 className="text-2xl font-bold tracking-tight">Users</h1>
+                    <h1 className="text-3xl font-bold tracking-tight uppercase font-mono text-brutal-green">Users</h1>
                     <p className="text-muted-foreground">Manage all registered users.</p>
                 </div>
 
-                <div className="overflow-x-auto rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
+                <div className="overflow-x-auto mc-container !p-0">
                     <table className="w-full text-sm">
                         <thead>
-                            <tr className="border-b border-sidebar-border/70 dark:border-sidebar-border">
-                                <th className="px-4 py-3 text-left font-medium">Name</th>
-                                <th className="px-4 py-3 text-left font-medium">Email</th>
-                                <th className="px-4 py-3 text-left font-medium">Role</th>
-                                <th className="px-4 py-3 text-left font-medium">Joined</th>
-                                <th className="px-4 py-3 text-right font-medium">Actions</th>
+                            <tr className="border-b-3 border-border bg-muted/30">
+                                <th className="px-4 py-3 text-left font-medium uppercase text-brutal-green font-mono">Name</th>
+                                <th className="px-4 py-3 text-left font-medium uppercase text-brutal-green font-mono">Email</th>
+                                <th className="px-4 py-3 text-left font-medium uppercase text-brutal-green font-mono">Role</th>
+                                <th className="px-4 py-3 text-left font-medium uppercase text-brutal-green font-mono">Joined</th>
+                                <th className="px-4 py-3 text-right font-medium uppercase text-brutal-green font-mono">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             {users.data.map((user) => (
-                                <tr key={user.id} className="border-b border-sidebar-border/70 last:border-0 dark:border-sidebar-border">
+                                <tr key={user.id} className="border-b border-border last:border-0">
                                     <td className="px-4 py-3 font-medium">{user.name}</td>
                                     <td className="px-4 py-3 text-muted-foreground">{user.email}</td>
                                     <td className="px-4 py-3">
-                                        <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${
+                                        <span className={`px-2 py-0.5 text-xs font-medium uppercase ${
                                             user.role === 'admin'
-                                                ? 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200'
-                                                : 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'
+                                                ? 'bg-brutal-purple/20 text-brutal-purple border-2 border-brutal-purple'
+                                                : 'bg-brutal-blue/20 text-brutal-blue border-2 border-brutal-blue'
                                         }`}>
                                             {user.role}
                                         </span>
@@ -72,21 +72,21 @@ export default function AdminUsersIndex({ users }: Props) {
                                             {user.role === 'user' ? (
                                                 <button
                                                     onClick={() => handlePromote(user)}
-                                                    className="text-xs text-primary hover:underline"
+                                                    className="mc-btn !py-0.5 !px-2 text-xs"
                                                 >
                                                     Promote
                                                 </button>
                                             ) : (
                                                 <button
                                                     onClick={() => handleDemote(user)}
-                                                    className="text-xs text-orange-600 hover:underline"
+                                                    className="mc-btn mc-btn-gold !py-0.5 !px-2 text-xs"
                                                 >
                                                     Demote
                                                 </button>
                                             )}
                                             <button
                                                 onClick={() => handleDelete(user)}
-                                                className="text-xs text-destructive hover:underline"
+                                                className="mc-btn mc-btn-danger !py-0.5 !px-2 text-xs"
                                             >
                                                 Delete
                                             </button>
@@ -104,10 +104,10 @@ export default function AdminUsersIndex({ users }: Props) {
                             <Link
                                 key={i}
                                 href={link.url ?? '#'}
-                                className={`rounded-lg border px-3 py-1 text-sm ${
+                                className={`mc-btn !py-1 !px-3 text-sm ${
                                     link.active
-                                        ? 'border-primary bg-primary text-primary-foreground'
-                                        : 'border-sidebar-border/70 hover:bg-accent'
+                                        ? 'mc-btn-gold'
+                                        : '!bg-card !border-brutal-border !text-foreground'
                                 } ${!link.url ? 'pointer-events-none opacity-50' : ''}`}
                                 dangerouslySetInnerHTML={{ __html: link.label }}
                             />

@@ -28,53 +28,53 @@ export default function AdminPostsIndex({ posts, filters }: Props) {
             <Head title="Manage Posts" />
             <div className="flex h-full flex-1 flex-col gap-6 p-4">
                 <div>
-                    <h1 className="text-2xl font-bold tracking-tight">All Posts</h1>
+                    <h1 className="text-3xl font-bold tracking-tight uppercase font-mono text-brutal-green">All Posts</h1>
                     <p className="text-muted-foreground">Manage all posts across the platform.</p>
                 </div>
 
-                <div className="flex gap-2">
+                <div className="flex gap-2 flex-wrap">
                     <Link
                         href="/admin/posts"
-                        className={`rounded-lg border px-3 py-1 text-sm ${!filters.type && !filters.status ? 'border-primary bg-primary text-primary-foreground' : 'border-sidebar-border/70 hover:bg-accent'}`}
+                        className={`mc-btn !py-1 !px-3 text-sm ${!filters.type && !filters.status ? 'mc-btn-gold' : '!bg-card !border-brutal-border !text-foreground'}`}
                     >
                         All
                     </Link>
                     <Link
                         href="/admin/posts?type=resource"
-                        className={`rounded-lg border px-3 py-1 text-sm ${filters.type === 'resource' ? 'border-primary bg-primary text-primary-foreground' : 'border-sidebar-border/70 hover:bg-accent'}`}
+                        className={`mc-btn !py-1 !px-3 text-sm ${filters.type === 'resource' ? 'mc-btn-gold' : '!bg-card !border-brutal-border !text-foreground'}`}
                     >
                         Resources
                     </Link>
                     <Link
                         href="/admin/posts?type=hackathon"
-                        className={`rounded-lg border px-3 py-1 text-sm ${filters.type === 'hackathon' ? 'border-primary bg-primary text-primary-foreground' : 'border-sidebar-border/70 hover:bg-accent'}`}
+                        className={`mc-btn !py-1 !px-3 text-sm ${filters.type === 'hackathon' ? 'mc-btn-gold' : '!bg-card !border-brutal-border !text-foreground'}`}
                     >
                         Hackathons
                     </Link>
                     <Link
                         href="/admin/posts?type=announcement"
-                        className={`rounded-lg border px-3 py-1 text-sm ${filters.type === 'announcement' ? 'border-primary bg-primary text-primary-foreground' : 'border-sidebar-border/70 hover:bg-accent'}`}
+                        className={`mc-btn !py-1 !px-3 text-sm ${filters.type === 'announcement' ? 'mc-btn-gold' : '!bg-card !border-brutal-border !text-foreground'}`}
                     >
                         Announcements
                     </Link>
                     <Link
                         href="/admin/posts?status=pending"
-                        className={`rounded-lg border px-3 py-1 text-sm ${filters.status === 'pending' ? 'border-yellow-500 bg-yellow-100 text-yellow-800' : 'border-sidebar-border/70 hover:bg-accent'}`}
+                        className={`mc-btn !py-1 !px-3 text-sm ${filters.status === 'pending' ? '!bg-brutal-yellow/20 !border-brutal-yellow !text-brutal-yellow' : '!bg-card !border-brutal-border !text-foreground'}`}
                     >
                         Pending
                     </Link>
                 </div>
 
-                <div className="overflow-x-auto rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
+                <div className="overflow-x-auto mc-container !p-0">
                     <table className="w-full text-sm">
                         <thead>
-                            <tr className="border-b border-sidebar-border/70 dark:border-sidebar-border">
-                                <th className="px-4 py-3 text-left font-medium">Title</th>
-                                <th className="px-4 py-3 text-left font-medium">Author</th>
-                                <th className="px-4 py-3 text-left font-medium">Type</th>
-                                <th className="px-4 py-3 text-left font-medium">Status</th>
-                                <th className="px-4 py-3 text-left font-medium">Date</th>
-                                <th className="px-4 py-3 text-right font-medium">Actions</th>
+                            <tr className="border-b-3 border-brutal-border bg-muted/30">
+                                <th className="px-4 py-3 text-left font-medium uppercase text-brutal-green font-mono">Title</th>
+                                <th className="px-4 py-3 text-left font-medium uppercase text-brutal-green font-mono">Author</th>
+                                <th className="px-4 py-3 text-left font-medium uppercase text-brutal-green font-mono">Type</th>
+                                <th className="px-4 py-3 text-left font-medium uppercase text-brutal-green font-mono">Status</th>
+                                <th className="px-4 py-3 text-left font-medium uppercase text-brutal-green font-mono">Date</th>
+                                <th className="px-4 py-3 text-right font-medium uppercase text-brutal-green font-mono">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -86,19 +86,19 @@ export default function AdminPostsIndex({ posts, filters }: Props) {
                                 </tr>
                             ) : (
                                 posts.data.map((post) => (
-                                    <tr key={post.id} className="border-b border-sidebar-border/70 last:border-0 dark:border-sidebar-border">
+                                    <tr key={post.id} className="border-b-2 border-brutal-border last:border-0">
                                         <td className="px-4 py-3 font-medium">{post.title}</td>
                                         <td className="px-4 py-3 text-muted-foreground">{post.user?.name ?? 'Admin'}</td>
                                         <td className="px-4 py-3">
-                                            <span className="rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary capitalize">
+                                            <span className="bg-brutal-green px-2 py-0.5 text-xs font-medium text-black uppercase font-mono">
                                                 {post.type}
                                             </span>
                                         </td>
                                         <td className="px-4 py-3">
-                                            <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${
+                                            <span className={`px-2 py-0.5 text-xs font-medium uppercase font-mono ${
                                                 post.status === 'approved'
-                                                    ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-                                                    : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
+                                                    ? 'bg-brutal-green/20 text-brutal-green border-2 border-brutal-green'
+                                                    : 'bg-brutal-yellow/20 text-brutal-yellow border-2 border-brutal-yellow'
                                             }`}>
                                                 {post.status}
                                             </span>
@@ -111,14 +111,14 @@ export default function AdminPostsIndex({ posts, filters }: Props) {
                                                 {post.status === 'pending' && (
                                                     <button
                                                         onClick={() => handleApprove(post)}
-                                                        className="text-xs text-green-600 hover:underline"
+                                                        className="mc-btn !py-0.5 !px-2 text-xs"
                                                     >
                                                         Approve
                                                     </button>
                                                 )}
                                                 <button
                                                     onClick={() => handleDelete(post)}
-                                                    className="text-xs text-destructive hover:underline"
+                                                    className="mc-btn mc-btn-danger !py-0.5 !px-2 text-xs"
                                                 >
                                                     Delete
                                                 </button>
@@ -137,10 +137,10 @@ export default function AdminPostsIndex({ posts, filters }: Props) {
                             <Link
                                 key={i}
                                 href={link.url ?? '#'}
-                                className={`rounded-lg border px-3 py-1 text-sm ${
+                                className={`mc-btn !py-1 !px-3 text-sm ${
                                     link.active
-                                        ? 'border-primary bg-primary text-primary-foreground'
-                                        : 'border-sidebar-border/70 hover:bg-accent'
+                                        ? 'mc-btn-gold'
+                                        : '!bg-card !border-brutal-border !text-foreground'
                                 } ${!link.url ? 'pointer-events-none opacity-50' : ''}`}
                                 dangerouslySetInnerHTML={{ __html: link.label }}
                             />

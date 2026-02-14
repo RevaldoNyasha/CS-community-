@@ -30,7 +30,9 @@ export default function AdminDashboard({ stats, recentPosts }: Props) {
             <Head title="Admin Dashboard" />
             <div className="flex h-full flex-1 flex-col gap-6 p-4">
                 <div>
-                    <h1 className="text-2xl font-bold tracking-tight">Admin Dashboard</h1>
+                    <h1 className="text-3xl font-bold tracking-tight uppercase font-mono text-brutal-green">
+                        Operator Dashboard
+                    </h1>
                     <p className="text-muted-foreground">System overview and management.</p>
                 </div>
 
@@ -39,42 +41,42 @@ export default function AdminDashboard({ stats, recentPosts }: Props) {
                         <Link
                             key={card.title}
                             href={card.href}
-                            className="rounded-xl border border-sidebar-border/70 p-4 transition-colors hover:bg-accent dark:border-sidebar-border"
+                            className="mc-container text-center transition-all hover:brightness-110"
                         >
-                            <div className="flex items-center justify-between">
-                                <span className="text-sm text-muted-foreground">{card.title}</span>
-                                <card.icon className="size-4 text-muted-foreground" />
+                            <div className="flex flex-col items-center gap-2">
+                                <card.icon className="size-8 text-brutal-green" />
+                                <span className="text-sm text-muted-foreground uppercase">{card.title}</span>
+                                <p className="text-4xl font-bold text-brutal-green font-mono">{card.value}</p>
                             </div>
-                            <p className="mt-2 text-3xl font-bold">{card.value}</p>
                         </Link>
                     ))}
                 </div>
 
                 <div>
-                    <h2 className="mb-3 text-lg font-semibold">Recent Posts</h2>
+                    <h2 className="mb-3 text-lg font-semibold uppercase font-mono text-brutal-green">Activity Feed</h2>
                     {recentPosts.length === 0 ? (
-                        <div className="rounded-xl border border-sidebar-border/70 p-6 text-center text-muted-foreground dark:border-sidebar-border">
+                        <div className="mc-container text-center text-muted-foreground">
                             No posts yet.
                         </div>
                     ) : (
-                        <div className="space-y-2">
-                            {recentPosts.map((post) => (
+                        <div className="mc-container !p-0">
+                            {recentPosts.map((post, index) => (
                                 <div
                                     key={post.id}
-                                    className="flex items-center justify-between rounded-xl border border-sidebar-border/70 p-3 dark:border-sidebar-border"
+                                    className={`flex items-center justify-between p-3 mc-slot !border-x-0 ${index === 0 ? '!border-t-0' : ''} ${index === recentPosts.length - 1 ? '!border-b-0' : ''}`}
                                 >
                                     <div>
                                         <span className="font-medium">{post.title}</span>
                                         <span className="ml-2 text-xs text-muted-foreground">by {post.user?.name ?? 'Admin'}</span>
                                     </div>
                                     <div className="flex items-center gap-2">
-                                        <span className="rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary capitalize">
+                                        <span className="bg-brutal-green px-2 py-0.5 text-xs font-medium text-black uppercase font-mono">
                                             {post.type}
                                         </span>
-                                        <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${
+                                        <span className={`px-2 py-0.5 text-xs font-medium uppercase font-mono ${
                                             post.status === 'approved'
-                                                ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-                                                : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
+                                                ? 'bg-brutal-green/20 text-brutal-green border-2 border-brutal-green'
+                                                : 'bg-brutal-yellow/20 text-brutal-yellow border-2 border-brutal-yellow'
                                         }`}>
                                             {post.status}
                                         </span>

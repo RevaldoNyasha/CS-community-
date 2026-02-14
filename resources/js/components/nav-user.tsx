@@ -28,11 +28,11 @@ export function NavUser() {
                     <DropdownMenuTrigger asChild>
                         <SidebarMenuButton
                             size="lg"
-                            className="group text-sidebar-accent-foreground data-[state=open]:bg-sidebar-accent"
+                            className="group text-black data-[state=open]:!border-t-[#000] data-[state=open]:!border-l-[#000] data-[state=open]:!border-b-[#fff] data-[state=open]:!border-r-[#fff] data-[state=open]:!shadow-[inset_1px_1px_0_#808080,inset_-1px_-1px_0_#dfdfdf] data-[state=open]:text-black mc-btn !rounded-none hover:!bg-[#d4d4d4] hover:!text-black active:!bg-[#c0c0c0] active:!text-black"
                             data-test="sidebar-menu-button"
                         >
                             <UserInfo user={auth.user} />
-                            <ChevronsUpDown className="ml-auto size-4" />
+                            <ChevronsUpDown className="ml-auto size-4 text-black" />
                         </SidebarMenuButton>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent
@@ -42,8 +42,8 @@ export function NavUser() {
                             isMobile
                                 ? 'bottom'
                                 : state === 'collapsed'
-                                  ? 'left'
-                                  : 'bottom'
+                                    ? 'left'
+                                    : 'bottom'
                         }
                     >
                         <UserMenuContent user={auth.user} />

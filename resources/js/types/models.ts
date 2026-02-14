@@ -1,5 +1,10 @@
 import type { User } from './auth';
 
+export type Tag = {
+    id: number;
+    name: string;
+};
+
 export type Post = {
     id: number;
     title: string;
@@ -9,13 +14,17 @@ export type Post = {
     user_id: number | null;
     file_path: string | null;
     file_size: number | null;
+    event_date: string | null;
     attachment_url: string | null;
     attachment_is_image: boolean;
     created_at: string;
     updated_at: string;
     user?: Pick<User, 'id' | 'name'>;
     comments_count?: number;
+    likes_count?: number;
+    is_liked?: boolean;
     comments?: Comment[];
+    tags?: Tag[];
 };
 
 export type Comment = {

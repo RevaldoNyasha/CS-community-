@@ -27,25 +27,22 @@ export default function AdminPendingIndex({ posts }: Props) {
             <Head title="Pending Approvals" />
             <div className="flex h-full flex-1 flex-col gap-6 p-4">
                 <div>
-                    <h1 className="text-2xl font-bold tracking-tight">Pending Approvals</h1>
+                    <h1 className="text-3xl font-bold tracking-tight uppercase font-mono text-brutal-green">Pending Approvals</h1>
                     <p className="text-muted-foreground">Review and approve user-submitted posts.</p>
                 </div>
 
                 {posts.data.length === 0 ? (
-                    <div className="rounded-xl border border-sidebar-border/70 p-8 text-center text-muted-foreground dark:border-sidebar-border">
+                    <div className="mc-container text-center text-muted-foreground">
                         No pending posts. All caught up!
                     </div>
                 ) : (
                     <div className="space-y-3">
                         {posts.data.map((post) => (
-                            <div
-                                key={post.id}
-                                className="rounded-xl border border-sidebar-border/70 p-4 dark:border-sidebar-border"
-                            >
+                            <div key={post.id} className="mc-container">
                                 <div className="flex items-start justify-between">
                                     <div className="flex-1">
                                         <div className="flex items-center gap-2 mb-1">
-                                            <span className="rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary capitalize">
+                                            <span className="bg-brutal-green px-2 py-0.5 text-xs font-medium text-black uppercase">
                                                 {post.type}
                                             </span>
                                             <span className="text-xs text-muted-foreground">
@@ -61,13 +58,13 @@ export default function AdminPendingIndex({ posts }: Props) {
                                     <div className="ml-4 flex shrink-0 gap-2">
                                         <button
                                             onClick={() => handleApprove(post)}
-                                            className="rounded-lg bg-green-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-green-700"
+                                            className="mc-btn text-xs !py-1"
                                         >
                                             Approve
                                         </button>
                                         <button
                                             onClick={() => handleDelete(post)}
-                                            className="rounded-lg bg-destructive px-3 py-1.5 text-xs font-medium text-destructive-foreground hover:bg-destructive/90"
+                                            className="mc-btn mc-btn-danger text-xs !py-1"
                                         >
                                             Reject
                                         </button>
