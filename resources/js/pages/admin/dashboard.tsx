@@ -28,12 +28,10 @@ export default function AdminDashboard({ stats, recentPosts }: Props) {
     return (
         <AdminLayout breadcrumbs={breadcrumbs}>
             <Head title="Admin Dashboard" />
-            <div className="flex h-full flex-1 flex-col gap-6 p-4">
+            <div className="flex h-full flex-1 flex-col gap-6 p-6 lg:p-8 bg-background">
                 <div>
-                    <h1 className="text-3xl font-bold tracking-tight uppercase font-mono text-brutal-green">
-                        Operator Dashboard
-                    </h1>
-                    <p className="text-muted-foreground">System overview and management.</p>
+                    <h1 className="text-xl font-semibold tracking-tight text-foreground">Admin Dashboard</h1>
+                    <p className="text-xs text-muted-foreground mt-0.5">System overview and management.</p>
                 </div>
 
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -41,42 +39,44 @@ export default function AdminDashboard({ stats, recentPosts }: Props) {
                         <Link
                             key={card.title}
                             href={card.href}
-                            className="mc-container text-center transition-all hover:brightness-110"
+                            className="bg-card border border-border rounded-lg p-5 hover:border-primary/40 transition-colors group shadow-sm"
                         >
-                            <div className="flex flex-col items-center gap-2">
-                                <card.icon className="size-8 text-brutal-green" />
-                                <span className="text-sm text-muted-foreground uppercase">{card.title}</span>
-                                <p className="text-4xl font-bold text-brutal-green font-mono">{card.value}</p>
+                            <div className="flex items-start justify-between">
+                                <div>
+                                    <p className="text-[10px] text-muted-foreground uppercase tracking-[0.2em] mb-2">{card.title}</p>
+                                    <p className="text-3xl font-light text-foreground group-hover:text-primary transition-colors">{card.value}</p>
+                                </div>
+                                <card.icon className="size-4 text-muted-foreground/40 mt-0.5" />
                             </div>
                         </Link>
                     ))}
                 </div>
 
                 <div>
-                    <h2 className="mb-3 text-lg font-semibold uppercase font-mono text-brutal-green">Activity Feed</h2>
+                    <h2 className="mb-3 text-xs font-bold uppercase tracking-[0.3em] text-muted-foreground">Activity Feed</h2>
                     {recentPosts.length === 0 ? (
-                        <div className="mc-container text-center text-muted-foreground">
+                        <div className="bg-card border border-border rounded-lg p-8 text-center text-muted-foreground text-sm">
                             No posts yet.
                         </div>
                     ) : (
-                        <div className="mc-container !p-0">
+                        <div className="bg-card border border-border rounded-lg overflow-hidden">
                             {recentPosts.map((post, index) => (
                                 <div
                                     key={post.id}
-                                    className={`flex items-center justify-between p-3 mc-slot !border-x-0 ${index === 0 ? '!border-t-0' : ''} ${index === recentPosts.length - 1 ? '!border-b-0' : ''}`}
+                                    className={`flex items-center justify-between px-5 py-3 text-sm ${index !== recentPosts.length - 1 ? 'border-b border-border' : ''}`}
                                 >
                                     <div>
-                                        <span className="font-medium">{post.title}</span>
+                                        <span className="font-medium text-foreground">{post.title}</span>
                                         <span className="ml-2 text-xs text-muted-foreground">by {post.user?.name ?? 'Admin'}</span>
                                     </div>
                                     <div className="flex items-center gap-2">
-                                        <span className="bg-brutal-green px-2 py-0.5 text-xs font-medium text-black uppercase font-mono">
+                                        <span className="border border-primary/30 bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-primary uppercase rounded">
                                             {post.type}
                                         </span>
-                                        <span className={`px-2 py-0.5 text-xs font-medium uppercase font-mono ${
+                                        <span className={`px-2 py-0.5 text-[10px] font-medium uppercase rounded ${
                                             post.status === 'approved'
-                                                ? 'bg-brutal-green/20 text-brutal-green border-2 border-brutal-green'
-                                                : 'bg-brutal-yellow/20 text-brutal-yellow border-2 border-brutal-yellow'
+                                                ? 'border border-emerald-500/30 bg-emerald-500/10 text-emerald-400'
+                                                : 'border border-yellow-500/30 bg-yellow-500/10 text-yellow-400'
                                         }`}>
                                             {post.status}
                                         </span>

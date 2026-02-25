@@ -6,6 +6,8 @@ import AuthLayout from '@/layouts/auth-layout';
 import { login } from '@/routes';
 import { store } from '@/routes/register';
 
+const underlineInput = "w-full bg-transparent border-0 border-b border-border/60 rounded-none px-0 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary focus:ring-0 transition-colors";
+
 export default function Register() {
     return (
         <AuthLayout
@@ -17,14 +19,11 @@ export default function Register() {
                 {...store.form()}
                 resetOnSuccess={['password', 'password_confirmation']}
                 disableWhileProcessing
-                className="space-y-4"
+                className="flex flex-col gap-7"
             >
                 {({ processing, errors }) => (
                     <>
-                        <div>
-                            <label htmlFor="name" className="block text-[10px] font-bold mb-0.5 text-gray-800">
-                                Name
-                            </label>
+                        <div className="grid gap-1">
                             <input
                                 id="name"
                                 type="text"
@@ -34,15 +33,12 @@ export default function Register() {
                                 autoComplete="name"
                                 name="name"
                                 placeholder="Full name"
-                                className="win95-sunken w-full bg-white px-2 py-1.5 text-xs focus:outline-none"
+                                className={underlineInput}
                             />
                             <InputError message={errors.name} />
                         </div>
 
-                        <div>
-                            <label htmlFor="email" className="block text-[10px] font-bold mb-0.5 text-gray-800">
-                                Email address
-                            </label>
+                        <div className="grid gap-1">
                             <input
                                 id="email"
                                 type="email"
@@ -50,16 +46,13 @@ export default function Register() {
                                 tabIndex={2}
                                 autoComplete="email"
                                 name="email"
-                                placeholder="email@example.com"
-                                className="win95-sunken w-full bg-white px-2 py-1.5 text-xs focus:outline-none"
+                                placeholder="Email address"
+                                className={underlineInput}
                             />
                             <InputError message={errors.email} />
                         </div>
 
-                        <div>
-                            <label htmlFor="password" className="block text-[10px] font-bold mb-0.5 text-gray-800">
-                                Password
-                            </label>
+                        <div className="grid gap-1">
                             <input
                                 id="password"
                                 type="password"
@@ -68,15 +61,12 @@ export default function Register() {
                                 autoComplete="new-password"
                                 name="password"
                                 placeholder="Password"
-                                className="win95-sunken w-full bg-white px-2 py-1.5 text-xs focus:outline-none"
+                                className={underlineInput}
                             />
                             <InputError message={errors.password} />
                         </div>
 
-                        <div>
-                            <label htmlFor="password_confirmation" className="block text-[10px] font-bold mb-0.5 text-gray-800">
-                                Confirm password
-                            </label>
+                        <div className="grid gap-1">
                             <input
                                 id="password_confirmation"
                                 type="password"
@@ -85,27 +75,25 @@ export default function Register() {
                                 autoComplete="new-password"
                                 name="password_confirmation"
                                 placeholder="Confirm password"
-                                className="win95-sunken w-full bg-white px-2 py-1.5 text-xs focus:outline-none"
+                                className={underlineInput}
                             />
                             <InputError message={errors.password_confirmation} />
                         </div>
 
-                        <div className="pt-2">
+                        <div className="flex flex-col gap-3 pt-1">
                             <button
                                 type="submit"
                                 tabIndex={5}
                                 data-test="register-user-button"
-                                className="mc-btn w-full py-1.5 !bg-black !text-white font-bold text-xs tracking-widest hover:brightness-110 active:brightness-90 flex items-center justify-center disabled:opacity-50"
+                                className="w-full py-2.5 bg-primary text-primary-foreground text-sm font-semibold tracking-wide hover:brightness-110 disabled:opacity-50 transition-all flex items-center justify-center"
                             >
                                 {processing && <Spinner className="mr-2" />}
                                 Create account
                             </button>
-                        </div>
 
-                        <div className="text-center pt-1">
-                            <p className="text-[10px] text-gray-700">
+                            <p className="text-center text-xs text-muted-foreground pt-1">
                                 Already have an account?{' '}
-                                <TextLink href={login()} tabIndex={6} className="!text-[10px] font-bold hover:text-black">
+                                <TextLink href={login()} tabIndex={6} className="text-xs! text-foreground hover:text-foreground/80 font-medium">
                                     Log in
                                 </TextLink>
                             </p>

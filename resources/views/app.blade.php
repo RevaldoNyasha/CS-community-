@@ -4,14 +4,17 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        {{-- Inline script to detect system dark mode preference and apply it immediately --}}
+        {{-- Inline script to detect system dark mode preference and apply it before paint --}}
         <script>
             (function() {
                 const appearance = '{{ $appearance ?? "system" }}';
 
-                if (appearance === 'system') {
+                if (appearance === 'light') {
+                    document.documentElement.classList.remove('dark');
+                } else if (appearance === 'dark') {
+                    document.documentElement.classList.add('dark');
+                } else {
                     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-
                     if (prefersDark) {
                         document.documentElement.classList.add('dark');
                     }
@@ -19,14 +22,13 @@
             })();
         </script>
 
-        {{-- Inline style to set the HTML background color based on our theme in app.css --}}
+        {{-- Inline style to set the HTML background color based on our theme --}}
         <style>
             html {
-                background-color: #1a1a24;
+                background-color: #ffffff;
             }
-
             html.dark {
-                background-color: #1a1a24;
+                background-color: #0d1117;
             }
         </style>
 

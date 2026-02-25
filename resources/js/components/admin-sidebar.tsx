@@ -89,8 +89,8 @@ const footerNavItems: NavItem[] = [];
 
 export function AdminSidebar() {
     return (
-        <Sidebar collapsible="icon" variant="inset">
-            <SidebarHeader>
+        <Sidebar collapsible="icon" variant="inset" className="text-foreground">
+            <SidebarHeader className="border-b border-border">
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
@@ -106,7 +106,7 @@ export function AdminSidebar() {
                 <NavMain items={mainNavItems} />
             </SidebarContent>
 
-            <SidebarFooter>
+            <SidebarFooter className="border-t border-border">
                 {footerNavItems.length > 0 && (
                     <NavFooter items={footerNavItems} className="mt-auto" />
                 )}

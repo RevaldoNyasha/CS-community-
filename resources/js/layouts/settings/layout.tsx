@@ -52,7 +52,7 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
             <div className="flex flex-col lg:flex-row lg:space-x-12">
                 <aside className="w-full max-w-xl lg:w-52">
                     <nav
-                        className="flex flex-col space-y-1"
+                        className="flex flex-col space-y-0.5"
                         aria-label="Settings"
                     >
                         {sidebarNavItems.map((item, index) => {
@@ -62,16 +62,16 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
                                     key={`${toUrl(item.href)}-${index}`}
                                     href={item.href}
                                     className={cn(
-                                        'mc-btn !justify-start gap-2 text-[12px] !py-1.5 !px-3 w-full',
+                                        'mc-btn !justify-start gap-2 text-xs !py-1.5 !px-3 w-full',
                                         active
-                                            ? '!bg-[#008080] !text-white !border-t-[#006060] !border-l-[#006060] !border-b-[#00a0a0] !border-r-[#00a0a0] !shadow-[inset_1px_1px_0_#005050,inset_-1px_-1px_0_#00b0b0]'
-                                            : 'hover:!bg-[#d4d4d4]',
+                                            ? 'mc-btn-gold !border-l-2 !border-l-primary'
+                                            : '',
                                     )}
                                 >
                                     {item.icon && (
-                                        <item.icon className={cn('size-4 shrink-0', active ? 'text-white' : 'text-[#008080]')} />
+                                        <item.icon className={cn('size-3.5 shrink-0', active ? 'text-primary' : 'text-muted-foreground')} />
                                     )}
-                                    <span className="uppercase tracking-wide">{item.title}</span>
+                                    <span>{item.title}</span>
                                 </Link>
                             );
                         })}

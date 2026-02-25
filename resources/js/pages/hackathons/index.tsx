@@ -1,5 +1,5 @@
 import { Head, Link, router } from '@inertiajs/react';
-import { Calendar, Clock, MessageSquare, Search, Trophy } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { useState } from 'react';
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem, Post } from '@/types';
@@ -9,63 +9,82 @@ const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Hackathons', href: '/hackathons' },
 ];
 
-type Filters = {
-    search: string;
-    date_from: string;
-    date_to: string;
-};
+type Filters = { search: string; date_from: string; date_to: string };
+type Props = { upcoming: Post[]; finished: Post[]; filters: Filters };
 
-type Props = {
-    upcoming: Post[];
-    finished: Post[];
-    filters: Filters;
-};
+/* Accent colors for upcoming (green) and finished (red) hackathons */
+const UPCOMING_ACCENT = [
+    { color: 'green', dateBg: 'bg-green-600', shadow: 'shadow-[0_0_15px_rgba(34,197,94,0.15)]', hover: 'group-hover:text-green-400', icon: 'text-green-500' },
+    { color: 'emerald', dateBg: 'bg-emerald-600', shadow: 'shadow-[0_0_15px_rgba(16,185,129,0.15)]', hover: 'group-hover:text-emerald-400', icon: 'text-emerald-500' },
+];
 
-function HackathonCard({ post, variant }: { post: Post; variant: 'upcoming' | 'finished' }) {
-    const isFinished = variant === 'finished';
+const FINISHED_ACCENT = [
+    { color: 'red', dateBg: 'bg-red-600', shadow: 'shadow-[0_0_15px_rgba(239,68,68,0.15)]', hover: 'group-hover:text-red-400', icon: 'text-red-500' },
+    { color: 'rose', dateBg: 'bg-rose-600', shadow: 'shadow-[0_0_15px_rgba(244,63,94,0.15)]', hover: 'group-hover:text-rose-400', icon: 'text-rose-500' },
+];
+
+function HackathonCard({ post, index, variant }: { post: Post; index: number; variant: 'upcoming' | 'finished' }) {
+    const accent = variant === 'upcoming' 
+        ? UPCOMING_ACCENT[index % UPCOMING_ACCENT.length]
+        : FINISHED_ACCENT[index % FINISHED_ACCENT.length];
+    const date = post.event_date ? new Date(post.event_date) : null;
+    const dateLabel = date
+        ? date.toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' })
+        : null;
 
     return (
         <Link
             href={`/posts/${post.id}`}
-            className="block win95-window group cursor-pointer hover:brightness-95 active:brightness-90"
+            className="group relative bg-card border border-border rounded-xl overflow-hidden flex flex-col hover:border-[#334155] transition-all duration-300 shadow-lg"
         >
-            <div className="win95-titlebar mb-[2px]">
-                <Trophy className="size-3 mr-1.5 shrink-0" />
-                <span className="text-[10px] truncate flex-1">{post.user?.name}</span>
-                {post.event_date && (
-                    <span className="flex items-center gap-0.5 text-[9px] bg-white/20 px-1 py-0.5 rounded-sm ml-1 shrink-0">
-                        <Calendar className="size-2.5" />
-                        {new Date(post.event_date).toLocaleDateString()}
-                    </span>
-                )}
-            </div>
-            <div className="p-3">
-                <h3 className="text-[13px] font-black uppercase text-black mb-2 line-clamp-2 group-hover:underline">
+            <div className="p-8 flex-1">
+                {/* Card top row */}
+                <div className="flex justify-between items-start mb-6">
+                    <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-lg flex items-center justify-center">
+                            <span className="material-symbols-outlined text-[20px] text-neutral-400">trophy</span>
+                        </div>
+                        <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider truncate max-w-[120px]">
+                            {post.user?.name ?? 'DEV-CRAFT'}
+                        </span>
+                    </div>
+                    {dateLabel && (
+                        <div className={`px-3 py-1.5 rounded-lg ${accent.dateBg} text-white text-[10px] font-black uppercase tracking-tighter ${accent.shadow} shrink-0`}>
+                            {dateLabel}
+                        </div>
+                    )}
+                </div>
+
+                {/* Title */}
+                <h3 className={`text-xl font-bold text-foreground mb-4 ${accent.hover} transition-colors leading-tight line-clamp-2`}>
                     {post.title}
                 </h3>
-                <div className="win95-sunken bg-white p-2 mb-2">
-                    <p className="text-[11px] text-[#1a1a1a] font-semibold line-clamp-3 leading-relaxed">
-                        {post.content}
-                    </p>
-                </div>
-                <div className="flex items-center gap-2 text-[10px] text-[#333]">
-                    {post.event_date ? (
-                        <span className={`flex items-center gap-0.5 font-bold ${isFinished ? 'text-[#999]' : 'text-[#008000]'}`}>
-                            <Clock className="size-2.5" />
-                            {isFinished ? 'Ended' : 'Upcoming'}
-                        </span>
-                    ) : (
-                        <span className="text-[10px]">{new Date(post.created_at).toLocaleDateString()}</span>
-                    )}
-                    {post.comments_count !== undefined && (
-                        <>
-                            <span>&middot;</span>
-                            <span className="flex items-center gap-0.5">
-                                <MessageSquare className="size-2.5" />
-                                {post.comments_count}
+
+                {/* Body */}
+                <p className="text-muted-foreground text-sm leading-relaxed line-clamp-3 font-light mb-6">
+                    {post.content}
+                </p>
+
+                {/* Tags */}
+                {post.tags && post.tags.length > 0 && (
+                    <div className="flex flex-wrap gap-2">
+                        {post.tags.map((tag) => (
+                            <span
+                                key={tag.id}
+                                className="px-2 py-1 text-[10px] bg-neutral-900 border border-neutral-800 text-neutral-400 rounded"
+                            >
+                                {tag.name}
                             </span>
-                        </>
-                    )}
+                        ))}
+                    </div>
+                )}
+            </div>
+
+            {/* Card footer */}
+            <div className="px-8 py-5 border-t border-border flex items-center justify-between text-[11px] font-bold text-muted-foreground uppercase tracking-widest">
+                <div className="flex items-center gap-2">
+                    <span className="material-symbols-outlined text-[16px] text-neutral-600">emoji_events</span>
+                    View Details
                 </div>
             </div>
         </Link>
@@ -85,115 +104,154 @@ export default function HackathonsIndex({ upcoming, finished, filters }: Props) 
         }, { preserveState: true, preserveScroll: true });
     }
 
-    function clearFilters() {
-        setSearch('');
-        setDateFrom('');
-        setDateTo('');
-        router.get('/hackathons', {}, { preserveState: true, preserveScroll: true });
-    }
-
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Hackathons" />
-            <div className="flex h-full flex-1 flex-col gap-4 p-4 bg-[#008080]">
-                {/* Page Header */}
-                <div className="flex items-center justify-between">
-                    <div>
-                        <h1 className="text-2xl font-black tracking-tight uppercase text-white">⚔ Hackathons</h1>
-                        <p className="text-[12px] text-white/80">Discover hackathon events and competitions.</p>
-                    </div>
-                    <Link href="/posts/create" className="mc-btn">
-                        Share Hackathon
-                    </Link>
-                </div>
 
-                {/* Search & Filters Bar */}
-                <div className="win95-window">
-                    <div className="win95-titlebar mb-[2px]">
-                        <Search className="size-3 mr-1.5" />
-                        <span className="text-[11px] font-bold uppercase">Search & Filter</span>
-                    </div>
-                    <div className="p-3 flex flex-wrap items-end gap-3">
-                        <div className="flex-1 min-w-[200px]">
-                            <label className="block text-[10px] font-bold uppercase text-[#333] mb-1">Search</label>
-                            <input
-                                type="text"
-                                value={search}
-                                onChange={(e) => setSearch(e.target.value)}
-                                onKeyDown={(e) => e.key === 'Enter' && applyFilters()}
-                                placeholder="Search hackathons..."
-                                className="win95-sunken bg-white w-full px-2 py-1 text-[12px] text-black outline-none"
-                            />
-                        </div>
+            <div className="flex-1 overflow-y-auto [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-border [&::-webkit-scrollbar-track]:bg-transparent">
+                <div className="max-w-7xl mx-auto px-6 lg:px-8 py-12">
+
+                    {/* ── Hero Header ── */}
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 mb-16">
                         <div>
-                            <label className="block text-[10px] font-bold uppercase text-[#333] mb-1">From</label>
-                            <input
-                                type="date"
-                                value={dateFrom}
-                                onChange={(e) => setDateFrom(e.target.value)}
-                                className="win95-sunken bg-white px-2 py-1 text-[12px] text-black outline-none"
-                            />
+                            <h1 className="text-5xl font-extrabold tracking-tighter mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white via-neutral-200 to-neutral-500 leading-tight">
+                                Hackathons Directory
+                            </h1>
+                            <p className="text-muted-foreground max-w-xl text-lg leading-relaxed font-light">
+                                Developer competitions for the most innovative builders. Filter by stack, date, and events.
+                            </p>
                         </div>
-                        <div>
-                            <label className="block text-[10px] font-bold uppercase text-[#333] mb-1">To</label>
-                            <input
-                                type="date"
-                                value={dateTo}
-                                onChange={(e) => setDateTo(e.target.value)}
-                                className="win95-sunken bg-white px-2 py-1 text-[12px] text-black outline-none"
-                            />
-                        </div>
-                        <div className="flex gap-2">
-                            <button type="button" onClick={applyFilters} className="mc-btn text-[11px] !py-1 !px-3">
-                                Apply
-                            </button>
-                            <button type="button" onClick={clearFilters} className="mc-btn text-[11px] !py-1 !px-3 !bg-[#c0c0c0] !text-black">
-                                Clear
-                            </button>
-                        </div>
+                        <Link
+                            href="/posts/create"
+                            className="btn-primary flex items-center gap-2 shrink-0 w-fit"
+                        >
+                            <Plus className="size-4" />
+                            Share Hackathon
+                        </Link>
                     </div>
-                </div>
 
-                {/* Upcoming Hackathons */}
-                <div>
-                    <div className="win95-window mb-1">
-                        <div className="win95-titlebar">
-                            <span className="text-[11px] mr-1.5">🟢</span>
-                            <span className="text-[12px] font-bold uppercase">Upcoming Hackathons ({upcoming.length})</span>
-                        </div>
-                    </div>
-                    {upcoming.length === 0 ? (
-                        <div className="win95-window p-4 text-center text-[#333] text-xs">
-                            No upcoming hackathons at the moment. Stay tuned!
-                        </div>
-                    ) : (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
-                            {upcoming.map((post) => (
-                                <HackathonCard key={post.id} post={post} variant="upcoming" />
-                            ))}
-                        </div>
-                    )}
-                </div>
+                    {/* ── Glass Search Bar ── */}
+                    <div className="rounded-2xl p-2 mb-16 shadow-2xl bg-white/[0.03] backdrop-blur-xl border border-white/[0.08]">
+                        <div className="flex flex-col lg:flex-row gap-2 items-center">
+                            {/* Search input */}
+                            <div className="relative flex-grow w-full">
+                                <span className="absolute inset-y-0 left-5 flex items-center pointer-events-none">
+                                    <span className="material-symbols-outlined text-muted-foreground/60">search</span>
+                                </span>
+                                <input
+                                    type="text"
+                                    value={search}
+                                    onChange={(e) => setSearch(e.target.value)}
+                                    onKeyDown={(e) => e.key === 'Enter' && applyFilters()}
+                                    placeholder="Search by tech stack, name, or organizer..."
+                                    className="w-full pl-14 pr-6 py-4 rounded-xl border-none bg-transparent focus:ring-1 focus:ring-white/20 outline-none text-foreground placeholder:text-muted-foreground/40 text-sm"
+                                />
+                            </div>
 
-                {/* Finished Hackathons */}
-                <div>
-                    <div className="win95-window mb-1">
-                        <div className="win95-titlebar">
-                            <span className="text-[11px] mr-1.5">⏹</span>
-                            <span className="text-[12px] font-bold uppercase">Finished Hackathons ({finished.length})</span>
+                            <div className="h-8 w-px bg-border/50 hidden lg:block mx-2" />
+
+                            {/* Date filters + button */}
+                            <div className="flex flex-col sm:flex-row gap-2 w-full lg:w-auto p-1">
+                                <input
+                                    type="date"
+                                    value={dateFrom}
+                                    onChange={(e) => setDateFrom(e.target.value)}
+                                    title="From date"
+                                    className="w-full lg:w-44 px-5 py-3.5 rounded-xl border-none bg-white/5 hover:bg-white/10 focus:bg-white/10 focus:ring-1 focus:ring-white/20 outline-none text-sm text-muted-foreground [color-scheme:dark]"
+                                />
+                                <input
+                                    type="date"
+                                    value={dateTo}
+                                    onChange={(e) => setDateTo(e.target.value)}
+                                    title="To date"
+                                    className="w-full lg:w-44 px-5 py-3.5 rounded-xl border-none bg-white/5 hover:bg-white/10 focus:bg-white/10 focus:ring-1 focus:ring-white/20 outline-none text-sm text-muted-foreground [color-scheme:dark]"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={applyFilters}
+                                    className="btn-primary"
+                                >
+                                    Filter
+                                </button>
+                            </div>
                         </div>
                     </div>
-                    {finished.length === 0 ? (
-                        <div className="win95-window p-4 text-center text-[#333] text-xs">
-                            No finished hackathons yet.
+
+                    {/* ── Upcoming Section ── */}
+                    <div className="mb-20">
+                        <div className="flex items-center justify-between mb-10">
+                            <div className="flex items-center gap-4">
+                                <span className="px-3 py-1 bg-green-500/10 text-green-400 text-xs font-bold tracking-[0.2em] rounded-full border border-green-500/20">
+                                    UPCOMING
+                                </span>
+                                <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-widest">
+                                    Available Challenges ({upcoming.length})
+                                </h2>
+                            </div>
+                            <div className="h-px flex-grow mx-8 bg-neutral-900" />
                         </div>
-                    ) : (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
-                            {finished.map((post) => (
-                                <HackathonCard key={post.id} post={post} variant="finished" />
-                            ))}
+
+                        {upcoming.length === 0 ? (
+                            <div className="flex flex-col items-center justify-center py-24 rounded-3xl border border-dashed border-border/60 bg-background">
+                                <div className="w-16 h-16 rounded-full bg-muted/50 flex items-center justify-center mb-4">
+                                    <span className="material-symbols-outlined text-3xl text-muted-foreground/40">emoji_events</span>
+                                </div>
+                                <p className="text-muted-foreground font-light tracking-wide">No upcoming hackathons at the moment. Stay tuned.</p>
+                            </div>
+                        ) : (
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                                {upcoming.map((post, i) => (
+                                    <HackathonCard key={post.id} post={post} index={i} variant="upcoming" />
+                                ))}
+                            </div>
+                        )}
+                    </div>
+
+                    {/* ── Finished Section ── */}
+                    <div className="mb-20">
+                        <div className="flex items-center justify-between mb-10">
+                            <div className="flex items-center gap-4">
+                                <span className="px-3 py-1 bg-red-500/10 text-red-400 text-xs font-bold tracking-[0.2em] rounded-full border border-red-500/20">
+                                    FINISHED
+                                </span>
+                                <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-widest">
+                                    Past Events ({finished.length})
+                                </h2>
+                            </div>
+                            <div className="h-px flex-grow mx-8 bg-neutral-900" />
                         </div>
-                    )}
+
+                        {finished.length === 0 ? (
+                            <div className="flex flex-col items-center justify-center py-24 rounded-3xl border border-dashed border-border/60 bg-background">
+                                <div className="w-16 h-16 rounded-full bg-muted/50 flex items-center justify-center mb-4">
+                                    <span className="material-symbols-outlined text-3xl text-muted-foreground/40">history_toggle_off</span>
+                                </div>
+                                <p className="text-muted-foreground font-light tracking-wide">Archived competitions will appear here.</p>
+                            </div>
+                        ) : (
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                                {finished.map((post, i) => (
+                                    <HackathonCard key={post.id} post={post} index={i} variant="finished" />
+                                ))}
+                            </div>
+                        )}
+                    </div>
+
+                    {/* ── Footer ── */}
+                    <footer className="border-t border-border/40 pt-12">
+                        <div className="flex flex-col md:flex-row justify-between items-center gap-8">
+                            <p className="text-muted-foreground/40 text-xs font-medium uppercase tracking-[0.3em]">
+                                © {new Date().getFullYear()} DEV-CRAFT Community
+                            </p>
+                            <div className="flex gap-8">
+                                {['Terms', 'Privacy', 'API'].map((item) => (
+                                    <a key={item} href="#" className="text-muted-foreground hover:text-foreground transition-colors text-xs font-bold uppercase tracking-widest">
+                                        {item}
+                                    </a>
+                                ))}
+                            </div>
+                        </div>
+                    </footer>
                 </div>
             </div>
         </AppLayout>

@@ -15,43 +15,43 @@ export default function AdminSuggestionsIndex({ suggestions }: Props) {
     return (
         <AdminLayout breadcrumbs={breadcrumbs}>
             <Head title="User Suggestions" />
-            <div className="flex h-full flex-1 flex-col gap-6 p-4">
+            <div className="flex h-full flex-1 flex-col gap-6 p-6 lg:p-8 bg-background">
                 <div>
-                    <h1 className="text-3xl font-bold tracking-tight uppercase font-mono text-brutal-green">Suggestions</h1>
-                    <p className="text-muted-foreground">User feedback and suggestions.</p>
+                    <h1 className="text-xl font-semibold tracking-tight text-foreground">Suggestions</h1>
+                    <p className="text-xs text-muted-foreground mt-0.5">User feedback and suggestions.</p>
                 </div>
 
                 {suggestions.data.length === 0 ? (
-                    <div className="mc-container text-center text-muted-foreground">
+                    <div className="bg-card border border-border rounded-lg p-8 text-center text-muted-foreground text-sm">
                         No suggestions yet.
                     </div>
                 ) : (
                     <div className="space-y-3">
                         {suggestions.data.map((suggestion) => (
-                            <div key={suggestion.id} className="mc-container">
+                            <div key={suggestion.id} className="bg-card border border-border rounded-lg p-5 shadow-sm">
                                 <div className="flex items-center justify-between mb-2">
-                                    <span className="text-sm font-medium text-brutal-green font-mono">{suggestion.user?.name ?? 'Unknown'}</span>
+                                    <span className="text-sm font-semibold text-foreground">{suggestion.user?.name ?? 'Unknown'}</span>
                                     <span className="text-xs text-muted-foreground">
                                         {new Date(suggestion.created_at).toLocaleDateString()}
                                     </span>
                                 </div>
-                                <p className="text-sm">{suggestion.message}</p>
+                                <p className="text-sm text-muted-foreground">{suggestion.message}</p>
                             </div>
                         ))}
                     </div>
                 )}
 
                 {suggestions.last_page > 1 && (
-                    <div className="flex justify-center gap-2">
+                    <div className="flex justify-center gap-1.5">
                         {suggestions.links.map((link, i) => (
                             <Link
                                 key={i}
                                 href={link.url ?? '#'}
-                                className={`mc-btn !py-1 !px-3 text-sm ${
+                                className={`px-3 py-1.5 text-xs font-semibold rounded-md border transition-colors ${
                                     link.active
-                                        ? 'mc-btn-gold'
-                                        : '!bg-card !border-brutal-border !text-foreground'
-                                } ${!link.url ? 'pointer-events-none opacity-50' : ''}`}
+                                        ? 'border-primary bg-primary/10 text-primary'
+                                        : 'border-border text-muted-foreground hover:border-primary/40 hover:text-foreground'
+                                } ${!link.url ? 'pointer-events-none opacity-40' : ''}`}
                                 dangerouslySetInnerHTML={{ __html: link.label }}
                             />
                         ))}

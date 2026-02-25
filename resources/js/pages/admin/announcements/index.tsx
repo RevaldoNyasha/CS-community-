@@ -1,4 +1,6 @@
 import { Head, Link, router, useForm } from '@inertiajs/react';
+import { useState } from 'react';
+import ConfirmDialog from '@/components/confirm-dialog';
 import AdminLayout from '@/layouts/admin-layout';
 import type { BreadcrumbItem, PaginatedData, Post } from '@/types';
 
@@ -6,6 +8,27 @@ const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Admin Dashboard', href: '/admin' },
     { title: 'Announcements', href: '/admin/announcements' },
 ];
+
+const inputClass = 'w-full bg-background border border-border rounded-md px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary/60 transition-colors';
+const btnDanger = 'px-3 py-1 border border-red-500/30 bg-red-500/10 text-red-400 text-xs font-semibold rounded-md hover:bg-red-500/20 transition-all';
+
+type DialogState = {
+    open: boolean;
+    title: string;
+    description: string;
+    confirmLabel: string;
+    confirmVariant: 'danger' | 'warning' | 'primary';
+    onConfirm: () => void;
+};
+
+const defaultDialog: DialogState = {
+    open: false,
+    title: '',
+    description: '',
+    confirmLabel: 'Confirm',
+    confirmVariant: 'danger',
+    onConfirm: () => {},
+};
 
 type Props = {
     announcements: PaginatedData<Post>;
@@ -16,6 +39,11 @@ export default function AdminAnnouncementsIndex({ announcements }: Props) {
         title: '',
         content: '',
     });
+    const [dialog, setDialog] = useState<DialogState>(defaultDialog);
+
+    function closeDialog() {
+        setDialog((d) => ({ ...d, open: false }));
+    }
 
     function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
@@ -25,69 +53,81 @@ export default function AdminAnnouncementsIndex({ announcements }: Props) {
     }
 
     function handleDelete(announcement: Post) {
-        if (confirm(`Delete "${announcement.title}"?`)) {
-            router.delete(`/admin/announcements/${announcement.id}`);
-        }
+        setDialog({
+            open: true,
+            title: 'Delete Announcement',
+            description: `Are you sure you want to delete "${announcement.title}"? This action cannot be undone.`,
+            confirmLabel: 'Delete',
+            confirmVariant: 'danger',
+            onConfirm: () => {
+                closeDialog();
+                router.delete(`/admin/announcements/${announcement.id}`);
+            },
+        });
     }
 
     return (
         <AdminLayout breadcrumbs={breadcrumbs}>
             <Head title="Announcements" />
-            <div className="flex h-full flex-1 flex-col gap-6 p-4">
+            <div className="flex h-full flex-1 flex-col gap-6 p-6 lg:p-8 bg-background">
                 <div>
-                    <h1 className="text-3xl font-bold tracking-tight uppercase font-mono text-brutal-green">Announcements</h1>
-                    <p className="text-muted-foreground">Create and manage announcements visible to all users.</p>
+                    <h1 className="text-xl font-semibold tracking-tight text-foreground">Announcements</h1>
+                    <p className="text-xs text-muted-foreground mt-0.5">Create and manage announcements visible to all users.</p>
                 </div>
 
-                <form onSubmit={handleSubmit} className="mc-container">
-                    <h3 className="mb-3 font-semibold uppercase text-brutal-green font-mono">New Announcement</h3>
+                <form onSubmit={handleSubmit} className="bg-card border border-border rounded-lg p-5 shadow-sm">
+                    <h3 className="mb-4 text-xs font-bold uppercase tracking-[0.3em] text-muted-foreground">New Announcement</h3>
                     <div className="space-y-3">
                         <div>
                             <input
                                 type="text"
                                 value={data.title}
                                 onChange={(e) => setData('title', e.target.value)}
-                                className="w-full mc-slot px-3 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-brutal-green"
+                                className={inputClass}
                                 placeholder="Announcement title"
                             />
-                            {errors.title && <p className="mt-1 text-sm text-red-400">{errors.title}</p>}
+                            {errors.title && <p className="mt-1 text-xs text-destructive">{errors.title}</p>}
                         </div>
                         <div>
                             <textarea
                                 value={data.content}
                                 onChange={(e) => setData('content', e.target.value)}
-                                className="w-full mc-slot px-3 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-brutal-green min-h-[100px]"
+                                className={`${inputClass} min-h-25 resize-none`}
                                 placeholder="Announcement content..."
                             />
-                            {errors.content && <p className="mt-1 text-sm text-red-400">{errors.content}</p>}
+                            {errors.content && <p className="mt-1 text-xs text-destructive">{errors.content}</p>}
                         </div>
-                        <button type="submit" disabled={processing} className="mc-btn disabled:opacity-50">
+                        <button
+                            type="submit"
+                            disabled={processing}
+                            className="px-4 py-2 bg-primary text-primary-foreground text-xs font-bold uppercase tracking-wider rounded-md hover:brightness-110 transition-all disabled:opacity-50"
+                        >
                             Post Announcement
                         </button>
                     </div>
                 </form>
 
                 <div>
-                    <h2 className="mb-3 text-lg font-semibold uppercase font-mono text-brutal-green">All Announcements</h2>
+                    <h2 className="mb-3 text-xs font-bold uppercase tracking-[0.3em] text-muted-foreground">All Announcements</h2>
                     {announcements.data.length === 0 ? (
-                        <div className="mc-container text-center text-muted-foreground">
+                        <div className="bg-card border border-border rounded-lg p-8 text-center text-muted-foreground text-sm">
                             No announcements yet.
                         </div>
                     ) : (
                         <div className="space-y-3">
                             {announcements.data.map((announcement) => (
-                                <div key={announcement.id} className="mc-container">
+                                <div key={announcement.id} className="bg-card border border-border rounded-lg p-5 shadow-sm">
                                     <div className="flex items-start justify-between">
-                                        <div className="flex-1">
-                                            <h3 className="font-semibold">{announcement.title}</h3>
+                                        <div className="flex-1 min-w-0">
+                                            <h3 className="font-semibold text-foreground">{announcement.title}</h3>
                                             <p className="mt-1 text-sm text-muted-foreground line-clamp-2">{announcement.content}</p>
-                                            <span className="mt-2 block text-xs text-muted-foreground">
+                                            <span className="mt-2 block text-xs text-muted-foreground/50">
                                                 {new Date(announcement.created_at).toLocaleDateString()}
                                             </span>
                                         </div>
                                         <button
                                             onClick={() => handleDelete(announcement)}
-                                            className="ml-4 mc-btn mc-btn-danger text-xs !py-0.5 !px-2"
+                                            className={`ml-4 shrink-0 ${btnDanger}`}
                                         >
                                             Delete
                                         </button>
@@ -99,22 +139,31 @@ export default function AdminAnnouncementsIndex({ announcements }: Props) {
                 </div>
 
                 {announcements.last_page > 1 && (
-                    <div className="flex justify-center gap-2">
+                    <div className="flex justify-center gap-1.5">
                         {announcements.links.map((link, i) => (
                             <Link
                                 key={i}
                                 href={link.url ?? '#'}
-                                className={`mc-btn !py-1 !px-3 text-sm ${
+                                className={`px-3 py-1.5 text-xs font-semibold rounded-md border transition-colors ${
                                     link.active
-                                        ? 'mc-btn-gold'
-                                        : '!bg-card !border-brutal-border !text-foreground'
-                                } ${!link.url ? 'pointer-events-none opacity-50' : ''}`}
+                                        ? 'border-primary bg-primary/10 text-primary'
+                                        : 'border-border text-muted-foreground hover:border-primary/40 hover:text-foreground'
+                                } ${!link.url ? 'pointer-events-none opacity-40' : ''}`}
                                 dangerouslySetInnerHTML={{ __html: link.label }}
                             />
                         ))}
                     </div>
                 )}
             </div>
+            <ConfirmDialog
+                open={dialog.open}
+                title={dialog.title}
+                description={dialog.description}
+                confirmLabel={dialog.confirmLabel}
+                confirmVariant={dialog.confirmVariant}
+                onConfirm={dialog.onConfirm}
+                onCancel={closeDialog}
+            />
         </AdminLayout>
     );
 }

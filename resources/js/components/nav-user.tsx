@@ -28,15 +28,15 @@ export function NavUser() {
                     <DropdownMenuTrigger asChild>
                         <SidebarMenuButton
                             size="lg"
-                            className="group text-black data-[state=open]:!border-t-[#000] data-[state=open]:!border-l-[#000] data-[state=open]:!border-b-[#fff] data-[state=open]:!border-r-[#fff] data-[state=open]:!shadow-[inset_1px_1px_0_#808080,inset_-1px_-1px_0_#dfdfdf] data-[state=open]:text-black mc-btn !rounded-none hover:!bg-[#d4d4d4] hover:!text-black active:!bg-[#c0c0c0] active:!text-black group-data-[collapsible=icon]:!border-0 group-data-[collapsible=icon]:!shadow-none group-data-[collapsible=icon]:!p-0 group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:items-center group-data-[collapsible=icon]:justify-center"
+                            className="!rounded-none text-muted-foreground hover:!bg-secondary hover:!text-foreground data-[state=open]:!bg-secondary data-[state=open]:!text-foreground group-data-[collapsible=icon]:!border-0 group-data-[collapsible=icon]:!shadow-none group-data-[collapsible=icon]:!p-0 group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:items-center group-data-[collapsible=icon]:justify-center"
                             data-test="sidebar-menu-button"
                         >
                             <UserInfo user={auth.user} />
-                            <ChevronsUpDown className="ml-auto size-4 text-black group-data-[collapsible=icon]:hidden" />
+                            <ChevronsUpDown className="ml-auto size-4 group-data-[collapsible=icon]:hidden" />
                         </SidebarMenuButton>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent
-                        className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
+                        className="w-(--radix-dropdown-menu-trigger-width) min-w-56"
                         align="end"
                         side={
                             isMobile

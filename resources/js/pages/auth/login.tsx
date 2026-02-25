@@ -7,6 +7,8 @@ import { register } from '@/routes';
 import { store } from '@/routes/login';
 import { request } from '@/routes/password';
 
+const underlineInput = "w-full bg-transparent border-0 border-b border-border/60 rounded-none px-0 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary focus:ring-0 transition-colors";
+
 type Props = {
     status?: string;
     canResetPassword: boolean;
@@ -28,14 +30,17 @@ export default function Login({
             <Form
                 {...store.form()}
                 resetOnSuccess={['password']}
-                className="space-y-4"
+                className="flex flex-col gap-7"
             >
                 {({ processing, errors }) => (
                     <>
-                        <div>
-                            <label htmlFor="email" className="block text-[10px] font-bold mb-0.5 text-gray-800">
-                                Email address
-                            </label>
+                        {status && (
+                            <div className="text-center text-sm font-medium text-green-400">
+                                {status}
+                            </div>
+                        )}
+
+                        <div className="grid gap-1">
                             <input
                                 id="email"
                                 type="email"
@@ -44,21 +49,18 @@ export default function Login({
                                 autoFocus
                                 tabIndex={1}
                                 autoComplete="email"
-                                placeholder="email@example.com"
-                                className="win95-sunken w-full bg-white px-2 py-1.5 text-xs focus:outline-none"
+                                placeholder="Email address"
+                                className={underlineInput}
                             />
                             <InputError message={errors.email} />
                         </div>
 
-                        <div>
-                            <div className="flex justify-between items-end mb-0.5">
-                                <label htmlFor="password" className="block text-[10px] font-bold text-gray-800">
-                                    Password
-                                </label>
+                        <div className="grid gap-1">
+                            <div className="flex items-center justify-between pb-0.5">
                                 {canResetPassword && (
                                     <TextLink
                                         href={request()}
-                                        className="!text-[9px] text-gray-600 underline hover:text-black"
+                                        className="text-xs! text-muted-foreground hover:text-foreground ml-auto"
                                         tabIndex={5}
                                     >
                                         Forgot password?
@@ -73,13 +75,13 @@ export default function Login({
                                 tabIndex={2}
                                 autoComplete="current-password"
                                 placeholder="Password"
-                                className="win95-sunken w-full bg-white px-2 py-1.5 text-xs focus:outline-none"
+                                className={underlineInput}
                             />
                             <InputError message={errors.password} />
                         </div>
 
                         <div className="flex items-center">
-                            <label htmlFor="remember" className="flex items-center cursor-pointer">
+                            <label htmlFor="remember" className="flex items-center cursor-pointer gap-2">
                                 <input
                                     id="remember"
                                     type="checkbox"
@@ -87,47 +89,39 @@ export default function Login({
                                     tabIndex={3}
                                     className="sr-only peer"
                                 />
-                                <span className="win95-sunken w-3.5 h-3.5 bg-white flex-shrink-0 mr-1.5 flex items-center justify-center peer-checked:[&>svg]:block">
-                                    <svg className="w-2.5 h-2.5 text-black hidden" fill="none" stroke="currentColor" strokeWidth="4" viewBox="0 0 24 24">
+                                <span className="w-4 h-4 border border-border bg-transparent rounded-none shrink-0 flex items-center justify-center peer-checked:[&>svg]:block">
+                                    <svg className="w-2.5 h-2.5 text-foreground hidden" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
                                         <polyline points="20 6 9 17 4 12" />
                                     </svg>
                                 </span>
-                                <span className="text-[10px] text-gray-800">Remember me</span>
+                                <span className="text-xs text-muted-foreground">Remember me</span>
                             </label>
                         </div>
 
-                        <div className="pt-2">
+                        <div className="flex flex-col gap-3 pt-1">
                             <button
                                 type="submit"
                                 tabIndex={4}
                                 disabled={processing}
                                 data-test="login-button"
-                                className="mc-btn w-full py-1.5 !bg-black !text-white font-bold text-xs tracking-widest hover:brightness-110 active:brightness-90 flex items-center justify-center disabled:opacity-50"
+                                className="w-full py-2.5 bg-primary text-primary-foreground text-sm font-semibold tracking-wide hover:brightness-110 disabled:opacity-50 transition-all flex items-center justify-center"
                             >
                                 {processing && <Spinner className="mr-2" />}
                                 Log in
                             </button>
-                        </div>
 
-                        {canRegister && (
-                            <div className="text-center pt-1">
-                                <p className="text-[10px] text-gray-700">
-                                    Don't have an account?{' '}
-                                    <TextLink href={register()} tabIndex={5} className="!text-[10px] font-bold hover:text-black">
+                            {canRegister && (
+                                <p className="text-center text-xs text-muted-foreground pt-1">
+                                    Don&apos;t have an account?{' '}
+                                    <TextLink href={register()} tabIndex={5} className="text-xs! text-foreground hover:text-foreground/80 font-medium">
                                         Sign up
                                     </TextLink>
                                 </p>
-                            </div>
-                        )}
+                            )}
+                        </div>
                     </>
                 )}
             </Form>
-
-            {status && (
-                <div className="mt-4 text-center text-sm font-medium text-green-600">
-                    {status}
-                </div>
-            )}
         </AuthLayout>
     );
 }

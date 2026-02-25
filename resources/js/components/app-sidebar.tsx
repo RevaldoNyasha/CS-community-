@@ -27,7 +27,7 @@ import AppLogo from './app-logo';
 const mainNavItems: NavItem[] = [
     {
         title: 'Dashboard',
-        href: dashboard(),
+        href: dashboard().url,
         icon: LayoutGrid,
     },
     {
@@ -102,11 +102,11 @@ export function AppSidebar() {
         : mainNavItems;
 
     return (
-        <Sidebar collapsible="icon" variant="inset" style={{ fontFamily: "'JetBrains Mono', monospace" }} className="text-black">
-            <SidebarHeader className="border-b border-[#808080]">
+        <Sidebar collapsible="icon" variant="inset" className="text-foreground">
+            <SidebarHeader className="border-b border-border">
                 <SidebarMenu>
                     <SidebarMenuItem>
-                        <SidebarMenuButton size="lg" asChild>
+                        <SidebarMenuButton size="lg" asChild className="hover:bg-transparent hover:text-current">
                             <Link href={dashboard()} prefetch>
                                 <AppLogo />
                             </Link>
@@ -119,7 +119,7 @@ export function AppSidebar() {
                 <NavMain items={items} />
             </SidebarContent>
 
-            <SidebarFooter className="border-t border-[#808080]">
+            <SidebarFooter className="border-t border-border">
                 <NavFooter items={footerNavItems} className="mt-auto" />
                 <NavUser />
             </SidebarFooter>

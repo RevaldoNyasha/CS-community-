@@ -24,7 +24,7 @@ function isNavGroup(item: NavItem | NavGroup): item is NavGroup {
 }
 
 const menuBtnClass =
-    "mc-btn !rounded-none uppercase tracking-wide text-[12px] text-black font-bold !font-[family-name:'JetBrains_Mono',monospace] hover:!bg-[#d4d4d4] hover:!text-black active:!bg-[#c0c0c0] active:!text-black data-[active=true]:!bg-[#c0c0c0] data-[active=true]:!text-black data-[active=true]:!border-t-[#000] data-[active=true]:!border-l-[#000] data-[active=true]:!border-b-[#fff] data-[active=true]:!border-r-[#fff] data-[active=true]:!shadow-[inset_1px_1px_0_#808080,inset_-1px_-1px_0_#dfdfdf] group-data-[collapsible=icon]:!border-0 group-data-[collapsible=icon]:!shadow-none group-data-[collapsible=icon]:!p-0 group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:items-center group-data-[collapsible=icon]:justify-center";
+    '!rounded-sm text-[13px] text-muted-foreground font-medium hover:!bg-muted hover:!text-foreground transition-all data-[active=true]:bg-gradient-to-r data-[active=true]:from-primary/10 data-[active=true]:to-transparent data-[active=true]:!text-primary group-data-[collapsible=icon]:!border-0 group-data-[collapsible=icon]:!p-0 group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:items-center group-data-[collapsible=icon]:justify-center';
 
 export function NavMain({ items = [] }: { items: (NavItem | NavGroup)[] }) {
     const { isCurrentUrl } = useCurrentUrl();
@@ -32,9 +32,9 @@ export function NavMain({ items = [] }: { items: (NavItem | NavGroup)[] }) {
     const isCollapsed = state === 'collapsed';
 
     return (
-        <SidebarGroup className="px-2 py-0">
-            <SidebarGroupLabel className="uppercase text-black font-bold text-[11px] tracking-widest">
-                Programs
+        <SidebarGroup className="px-2 py-2">
+            <SidebarGroupLabel className="uppercase text-[10px] text-muted-foreground/50 tracking-widest font-medium mb-1">
+                Navigation
             </SidebarGroupLabel>
             <SidebarMenu>
                 {items.map((item) =>
@@ -75,12 +75,10 @@ export function NavMain({ items = [] }: { items: (NavItem | NavGroup)[] }) {
                                                     <SidebarMenuSubButton
                                                         asChild
                                                         isActive={isCurrentUrl(child.href)}
-                                                        className="hover:!bg-[#d4d4d4] hover:!text-black active:!bg-[#c0c0c0] active:!text-black data-[active=true]:!bg-[#d4d4d4] data-[active=true]:!text-black"
+                                                        className="!rounded-none text-muted-foreground hover:!bg-secondary hover:!text-foreground data-[active=true]:!bg-secondary data-[active=true]:!text-primary"
                                                     >
                                                         <Link href={child.href} prefetch>
-                                                            <span className="uppercase tracking-wide">
-                                                                {child.title}
-                                                            </span>
+                                                            <span>{child.title}</span>
                                                         </Link>
                                                     </SidebarMenuSubButton>
                                                 </SidebarMenuSubItem>

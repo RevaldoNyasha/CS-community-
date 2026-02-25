@@ -15,13 +15,21 @@ class DashboardController extends Controller
     public function __invoke(Request $request): Response
     {
         $user = $request->user();
+        $search = trim((string)$request->input('search', ''));
 
         $recentPosts = Post::query()
             ->approved()
+            ->when($search, function ($q) use ($search): void {
+            $q->where(function ($q) use ($search): void {
+                    $q->where('title', 'like', "%{$search}%")
+                        ->orWhere('content', 'like', "%{$search}%");
+                }
+                );
+            })
             ->with(['user:id,name', 'tags'])
             ->withCount(['comments', 'likes'])
             ->latest()
-            ->limit(10)
+            ->limit(20)
             ->get()
             ->each(function (Post $post) use ($user): void {
             $post->setAttribute('is_liked', $post->isLikedBy($user));
@@ -59,6 +67,7 @@ class DashboardController extends Controller
             'pendingCount' => $pendingCount,
             'popularTags' => $popularTags,
             'recentHackathons' => $recentHackathons,
+            'search' => $search,
         ]);
     }
 }

@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+
 @import 'tailwindcss';
 
 @import 'tw-animate-css';
@@ -9,9 +11,10 @@
 
 @theme {
     --font-sans:
-        'JetBrains Mono', 'Courier New', 'Consolas', monospace;
+        'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+        'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     --font-mono:
-        'JetBrains Mono', 'Courier New', 'Consolas', monospace;
+        'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Courier New', monospace;
 
     --radius-lg: var(--radius);
     --radius-md: calc(var(--radius) - 2px);
@@ -60,125 +63,116 @@
     --color-sidebar-border: var(--sidebar-border);
     --color-sidebar-ring: var(--sidebar-ring);
 
-    /* Windows 95 color tokens */
-    --color-brutal-green: #008080;
-    --color-brutal-purple: #000000;
-    --color-brutal-blue: #4682B4;
-    --color-brutal-red: #c0392b;
-    --color-brutal-yellow: #c0a000;
-    --color-brutal-card: #c0c0c0;
-    --color-brutal-card-alt: #b8b8b8;
-    --color-brutal-bg: #008080;
-    --color-brutal-border: #808080;
+    /* Token aliases — pure black theme */
+    --color-brutal-green: #3ecf8e;
+    --color-brutal-purple: #a78bfa;
+    --color-brutal-blue: #60a5fa;
+    --color-brutal-red: #f87171;
+    --color-brutal-yellow: #fbbf24;
+    --color-brutal-card: #1a1a1a;
+    --color-brutal-card-alt: #222222;
+    --color-brutal-bg: #0c0c0c;
+    --color-brutal-border: #2a2a2a;
 
-    /* Win95 aliases */
-    --color-mc-gold: #008080;
-    --color-mc-grass: #008080;
-    --color-mc-enchant: #000000;
-    --color-mc-redstone: #c0392b;
-    --color-mc-sky: #4682B4;
-    --color-mc-obsidian: #808080;
-    --color-mc-stone: #808080;
-    --color-mc-dirt: #c0c0c0;
-    --color-mc-wood: #b8b8b8;
-
-    /* Win95 3D border colors */
-    --color-win95-highlight: #ffffff;
-    --color-win95-light: #dfdfdf;
-    --color-win95-shadow: #808080;
-    --color-win95-dark-shadow: #000000;
-    --color-win95-face: #c0c0c0;
-    --color-win95-window: #ffffff;
-    --color-win95-titlebar: #000000;
-    --color-win95-titlebar-text: #ffffff;
-    --color-win95-desktop: #008080;
+    /* Legacy aliases — remapped to neutral */
+    --color-mc-gold: #e5e5e5;
+    --color-mc-grass: #3ecf8e;
+    --color-mc-enchant: #a78bfa;
+    --color-mc-redstone: #f87171;
+    --color-mc-sky: #60a5fa;
+    --color-mc-obsidian: #2a2a2a;
+    --color-mc-stone: #1e1e1e;
+    --color-mc-dirt: #1a1a1a;
+    --color-mc-wood: #222222;
 }
 
-/* ===== WINDOWS 95 THEME ===== */
+/* ===== LIGHT THEME (default) ===== */
 :root {
-    --background: #008080;
-    --foreground: #000000;
-    --card: #c0c0c0;
-    --card-foreground: #000000;
-    --popover: #c0c0c0;
-    --popover-foreground: #000000;
-    --primary: #000000;
-    --primary-foreground: #ffffff;
-    --secondary: #c0c0c0;
-    --secondary-foreground: #000000;
-    --muted: #b8b8b8;
-    --muted-foreground: #333333;
-    --accent: #000000;
-    --accent-foreground: #ffffff;
-    --destructive: #c0392b;
-    --destructive-foreground: #ffffff;
-    --border: #808080;
-    --input: #ffffff;
-    --ring: #000000;
-    --chart-1: #008080;
-    --chart-2: #c0a000;
-    --chart-3: #4682B4;
-    --chart-4: #000000;
-    --chart-5: #c0392b;
-    --radius: 0;
-    --sidebar: #c0c0c0;
-    --sidebar-foreground: #000000;
-    --sidebar-primary: #000000;
-    --sidebar-primary-foreground: #ffffff;
-    --sidebar-accent: #000000;
-    --sidebar-accent-foreground: #ffffff;
-    --sidebar-border: #808080;
-    --sidebar-ring: #000000;
+    --background: #ffffff;
+    --foreground: #0c0c0c;
+    --card: #ffffff;
+    --card-foreground: #0c0c0c;
+    --popover: #ffffff;
+    --popover-foreground: #0c0c0c;
+    --primary: #18181b;
+    --primary-foreground: #fafafa;
+    --secondary: #f4f4f5;
+    --secondary-foreground: #18181b;
+    --muted: #f4f4f5;
+    --muted-foreground: #71717a;
+    --accent: #f4f4f5;
+    --accent-foreground: #18181b;
+    --destructive: #ef4444;
+    --destructive-foreground: #fafafa;
+    --border: #e4e4e7;
+    --input: #e4e4e7;
+    --ring: #18181b;
+    --chart-1: #16a34a;
+    --chart-2: #d97706;
+    --chart-3: #7c3aed;
+    --chart-4: #2563eb;
+    --chart-5: #dc2626;
+    --radius: 8px;
+    --sidebar: #f9f9f9;
+    --sidebar-foreground: #18181b;
+    --sidebar-primary: #18181b;
+    --sidebar-primary-foreground: #fafafa;
+    --sidebar-accent: #f4f4f5;
+    --sidebar-accent-foreground: #18181b;
+    --sidebar-border: #e4e4e7;
+    --sidebar-ring: #18181b;
 }
 
+/* ===== DARK THEME ===== */
 .dark {
-    --background: #008080;
-    --foreground: #000000;
-    --card: #c0c0c0;
-    --card-foreground: #000000;
-    --popover: #c0c0c0;
-    --popover-foreground: #000000;
-    --primary: #000000;
-    --primary-foreground: #ffffff;
-    --secondary: #c0c0c0;
-    --secondary-foreground: #000000;
-    --muted: #b8b8b8;
-    --muted-foreground: #333333;
-    --accent: #000000;
-    --accent-foreground: #ffffff;
-    --destructive: #c0392b;
+    --background: #0d1117;
+    --foreground: #f0f6fc;
+    --card: #161b22;
+    --card-foreground: #f0f6fc;
+    --popover: #161b22;
+    --popover-foreground: #f0f6fc;
+    --primary: #00f2ff;
+    --primary-foreground: #0d1117;
+    --secondary: #21262d;
+    --secondary-foreground: #c9d1d9;
+    --muted: #21262d;
+    --muted-foreground: #8b949e;
+    --accent: #39ff14;
+    --accent-foreground: #0d1117;
+    --destructive: #f85149;
     --destructive-foreground: #ffffff;
-    --border: #808080;
-    --input: #ffffff;
-    --ring: #000000;
-    --chart-1: #008080;
-    --chart-2: #c0a000;
-    --chart-3: #4682B4;
-    --chart-4: #000000;
-    --chart-5: #c0392b;
-    --sidebar: #c0c0c0;
-    --sidebar-foreground: #000000;
-    --sidebar-primary: #000000;
-    --sidebar-primary-foreground: #ffffff;
-    --sidebar-accent: #000000;
-    --sidebar-accent-foreground: #ffffff;
-    --sidebar-border: #808080;
-    --sidebar-ring: #000000;
+    --border: #30363d;
+    --input: #161b22;
+    --ring: #00f2ff;
+    --chart-1: #39ff14;
+    --chart-2: #fbbf24;
+    --chart-3: #a78bfa;
+    --chart-4: #00f2ff;
+    --chart-5: #f85149;
+    --sidebar: #161b22;
+    --sidebar-foreground: #8b949e;
+    --sidebar-primary: #00f2ff;
+    --sidebar-primary-foreground: #0d1117;
+    --sidebar-accent: #21262d;
+    --sidebar-accent-foreground: #f0f6fc;
+    --sidebar-border: #30363d;
+    --sidebar-ring: #00f2ff;
 }
 
 @layer base {
     * {
         @apply border-border;
-        border-radius: 0 !important;
     }
 
     body {
         @apply bg-background text-foreground;
-        font-family: 'Courier New', 'Consolas', 'Monaco', monospace;
-        letter-spacing: 0;
-        font-size: 13px;
-        -webkit-font-smoothing: none;
-        -moz-osx-font-smoothing: auto;
+        font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 1.6;
+        letter-spacing: -0.01em;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
     }
 
     h1,
@@ -187,293 +181,277 @@
     h4,
     h5,
     h6 {
-        font-family: 'Courier New', 'Consolas', 'Monaco', monospace;
+        font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+        font-weight: 500;
+        letter-spacing: -0.02em;
     }
 
-    /* Win95 scrollbar */
+    /* Minimal dark scrollbar */
     ::-webkit-scrollbar {
-        width: 16px;
+        width: 5px;
+        height: 5px;
     }
 
     ::-webkit-scrollbar-track {
-        background: #c0c0c0;
-        border-left: 1px solid #808080;
+        background: #0d0d0d;
     }
 
     ::-webkit-scrollbar-thumb {
-        background: #c0c0c0;
-        border-top: 2px solid #ffffff;
-        border-left: 2px solid #ffffff;
-        border-bottom: 2px solid #000000;
-        border-right: 2px solid #000000;
+        background: #2a2a2a;
     }
 
-    ::-webkit-scrollbar-button {
-        background: #c0c0c0;
-        border-top: 2px solid #ffffff;
-        border-left: 2px solid #ffffff;
-        border-bottom: 2px solid #000000;
-        border-right: 2px solid #000000;
-        height: 16px;
+    ::-webkit-scrollbar-thumb:hover {
+        background: #383838;
     }
 
     .dark ::-webkit-scrollbar-track {
-        background: #c0c0c0;
+        background: #0d0d0d;
     }
 
     .dark ::-webkit-scrollbar-thumb {
-        background: #c0c0c0;
-        border-top: 2px solid #ffffff;
-        border-left: 2px solid #ffffff;
-        border-bottom: 2px solid #000000;
-        border-right: 2px solid #000000;
+        background: #2a2a2a;
     }
 }
 
-/* ===== WINDOWS 95 UTILITY CLASSES ===== */
+/* ===== DARK SAAS UTILITY CLASSES ===== */
 
-/* Win95 3D Raised Border (outset) */
-.win95-raised {
-    border-top: 2px solid #ffffff;
-    border-left: 2px solid #ffffff;
-    border-bottom: 2px solid #000000;
-    border-right: 2px solid #000000;
-    box-shadow: inset 1px 1px 0 #dfdfdf, inset -1px -1px 0 #808080;
-}
-
-/* Win95 3D Sunken Border (inset) */
-.win95-sunken {
-    border-top: 2px solid #808080;
-    border-left: 2px solid #808080;
-    border-bottom: 2px solid #ffffff;
-    border-right: 2px solid #ffffff;
-    box-shadow: inset 1px 1px 0 #000000, inset -1px -1px 0 #dfdfdf;
-}
-
-/* Win95 Window Frame */
-.win95-window {
-    background: #c0c0c0;
-    border-top: 2px solid #ffffff;
-    border-left: 2px solid #ffffff;
-    border-bottom: 2px solid #000000;
-    border-right: 2px solid #000000;
-    box-shadow: inset 1px 1px 0 #dfdfdf, inset -1px -1px 0 #808080;
-    padding: 3px;
-}
-
-/* Win95 Title Bar */
-.win95-titlebar {
-    background: linear-gradient(90deg, #808080, #b0b0b0);
-    color: #ffffff;
-    padding: 2px 4px;
-    font-weight: bold;
-    font-size: 12px;
-    display: flex;
-    align-items: center;
-    user-select: none;
-}
-
-/* Win95 Content Area (sunken white) */
-.win95-content {
-    background: #ffffff;
-    border-top: 2px solid #808080;
-    border-left: 2px solid #808080;
-    border-bottom: 2px solid #ffffff;
-    border-right: 2px solid #ffffff;
-    box-shadow: inset 1px 1px 0 #000000, inset -1px -1px 0 #dfdfdf;
-}
-
-/* Brutal Container → Win95 Window */
+/* Primary card / panel */
 .mc-container {
-    background: #c0c0c0;
-    border-top: 2px solid #ffffff;
-    border-left: 2px solid #ffffff;
-    border-bottom: 2px solid #000000;
-    border-right: 2px solid #000000;
-    box-shadow: inset 1px 1px 0 #dfdfdf, inset -1px -1px 0 #808080;
+    background: #1a1a1a;
+    border: 1px solid #2a2a2a;
     padding: 1rem;
+    border-radius: 8px;
     transition: none;
 }
 
 .dark .mc-container {
-    background: #c0c0c0;
-    border-top: 2px solid #ffffff;
-    border-left: 2px solid #ffffff;
-    border-bottom: 2px solid #000000;
-    border-right: 2px solid #000000;
-    box-shadow: inset 1px 1px 0 #dfdfdf, inset -1px -1px 0 #808080;
+    background: #1a1a1a;
+    border: 1px solid #2a2a2a;
 }
 
 .mc-container:hover {
     transform: none;
-    box-shadow: inset 1px 1px 0 #dfdfdf, inset -1px -1px 0 #808080;
+    box-shadow: none;
 }
 
-/* Brutal Button → Win95 Button */
+/* Flat action button */
 .mc-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 4px 12px;
-    background: #c0c0c0;
-    color: #000000;
-    border-top: 2px solid #ffffff;
-    border-left: 2px solid #ffffff;
-    border-bottom: 2px solid #000000;
-    border-right: 2px solid #000000;
-    box-shadow: inset 1px 1px 0 #dfdfdf, inset -1px -1px 0 #808080;
-    font-family: 'Courier New', 'Consolas', monospace;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0;
-    text-transform: uppercase;
+    gap: 6px;
+    padding: 6px 14px;
+    background: var(--secondary);
+    color: var(--secondary-foreground);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    text-transform: none;
     cursor: pointer;
-    transition: none;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
 }
 
 .mc-btn:hover {
+    background: var(--accent);
+    border-color: var(--ring);
+    color: var(--accent-foreground);
     filter: none;
     transform: none;
 }
 
 .mc-btn:active {
-    border-top: 2px solid #000000;
-    border-left: 2px solid #000000;
-    border-bottom: 2px solid #ffffff;
-    border-right: 2px solid #ffffff;
-    box-shadow: inset 1px 1px 0 #808080, inset -1px -1px 0 #dfdfdf;
-    padding: 5px 11px 3px 13px;
+    background: var(--muted);
+    border-color: var(--border);
+    padding: 6px 14px;
 }
 
 .mc-btn-danger {
-    background: #c0c0c0;
-    color: #c0392b;
-    font-weight: 900;
+    color: var(--destructive);
+    border-color: color-mix(in srgb, var(--destructive) 30%, transparent);
+}
+
+.mc-btn-danger:hover {
+    color: var(--destructive);
+    border-color: var(--destructive);
+    background: color-mix(in srgb, var(--destructive) 10%, transparent);
 }
 
 .mc-btn-gold {
-    background: #c0c0c0;
-    color: #000000;
+    background: var(--secondary);
+    color: var(--foreground);
+    border-color: var(--border);
 }
 
-/* Brutal Input → Win95 Input */
+/* Input / textarea */
 .mc-slot {
-    background: #ffffff;
-    border-top: 2px solid #808080;
-    border-left: 2px solid #808080;
-    border-bottom: 2px solid #ffffff;
-    border-right: 2px solid #ffffff;
-    box-shadow: inset 1px 1px 0 #000000, inset -1px -1px 0 #dfdfdf;
-    color: #000000;
-    font-family: 'Courier New', 'Consolas', monospace;
+    background: var(--input);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--foreground);
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
 }
 
-.dark .mc-slot {
-    background: #ffffff;
-    border-top: 2px solid #808080;
-    border-left: 2px solid #808080;
-    border-bottom: 2px solid #ffffff;
-    border-right: 2px solid #ffffff;
-    box-shadow: inset 1px 1px 0 #000000, inset -1px -1px 0 #dfdfdf;
-    color: #000000;
-}
-
-/* Brutal Enchanted → Win95 Striped status style */
+/* Enchanted → subtle accent gradient */
 .mc-enchanted {
-    background:
-        repeating-linear-gradient(45deg,
-            #c0c0c0,
-            #c0c0c0 10px,
-            #b8b8b8 10px,
-            #b8b8b8 20px);
-    border-top: 2px solid #ffffff;
-    border-left: 2px solid #ffffff;
-    border-bottom: 2px solid #000000;
-    border-right: 2px solid #000000;
-    box-shadow: inset 1px 1px 0 #dfdfdf, inset -1px -1px 0 #808080;
+    background: linear-gradient(135deg, #111827, #161f30);
+    border: 1px solid #1e293b;
 }
 
-/* Pixel text shadow — removed for Win95 */
+/* Pixel text shadow — removed */
 .pixel-text-shadow {
     text-shadow: none;
 }
 
-/* Post Card → Win95 Window */
+/* Post card — separator-based, no box */
 .post-card {
-    background: #c0c0c0;
-    border-top: 2px solid #ffffff;
-    border-left: 2px solid #ffffff;
-    border-bottom: 2px solid #000000;
-    border-right: 2px solid #000000;
-    box-shadow: inset 1px 1px 0 #dfdfdf, inset -1px -1px 0 #808080;
-    padding: 3px;
-    transition: none;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #2a2a2a;
+    padding: 0;
+    transition: background 0.15s ease;
 }
 
 .post-card:hover {
-    border-top: 2px solid #ffffff;
-    border-left: 2px solid #ffffff;
-    border-bottom: 2px solid #000000;
-    border-right: 2px solid #000000;
+    background: #181818;
+    border-color: #2a2a2a;
 }
 
-/* Win95 Drop Shadow */
-.win-shadow {
-    box-shadow:
-        inset 1px 1px 0 #dfdfdf,
-        inset -1px -1px 0 #808080,
-        2px 2px 0 rgba(0, 0, 0, 0.5);
+/* Body text — mid-level between foreground and muted */
+.text-body {
+    color: #a0a0a0;
 }
 
-/* Win95 Inactive Title Bar */
-.win95-titlebar-inactive {
-    background: linear-gradient(90deg, #808080, #b0b0b0);
-    color: #c0c0c0;
-    padding: 2px 4px;
-    font-weight: bold;
-    font-size: 12px;
+/* Post content snippet — separator style, no box */
+.post-content-snippet {
+    border-top: 1px solid #2a2a2a;
+    padding: 12px 0 8px;
+}
+
+/* ===== WIN95 REPLACEMENTS (flat dark equivalents) ===== */
+
+/* Window panel → dark card */
+.win95-window {
+    background: #1a1a1a;
+    border: 1px solid #2a2a2a;
+    border-radius: 8px;
+}
+
+/* Title bar → minimal section header */
+.win95-titlebar {
+    background: var(--muted);
+    color: var(--muted-foreground);
+    padding: 6px 12px;
+    font-size: 10px;
+    font-weight: 500;
     display: flex;
     align-items: center;
     user-select: none;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    border-radius: 6px;
 }
 
-/* Win95 Taskbar */
-.win95-taskbar {
-    background: #c0c0c0;
-    border-top: 2px solid #ffffff;
-    border-left: 2px solid #ffffff;
-    border-bottom: 2px solid #000000;
-    border-right: 2px solid #000000;
-    box-shadow: inset 1px 1px 0 #dfdfdf;
+/* Inactive titlebar */
+.win95-titlebar-inactive {
+    background: var(--muted);
+    color: var(--muted-foreground);
+    padding: 7px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    user-select: none;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    border-radius: 6px;
 }
 
-/* Win95 Outset border (for buttons/tags in the HTML reference) */
+/* Content area */
+.win95-content {
+    background: #0c0c0c;
+    border: 1px solid #2a2a2a;
+}
+
+/* Raised → flat bordered */
+.win95-raised {
+    border: 1px solid #2a2a2a;
+    background: #242424;
+    box-shadow: none;
+}
+
+/* Sunken → deeper dark */
+.win95-sunken {
+    background: #111111;
+    border: 1px solid #2a2a2a;
+    box-shadow: none;
+}
+
+/* Outset → simple border */
 .win95-outset {
-    border-top: 2px solid #ffffff;
-    border-left: 2px solid #ffffff;
-    border-right: 2px solid #808080;
-    border-bottom: 2px solid #808080;
+    border: 1px solid #2a2a2a;
 }
 
-/* Win95 Inset border (for inputs/panels) */
+/* Inset → deeper background */
 .win95-inset {
-    border-top: 2px solid #808080;
-    border-left: 2px solid #808080;
-    border-right: 2px solid #ffffff;
-    border-bottom: 2px solid #ffffff;
-    background-color: #ffffff;
+    background: #111111;
+    border: 1px solid #2a2a2a;
+    color: #f0f0f0;
 }
 
-/* Win95 Sidebar overlay */
+/* Subtle shadow */
+.win-shadow {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+/* Taskbar */
+.win95-taskbar {
+    background: #111111;
+    border-top: 1px solid #2a2a2a;
+    box-shadow: none;
+}
+
+/* Sidebar overlay */
 .win95-sidebar-overlay {
     transition: opacity 200ms ease;
 }
 
-/* Win95 Taskbar divider */
+/* App-wide primary button style */
+.btn-primary {
+    background-color: #14b8a6;
+    color: white;
+    font-weight: 600;
+    padding: 0.5rem 1.5rem;
+    border-radius: 0.375rem;
+    box-shadow: 0 4px 12px rgba(20, 184, 166, 0.15);
+    transition: all 0.2s ease;
+    border: none;
+    cursor: pointer;
+    font-size: 0.875rem;
+}
+
+.btn-primary:hover {
+    background-color: #0d9488;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(20, 184, 166, 0.2);
+}
+
+.btn-primary:active {
+    transform: scale(0.98);
+}
+
+.btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Taskbar divider */
 .win95-taskbar-divider {
-    height: 24px;
-    width: 2px;
-    background: #808080;
-    border-left: 1px solid #ffffff;
+    height: 20px;
+    width: 1px;
+    background: #1e293b;
     margin: 0 4px;
 }
