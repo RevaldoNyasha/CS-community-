@@ -54,7 +54,7 @@ function ResourceCard({ post, index }: { post: Post; index: number }) {
     return (
         <Link
             href={`/posts/${post.id}`}
-            className="group relative bg-card border border-border rounded-xl overflow-hidden flex flex-col hover:border-[#334155] transition-all duration-300 shadow-lg"
+            className="group relative bg-card border border-border rounded-xl overflow-hidden flex flex-col hover:border-primary/20 transition-all duration-300 shadow-lg"
         >
             {/* Image preview */}
             {hasImage && (
@@ -107,7 +107,7 @@ function ResourceCard({ post, index }: { post: Post; index: number }) {
                         {post.tags.map((tag) => (
                             <span
                                 key={tag.id}
-                                className="px-2 py-1 text-[10px] bg-neutral-900 border border-neutral-800 text-neutral-400 rounded"
+                                className="px-2 py-1 text-[10px] bg-muted border border-border text-muted-foreground rounded"
                             >
                                 {tag.name}
                             </span>
@@ -162,7 +162,7 @@ export default function ResourcesIndex({ posts, filters }: Props) {
                     {/* ── Hero Header ── */}
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 mb-16">
                         <div>
-                            <h1 className="text-5xl font-extrabold tracking-tighter mb-4 bg-clip-text text-transparent bg-linear-to-r from-white via-neutral-200 to-neutral-500 leading-tight">
+                            <h1 className="text-5xl font-extrabold tracking-tighter mb-4 text-foreground leading-tight">
                                 Resources Library
                             </h1>
                             <p className="text-muted-foreground max-w-xl text-lg leading-relaxed font-light">
@@ -179,7 +179,7 @@ export default function ResourcesIndex({ posts, filters }: Props) {
                     </div>
 
                     {/* ── Glass Search Bar ── */}
-                    <div className="rounded-2xl p-2 mb-16 shadow-2xl bg-white/3 backdrop-blur-xl border border-white/8">
+                    <div className="rounded-2xl p-2 mb-16 shadow-2xl bg-secondary/10 backdrop-blur-xl border border-border">
                         <div className="flex flex-col lg:flex-row gap-2 items-center">
                             {/* Search input */}
                             <div className="relative grow w-full">
@@ -205,16 +205,16 @@ export default function ResourcesIndex({ posts, filters }: Props) {
                                     value={dateFrom}
                                     onChange={(e) => setDateFrom(e.target.value)}
                                     title="From date"
-                                    className="w-full lg:w-44 px-5 py-3.5 rounded-xl border-none bg-white/5 hover:bg-white/10 focus:bg-white/10 focus:ring-1 focus:ring-white/20 outline-none text-sm text-muted-foreground scheme-dark"
+                                    className="w-full lg:w-44 px-5 py-3.5 rounded-xl border-none bg-secondary/20 hover:bg-secondary/40 focus:bg-secondary/40 focus:ring-1 focus:ring-border outline-none text-sm text-muted-foreground"
                                 />
                                 <input
                                     type="date"
                                     value={dateTo}
                                     onChange={(e) => setDateTo(e.target.value)}
                                     title="To date"
-                                    className="w-full lg:w-44 px-5 py-3.5 rounded-xl border-none bg-white/5 hover:bg-white/10 focus:bg-white/10 focus:ring-1 focus:ring-white/20 outline-none text-sm text-muted-foreground scheme-dark"
+                                    className="w-full lg:w-44 px-5 py-3.5 rounded-xl border-none bg-secondary/20 hover:bg-secondary/40 focus:bg-secondary/40 focus:ring-1 focus:ring-border outline-none text-sm text-muted-foreground"
                                 />
-                                <label className="flex items-center gap-2 px-4 py-3.5 rounded-xl border-none bg-white/5 hover:bg-white/10 focus:bg-white/10 focus:ring-1 focus:ring-white/20 outline-none text-sm text-muted-foreground cursor-pointer scheme-dark">
+                                <label className="flex items-center gap-2 px-4 py-3.5 rounded-xl border-none bg-secondary/20 hover:bg-secondary/40 focus:bg-secondary/40 focus:ring-1 focus:ring-border outline-none text-sm text-muted-foreground cursor-pointer">
                                     <input 
                                         type="checkbox" 
                                         checked={hasPdf} 
@@ -234,7 +234,7 @@ export default function ResourcesIndex({ posts, filters }: Props) {
                                     <button
                                         type="button"
                                         onClick={clearFilters}
-                                        className="px-5 py-3.5 rounded-xl border-none bg-white/5 hover:bg-white/10 focus:bg-white/10 focus:ring-1 focus:ring-white/20 outline-none text-sm text-muted-foreground font-medium scheme-dark"
+                                        className="px-5 py-3.5 rounded-xl border-none bg-secondary/20 hover:bg-secondary/40 focus:bg-secondary/40 focus:ring-1 focus:ring-border outline-none text-sm text-muted-foreground font-medium"
                                     >
                                         Clear
                                     </button>
@@ -254,7 +254,7 @@ export default function ResourcesIndex({ posts, filters }: Props) {
                                     Available Materials ({posts.total ?? posts.data.length})
                                 </h2>
                             </div>
-                            <div className="h-px grow mx-8 bg-neutral-900" />
+                            <div className="h-px grow mx-8 bg-border" />
                         </div>
 
                         {posts.data.length === 0 ? (
@@ -282,8 +282,8 @@ export default function ResourcesIndex({ posts, filters }: Props) {
                                     href={link.url ?? '#'}
                                     className={`px-4 py-2 rounded-lg text-xs font-bold border transition-all
                                         ${link.active
-                                            ? 'bg-[#14b8a6] text-white border-[#14b8a6] shadow-[0_0_12px_rgba(20,184,166,0.3)]'
-                                            : 'bg-card border-border text-muted-foreground hover:text-foreground hover:border-[#334155]'}
+                                            ? 'bg-primary text-primary-foreground border-primary'
+                                            : 'bg-card border-border text-muted-foreground hover:text-foreground hover:border-primary/20'}
                                         ${!link.url ? 'pointer-events-none opacity-30' : ''}`}
                                     dangerouslySetInnerHTML={{ __html: link.label }}
                                 />

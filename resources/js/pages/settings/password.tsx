@@ -4,9 +4,6 @@ import { useRef } from 'react';
 import PasswordController from '@/actions/App/Http/Controllers/Settings/PasswordController';
 import Heading from '@/components/heading';
 import InputError from '@/components/input-error';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/app-layout';
 import SettingsLayout from '@/layouts/settings/layout';
 import { edit } from '@/routes/user-password';
@@ -61,70 +58,61 @@ export default function Password() {
                     >
                         {({ errors, processing, recentlySuccessful }) => (
                             <>
-                                <div className="grid gap-2">
-                                    <Label htmlFor="current_password">
+                                <div className="grid gap-1.5">
+                                    <label htmlFor="current_password" className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
                                         Current password
-                                    </Label>
-
-                                    <Input
+                                    </label>
+                                    <input
                                         id="current_password"
                                         ref={currentPasswordInput}
                                         name="current_password"
                                         type="password"
-                                        className="mt-1 block w-full"
+                                        className="w-full bg-transparent border-0 border-b border-border/60 rounded-none px-0 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary focus:ring-0 transition-colors"
                                         autoComplete="current-password"
                                         placeholder="Current password"
                                     />
-
-                                    <InputError
-                                        message={errors.current_password}
-                                    />
+                                    <InputError message={errors.current_password} />
                                 </div>
 
-                                <div className="grid gap-2">
-                                    <Label htmlFor="password">
+                                <div className="grid gap-1.5">
+                                    <label htmlFor="password" className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
                                         New password
-                                    </Label>
-
-                                    <Input
+                                    </label>
+                                    <input
                                         id="password"
                                         ref={passwordInput}
                                         name="password"
                                         type="password"
-                                        className="mt-1 block w-full"
+                                        className="w-full bg-transparent border-0 border-b border-border/60 rounded-none px-0 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary focus:ring-0 transition-colors"
                                         autoComplete="new-password"
                                         placeholder="New password"
                                     />
-
                                     <InputError message={errors.password} />
                                 </div>
 
-                                <div className="grid gap-2">
-                                    <Label htmlFor="password_confirmation">
+                                <div className="grid gap-1.5">
+                                    <label htmlFor="password_confirmation" className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
                                         Confirm password
-                                    </Label>
-
-                                    <Input
+                                    </label>
+                                    <input
                                         id="password_confirmation"
                                         name="password_confirmation"
                                         type="password"
-                                        className="mt-1 block w-full"
+                                        className="w-full bg-transparent border-0 border-b border-border/60 rounded-none px-0 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary focus:ring-0 transition-colors"
                                         autoComplete="new-password"
                                         placeholder="Confirm password"
                                     />
-
-                                    <InputError
-                                        message={errors.password_confirmation}
-                                    />
+                                    <InputError message={errors.password_confirmation} />
                                 </div>
 
                                 <div className="flex items-center gap-4">
-                                    <Button
+                                    <button
                                         disabled={processing}
                                         data-test="update-password-button"
+                                        className="px-4 py-2 border border-primary/30 bg-primary/10 text-primary text-xs font-semibold rounded-md hover:bg-primary/20 transition-all disabled:opacity-50"
                                     >
                                         Save password
-                                    </Button>
+                                    </button>
 
                                     <Transition
                                         show={recentlySuccessful}
@@ -133,9 +121,7 @@ export default function Password() {
                                         leave="transition ease-in-out"
                                         leaveTo="opacity-0"
                                     >
-                                        <p className="text-sm text-neutral-600">
-                                            Saved
-                                        </p>
+                                        <p className="text-xs text-emerald-400">Saved</p>
                                     </Transition>
                                 </div>
                             </>

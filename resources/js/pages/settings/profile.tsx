@@ -4,9 +4,6 @@ import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileCo
 import DeleteUser from '@/components/delete-user';
 import Heading from '@/components/heading';
 import InputError from '@/components/input-error';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/app-layout';
 import SettingsLayout from '@/layouts/settings/layout';
 import { edit } from '@/routes/profile';
@@ -52,43 +49,33 @@ export default function Profile({
                     >
                         {({ processing, recentlySuccessful, errors }) => (
                             <>
-                                <div className="grid gap-2">
-                                    <Label htmlFor="name">Name</Label>
-
-                                    <Input
+                                <div className="grid gap-1.5">
+                                    <label htmlFor="name" className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Name</label>
+                                    <input
                                         id="name"
-                                        className="mt-1 block w-full"
+                                        className="w-full bg-transparent border-0 border-b border-border/60 rounded-none px-0 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary focus:ring-0 transition-colors"
                                         defaultValue={auth.user.name}
                                         name="name"
                                         required
                                         autoComplete="name"
                                         placeholder="Full name"
                                     />
-
-                                    <InputError
-                                        className="mt-2"
-                                        message={errors.name}
-                                    />
+                                    <InputError className="mt-1" message={errors.name} />
                                 </div>
 
-                                <div className="grid gap-2">
-                                    <Label htmlFor="email">Email address</Label>
-
-                                    <Input
+                                <div className="grid gap-1.5">
+                                    <label htmlFor="email" className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Email address</label>
+                                    <input
                                         id="email"
                                         type="email"
-                                        className="mt-1 block w-full"
+                                        className="w-full bg-transparent border-0 border-b border-border/60 rounded-none px-0 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary focus:ring-0 transition-colors"
                                         defaultValue={auth.user.email}
                                         name="email"
                                         required
                                         autoComplete="username"
                                         placeholder="Email address"
                                     />
-
-                                    <InputError
-                                        className="mt-2"
-                                        message={errors.email}
-                                    />
+                                    <InputError className="mt-1" message={errors.email} />
                                 </div>
 
                                 {mustVerifyEmail &&
@@ -100,16 +87,15 @@ export default function Profile({
                                                 <Link
                                                     href={send()}
                                                     as="button"
-                                                    className="text-foreground underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current! dark:decoration-neutral-500"
+                                                    className="text-foreground underline underline-offset-4 hover:text-primary transition-colors"
                                                 >
                                                     Click here to resend the
                                                     verification email.
                                                 </Link>
                                             </p>
 
-                                            {status ===
-                                                'verification-link-sent' && (
-                                                <div className="mt-2 text-sm font-medium text-green-600">
+                                            {status === 'verification-link-sent' && (
+                                                <div className="mt-2 text-sm font-medium text-emerald-400">
                                                     A new verification link has
                                                     been sent to your email
                                                     address.
@@ -119,12 +105,13 @@ export default function Profile({
                                     )}
 
                                 <div className="flex items-center gap-4">
-                                    <Button
+                                    <button
                                         disabled={processing}
                                         data-test="update-profile-button"
+                                        className="px-4 py-2 border border-primary/30 bg-primary/10 text-primary text-xs font-semibold rounded-md hover:bg-primary/20 transition-all disabled:opacity-50"
                                     >
                                         Save
-                                    </Button>
+                                    </button>
 
                                     <Transition
                                         show={recentlySuccessful}
@@ -133,9 +120,7 @@ export default function Profile({
                                         leave="transition ease-in-out"
                                         leaveTo="opacity-0"
                                     >
-                                        <p className="text-sm text-neutral-600">
-                                            Saved
-                                        </p>
+                                        <p className="text-xs text-emerald-400">Saved</p>
                                     </Transition>
                                 </div>
                             </>

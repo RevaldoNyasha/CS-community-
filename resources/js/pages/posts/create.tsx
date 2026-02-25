@@ -58,7 +58,7 @@ export default function PostCreate() {
                                     type="submit"
                                     disabled={processing}
                                     form="post-form"
-                                    className="bg-[#14b8a6] hover:bg-[#0d9488] text-white font-semibold px-6 py-2 rounded-md shadow-lg shadow-[#14b8a6]/20 transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap text-sm"
+                                    className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-6 py-2 rounded-md shadow-lg shadow-primary/20 transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap text-sm"
                                 >
                                     {processing ? 'Submitting...' : 'Submit for Review'}
                                 </button>
@@ -143,7 +143,7 @@ export default function PostCreate() {
                                 {data.attachment ? (
                                     /* Selected file row */
                                     <div className="flex items-center gap-2 border border-border rounded-md px-3 py-2 bg-background text-sm">
-                                        <Paperclip className="size-3 shrink-0 text-[#14b8a6]" />
+                                        <Paperclip className="size-3 shrink-0 text-primary" />
                                         <span className="truncate text-foreground flex-1 text-xs">{data.attachment.name}</span>
                                         <span className="shrink-0 text-muted-foreground text-xs">
                                             ({(data.attachment.size / 1024 / 1024).toFixed(2)} MB)
@@ -158,8 +158,8 @@ export default function PostCreate() {
                                     </div>
                                 ) : (
                                     /* Drag-and-drop zone */
-                                    <label className="group relative flex flex-col items-center justify-center border-2 border-dashed border-border rounded-lg p-4 bg-muted/10 hover:border-[#14b8a6]/50 transition-all cursor-pointer">
-                                        <span className="material-symbols-outlined text-2xl text-muted-foreground/50 group-hover:text-[#14b8a6] transition-colors mb-1">
+                                    <label className="group relative flex flex-col items-center justify-center border-2 border-dashed border-border rounded-lg p-4 bg-muted/10 hover:border-primary/50 transition-all cursor-pointer">
+                                        <span className="material-symbols-outlined text-2xl text-muted-foreground/50 group-hover:text-primary transition-colors mb-1">
                                             cloud_upload
                                         </span>
                                         <p className="text-xs font-medium text-foreground">Click to upload or drag and drop</p>
@@ -180,7 +180,7 @@ export default function PostCreate() {
                                 <div className="space-y-1">
                                     <div className="h-1 w-full bg-muted rounded-full overflow-hidden">
                                         <div
-                                            className="h-full bg-[#14b8a6] transition-all duration-200"
+                                            className="h-full bg-primary transition-all duration-200"
                                             style={{ width: `${progress.percentage}%` }}
                                         />
                                     </div>

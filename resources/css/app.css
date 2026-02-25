@@ -186,30 +186,22 @@
         letter-spacing: -0.02em;
     }
 
-    /* Minimal dark scrollbar */
+    /* Adaptive scrollbar */
     ::-webkit-scrollbar {
         width: 5px;
         height: 5px;
     }
 
     ::-webkit-scrollbar-track {
-        background: #0d0d0d;
+        background: var(--background);
     }
 
     ::-webkit-scrollbar-thumb {
-        background: #2a2a2a;
+        background: var(--border);
     }
 
     ::-webkit-scrollbar-thumb:hover {
-        background: #383838;
-    }
-
-    .dark ::-webkit-scrollbar-track {
-        background: #0d0d0d;
-    }
-
-    .dark ::-webkit-scrollbar-thumb {
-        background: #2a2a2a;
+        background: var(--muted-foreground);
     }
 }
 
@@ -217,16 +209,11 @@
 
 /* Primary card / panel */
 .mc-container {
-    background: #1a1a1a;
-    border: 1px solid #2a2a2a;
+    background: var(--card);
+    border: 1px solid var(--border);
     padding: 1rem;
     border-radius: 8px;
     transition: none;
-}
-
-.dark .mc-container {
-    background: #1a1a1a;
-    border: 1px solid #2a2a2a;
 }
 
 .mc-container:hover {
@@ -296,8 +283,8 @@
 
 /* Enchanted → subtle accent gradient */
 .mc-enchanted {
-    background: linear-gradient(135deg, #111827, #161f30);
-    border: 1px solid #1e293b;
+    background: var(--card);
+    border: 1px solid var(--border);
 }
 
 /* Pixel text shadow — removed */
@@ -309,24 +296,24 @@
 .post-card {
     background: transparent;
     border: none;
-    border-bottom: 1px solid #2a2a2a;
+    border-bottom: 1px solid var(--border);
     padding: 0;
     transition: background 0.15s ease;
 }
 
 .post-card:hover {
-    background: #181818;
-    border-color: #2a2a2a;
+    background: var(--muted);
+    border-color: var(--border);
 }
 
 /* Body text — mid-level between foreground and muted */
 .text-body {
-    color: #a0a0a0;
+    color: var(--muted-foreground);
 }
 
 /* Post content snippet — separator style, no box */
 .post-content-snippet {
-    border-top: 1px solid #2a2a2a;
+    border-top: 1px solid var(--border);
     padding: 12px 0 8px;
 }
 
@@ -334,8 +321,8 @@
 
 /* Window panel → dark card */
 .win95-window {
-    background: #1a1a1a;
-    border: 1px solid #2a2a2a;
+    background: var(--card);
+    border: 1px solid var(--border);
     border-radius: 8px;
 }
 
@@ -371,34 +358,34 @@
 
 /* Content area */
 .win95-content {
-    background: #0c0c0c;
-    border: 1px solid #2a2a2a;
+    background: var(--background);
+    border: 1px solid var(--border);
 }
 
 /* Raised → flat bordered */
 .win95-raised {
-    border: 1px solid #2a2a2a;
-    background: #242424;
+    border: 1px solid var(--border);
+    background: var(--card);
     box-shadow: none;
 }
 
 /* Sunken → deeper dark */
 .win95-sunken {
-    background: #111111;
-    border: 1px solid #2a2a2a;
+    background: var(--muted);
+    border: 1px solid var(--border);
     box-shadow: none;
 }
 
 /* Outset → simple border */
 .win95-outset {
-    border: 1px solid #2a2a2a;
+    border: 1px solid var(--border);
 }
 
 /* Inset → deeper background */
 .win95-inset {
-    background: #111111;
-    border: 1px solid #2a2a2a;
-    color: #f0f0f0;
+    background: var(--muted);
+    border: 1px solid var(--border);
+    color: var(--foreground);
 }
 
 /* Subtle shadow */
@@ -408,8 +395,8 @@
 
 /* Taskbar */
 .win95-taskbar {
-    background: #111111;
-    border-top: 1px solid #2a2a2a;
+    background: var(--card);
+    border-top: 1px solid var(--border);
     box-shadow: none;
 }
 
@@ -452,6 +439,6 @@
 .win95-taskbar-divider {
     height: 20px;
     width: 1px;
-    background: #1e293b;
+    background: var(--border);
     margin: 0 4px;
 }

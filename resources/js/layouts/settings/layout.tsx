@@ -1,5 +1,5 @@
 import { Link } from '@inertiajs/react';
-import { KeyRound, Monitor, ShieldCheck, User } from 'lucide-react';
+import { KeyRound, Monitor, User } from 'lucide-react';
 import type { PropsWithChildren } from 'react';
 import Heading from '@/components/heading';
 import { Separator } from '@/components/ui/separator';
@@ -7,7 +7,6 @@ import { useCurrentUrl } from '@/hooks/use-current-url';
 import { cn, toUrl } from '@/lib/utils';
 import { edit as editAppearance } from '@/routes/appearance';
 import { edit } from '@/routes/profile';
-import { show } from '@/routes/two-factor';
 import { edit as editPassword } from '@/routes/user-password';
 import type { NavItem } from '@/types';
 
@@ -21,11 +20,6 @@ const sidebarNavItems: NavItem[] = [
         title: 'Password',
         href: editPassword(),
         icon: KeyRound,
-    },
-    {
-        title: 'Two-Factor Auth',
-        href: show(),
-        icon: ShieldCheck,
     },
     {
         title: 'Appearance',
@@ -62,14 +56,14 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
                                     key={`${toUrl(item.href)}-${index}`}
                                     href={item.href}
                                     className={cn(
-                                        'mc-btn !justify-start gap-2 text-xs !py-1.5 !px-3 w-full',
+                                        'flex items-center gap-2.5 px-3 py-2 text-xs font-medium rounded-md transition-colors w-full',
                                         active
-                                            ? 'mc-btn-gold !border-l-2 !border-l-primary'
-                                            : '',
+                                            ? 'bg-secondary/40 text-foreground'
+                                            : 'text-muted-foreground hover:bg-secondary/30 hover:text-foreground',
                                     )}
                                 >
                                     {item.icon && (
-                                        <item.icon className={cn('size-3.5 shrink-0', active ? 'text-primary' : 'text-muted-foreground')} />
+                                        <item.icon className={cn('size-3.5 shrink-0', active ? 'text-primary' : 'text-muted-foreground/70')} />
                                     )}
                                     <span>{item.title}</span>
                                 </Link>

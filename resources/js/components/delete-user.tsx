@@ -3,7 +3,6 @@ import { useRef } from 'react';
 import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController';
 import Heading from '@/components/heading';
 import InputError from '@/components/input-error';
-import { Button } from '@/components/ui/button';
 import {
     Dialog,
     DialogClose,
@@ -26,22 +25,22 @@ export default function DeleteUser() {
                 title="Delete account"
                 description="Delete your account and all of its resources"
             />
-            <div className="space-y-4 rounded-lg border border-red-100 bg-red-50 p-4 dark:border-red-200/10 dark:bg-red-700/10">
-                <div className="relative space-y-0.5 text-red-600 dark:text-red-100">
-                    <p className="font-medium">Warning</p>
-                    <p className="text-sm">
+            <div className="space-y-4 rounded-lg border border-red-500/20 bg-red-500/5 p-4">
+                <div className="relative space-y-0.5 text-red-400">
+                    <p className="text-xs font-semibold uppercase tracking-wider">Warning</p>
+                    <p className="text-sm text-muted-foreground">
                         Please proceed with caution, this cannot be undone.
                     </p>
                 </div>
 
                 <Dialog>
                     <DialogTrigger asChild>
-                        <Button
-                            variant="destructive"
+                        <button
                             data-test="delete-user-button"
+                            className="px-4 py-2 border border-red-500/30 bg-red-500/10 text-red-400 text-xs font-semibold rounded-md hover:bg-red-500/20 transition-all"
                         >
                             Delete account
-                        </Button>
+                        </button>
                     </DialogTrigger>
                     <DialogContent>
                         <DialogTitle>
@@ -87,28 +86,22 @@ export default function DeleteUser() {
 
                                     <DialogFooter className="gap-2">
                                         <DialogClose asChild>
-                                            <Button
-                                                variant="secondary"
-                                                onClick={() =>
-                                                    resetAndClearErrors()
-                                                }
+                                            <button
+                                                onClick={() => resetAndClearErrors()}
+                                                className="px-4 py-2 border border-border text-muted-foreground text-xs font-semibold rounded-md hover:bg-secondary/40 transition-colors"
                                             >
                                                 Cancel
-                                            </Button>
+                                            </button>
                                         </DialogClose>
 
-                                        <Button
-                                            variant="destructive"
+                                        <button
+                                            type="submit"
                                             disabled={processing}
-                                            asChild
+                                            data-test="confirm-delete-user-button"
+                                            className="px-4 py-2 border border-red-500/30 bg-red-500/10 text-red-400 text-xs font-semibold rounded-md hover:bg-red-500/20 transition-all disabled:opacity-50"
                                         >
-                                            <button
-                                                type="submit"
-                                                data-test="confirm-delete-user-button"
-                                            >
-                                                Delete account
-                                            </button>
-                                        </Button>
+                                            Delete account
+                                        </button>
                                     </DialogFooter>
                                 </>
                             )}

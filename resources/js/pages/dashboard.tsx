@@ -70,15 +70,12 @@ export default function Dashboard({ recentPosts, pendingCount, popularTags, rece
                             )}
                         </div>
                     </div>
-                    <div className="flex items-center gap-3 ml-4">
-                        <button type="button" className="p-2 text-muted-foreground hover:text-foreground transition-colors">
-                            <span className="material-symbols-outlined text-[20px]">notifications</span>
-                        </button>
+                    <div className="flex items-center ml-2">
                         <Link
                             href="/posts/create"
-                            className="flex items-center gap-2 bg-primary hover:brightness-110 text-primary-foreground px-5 py-2 rounded-md text-xs font-bold uppercase tracking-wider shadow-[0_0_20px_rgba(0,242,255,0.15)] transition-all active:scale-95"
+                            className="flex items-center gap-2 border border-border bg-secondary/40 text-muted-foreground hover:text-foreground hover:bg-secondary/70 px-4 py-2 rounded-md text-xs font-semibold uppercase tracking-wider transition-all active:scale-95"
                         >
-                            <Plus className="size-4" />
+                            <Plus className="size-3.5" />
                             New Post
                         </Link>
                     </div>
@@ -144,7 +141,7 @@ export default function Dashboard({ recentPosts, pendingCount, popularTags, rece
                             {/* ── Hackathons ── */}
                             <section className="bg-card border border-border rounded-lg p-5">
                                 <h3 className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
-                                    <span className="w-1 h-1 bg-neutral-600 rounded-full inline-block" />
+                                    <span className="w-1 h-1 bg-muted-foreground rounded-full inline-block" />
                                     Upcoming Hackathons
                                 </h3>
                                 <div className="space-y-4">

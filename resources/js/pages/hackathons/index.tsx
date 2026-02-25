@@ -35,7 +35,7 @@ function HackathonCard({ post, index, variant }: { post: Post; index: number; va
     return (
         <Link
             href={`/posts/${post.id}`}
-            className="group relative bg-card border border-border rounded-xl overflow-hidden flex flex-col hover:border-[#334155] transition-all duration-300 shadow-lg"
+            className="group relative bg-card border border-border rounded-xl overflow-hidden flex flex-col hover:border-primary/20 transition-all duration-300 shadow-lg"
         >
             <div className="p-8 flex-1">
                 {/* Card top row */}
@@ -71,7 +71,7 @@ function HackathonCard({ post, index, variant }: { post: Post; index: number; va
                         {post.tags.map((tag) => (
                             <span
                                 key={tag.id}
-                                className="px-2 py-1 text-[10px] bg-neutral-900 border border-neutral-800 text-neutral-400 rounded"
+                                className="px-2 py-1 text-[10px] bg-muted border border-border text-muted-foreground rounded"
                             >
                                 {tag.name}
                             </span>
@@ -83,7 +83,7 @@ function HackathonCard({ post, index, variant }: { post: Post; index: number; va
             {/* Card footer */}
             <div className="px-8 py-5 border-t border-border flex items-center justify-between text-[11px] font-bold text-muted-foreground uppercase tracking-widest">
                 <div className="flex items-center gap-2">
-                    <span className="material-symbols-outlined text-[16px] text-neutral-600">emoji_events</span>
+                    <span className="material-symbols-outlined text-[16px] text-muted-foreground">emoji_events</span>
                     View Details
                 </div>
             </div>
@@ -114,7 +114,7 @@ export default function HackathonsIndex({ upcoming, finished, filters }: Props) 
                     {/* ── Hero Header ── */}
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 mb-16">
                         <div>
-                            <h1 className="text-5xl font-extrabold tracking-tighter mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white via-neutral-200 to-neutral-500 leading-tight">
+                            <h1 className="text-5xl font-extrabold tracking-tighter mb-4 text-foreground leading-tight">
                                 Hackathons Directory
                             </h1>
                             <p className="text-muted-foreground max-w-xl text-lg leading-relaxed font-light">
@@ -131,7 +131,7 @@ export default function HackathonsIndex({ upcoming, finished, filters }: Props) 
                     </div>
 
                     {/* ── Glass Search Bar ── */}
-                    <div className="rounded-2xl p-2 mb-16 shadow-2xl bg-white/[0.03] backdrop-blur-xl border border-white/[0.08]">
+                    <div className="rounded-2xl p-2 mb-16 shadow-2xl bg-secondary/10 backdrop-blur-xl border border-border">
                         <div className="flex flex-col lg:flex-row gap-2 items-center">
                             {/* Search input */}
                             <div className="relative flex-grow w-full">
@@ -157,14 +157,14 @@ export default function HackathonsIndex({ upcoming, finished, filters }: Props) 
                                     value={dateFrom}
                                     onChange={(e) => setDateFrom(e.target.value)}
                                     title="From date"
-                                    className="w-full lg:w-44 px-5 py-3.5 rounded-xl border-none bg-white/5 hover:bg-white/10 focus:bg-white/10 focus:ring-1 focus:ring-white/20 outline-none text-sm text-muted-foreground [color-scheme:dark]"
+                                    className="w-full lg:w-44 px-5 py-3.5 rounded-xl border-none bg-secondary/20 hover:bg-secondary/40 focus:bg-secondary/40 focus:ring-1 focus:ring-border outline-none text-sm text-muted-foreground"
                                 />
                                 <input
                                     type="date"
                                     value={dateTo}
                                     onChange={(e) => setDateTo(e.target.value)}
                                     title="To date"
-                                    className="w-full lg:w-44 px-5 py-3.5 rounded-xl border-none bg-white/5 hover:bg-white/10 focus:bg-white/10 focus:ring-1 focus:ring-white/20 outline-none text-sm text-muted-foreground [color-scheme:dark]"
+                                    className="w-full lg:w-44 px-5 py-3.5 rounded-xl border-none bg-secondary/20 hover:bg-secondary/40 focus:bg-secondary/40 focus:ring-1 focus:ring-border outline-none text-sm text-muted-foreground"
                                 />
                                 <button
                                     type="button"
@@ -188,7 +188,7 @@ export default function HackathonsIndex({ upcoming, finished, filters }: Props) 
                                     Available Challenges ({upcoming.length})
                                 </h2>
                             </div>
-                            <div className="h-px flex-grow mx-8 bg-neutral-900" />
+                            <div className="h-px flex-grow mx-8 bg-border" />
                         </div>
 
                         {upcoming.length === 0 ? (
@@ -218,7 +218,7 @@ export default function HackathonsIndex({ upcoming, finished, filters }: Props) 
                                     Past Events ({finished.length})
                                 </h2>
                             </div>
-                            <div className="h-px flex-grow mx-8 bg-neutral-900" />
+                            <div className="h-px flex-grow mx-8 bg-border" />
                         </div>
 
                         {finished.length === 0 ? (
