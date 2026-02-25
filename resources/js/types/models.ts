@@ -9,12 +9,13 @@ export type Post = {
     id: number;
     title: string;
     content: string;
-    type: 'resource' | 'hackathon' | 'announcement';
+    type: 'resource' | 'hackathon' | 'project' | 'announcement';
     status: 'pending' | 'approved';
     user_id: number | null;
     file_path: string | null;
     file_size: number | null;
     event_date: string | null;
+    github_url: string | null;
     attachment_url: string | null;
     attachment_is_image: boolean;
     created_at: string;

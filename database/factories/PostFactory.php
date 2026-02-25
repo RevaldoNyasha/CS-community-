@@ -45,6 +45,13 @@ class PostFactory extends Factory
         ]);
     }
 
+    public function project(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'type' => 'project',
+        ]);
+    }
+
     public function announcement(): static
     {
         return $this->state(fn (array $attributes) => [

@@ -1,9 +1,9 @@
-import { Form, Head } from '@inertiajs/react';
+import { Form, Head, Link } from '@inertiajs/react';
 import InputError from '@/components/input-error';
 import TextLink from '@/components/text-link';
 import { Spinner } from '@/components/ui/spinner';
 import AuthLayout from '@/layouts/auth-layout';
-import { register } from '@/routes';
+import { home, register } from '@/routes';
 import { store } from '@/routes/login';
 import { request } from '@/routes/password';
 
@@ -109,6 +109,14 @@ export default function Login({
                                 {processing && <Spinner className="mr-2" />}
                                 Log in
                             </button>
+
+                            <Link
+                                href={home()}
+                                tabIndex={6}
+                                className="w-full py-2.5 border border-border text-sm font-semibold tracking-wide text-muted-foreground hover:text-foreground hover:border-foreground/30 transition-all flex items-center justify-center"
+                            >
+                                Cancel
+                            </Link>
 
                             {canRegister && (
                                 <p className="text-center text-xs text-muted-foreground pt-1">

@@ -5,8 +5,48 @@ use App\Models\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
-test('guests are redirected to login from resources page', function () {
-    $this->get('/resources')->assertRedirect(route('login'));
+test('guests can view the resources page', function () {
+    Post::factory(3)->approved()->resource()->create();
+
+    $this->get('/resources')->assertSuccessful();
+});
+
+test('guests can view the hackathons page', function () {
+    Post::factory(3)->approved()->hackathon()->create();
+
+    $this->get('/hackathons')->assertSuccessful();
+});
+
+test('guests can view an approved post', function () {
+    $post = Post::factory()->approved()->resource()->create();
+
+    $this->get("/posts/{$post->id}")->assertSuccessful();
+});
+
+test('guests cannot view a pending post', function () {
+    $post = Post::factory()->resource()->create(); // pending by default
+
+    $this->get("/posts/{$post->id}")->assertForbidden();
+});
+
+test('guests are redirected to login when accessing post create page', function () {
+    $this->get('/posts/create')->assertRedirect(route('login'));
+});
+
+test('guests are redirected to login when submitting a post', function () {
+    $this->post('/posts', [
+        'title' => 'Unauthorized',
+        'content' => 'Content here.',
+        'type' => 'resource',
+    ])->assertRedirect(route('login'));
+});
+
+test('guests are redirected to login when commenting', function () {
+    $post = Post::factory()->approved()->resource()->create();
+
+    $this->post("/posts/{$post->id}/comments", [
+        'comment' => 'Hello',
+    ])->assertRedirect(route('login'));
 });
 
 test('users can view approved resources', function () {

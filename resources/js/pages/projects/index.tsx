@@ -1,5 +1,5 @@
 import { Head, Link, router, usePage } from '@inertiajs/react';
-import { Download, FileText, MessageSquare, Plus } from 'lucide-react';
+import { ExternalLink, FolderGit2, MessageSquare, Plus } from 'lucide-react';
 import { useState } from 'react';
 import AuthPromptModal from '@/components/auth-prompt-modal';
 import AppLayout from '@/layouts/app-layout';
@@ -7,22 +7,21 @@ import type { BreadcrumbItem, PaginatedData, Post, SharedData } from '@/types';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: '/dashboard' },
-    { title: 'Resources', href: '/resources' },
+    { title: 'Projects', href: '/projects' },
 ];
 
-type Filters = { search: string; date_from: string; date_to: string; has_pdf: boolean };
+type Filters = { search: string; date_from: string; date_to: string };
 type Props = { posts: PaginatedData<Post>; filters: Filters };
 
-/* Avatar colors for user initials */
 const AVATAR_COLORS = [
-    { bg: '#00b4d8', text: '#ffffff' }, // cyan
-    { bg: '#39ff14', text: '#0a0a0a' }, // neon green (dark text for contrast)
-    { bg: '#7c3aed', text: '#ffffff' }, // purple
-    { bg: '#f59e0b', text: '#0a0a0a' }, // amber
-    { bg: '#ef4444', text: '#ffffff' }, // red
-    { bg: '#10b981', text: '#ffffff' }, // emerald
-    { bg: '#3b82f6', text: '#ffffff' }, // blue
-    { bg: '#ec4899', text: '#ffffff' }, // pink
+    { bg: '#7c3aed', text: '#ffffff' },
+    { bg: '#00b4d8', text: '#ffffff' },
+    { bg: '#39ff14', text: '#0a0a0a' },
+    { bg: '#f59e0b', text: '#0a0a0a' },
+    { bg: '#ef4444', text: '#ffffff' },
+    { bg: '#10b981', text: '#ffffff' },
+    { bg: '#3b82f6', text: '#ffffff' },
+    { bg: '#ec4899', text: '#ffffff' },
 ];
 
 function avatarColor(name: string) {
@@ -37,19 +36,14 @@ function initials(name: string): string {
     return name.slice(0, 2).toUpperCase();
 }
 
-function ResourceCard({ post }: { post: Post }) {
-    const hasPdf = post.file_path?.endsWith('.pdf');
+function ProjectCard({ post }: { post: Post }) {
     const hasImage = post.attachment_is_image && post.attachment_url;
     const dateLabel = new Date(post.created_at).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' });
-    
     const authorName = post.user?.name ?? 'Shared';
     const avatarStyle = avatarColor(authorName);
 
     return (
-        <Link
-            href={`/posts/${post.id}`}
-            className="relative bg-card border border-border rounded-xl overflow-hidden flex flex-col hover:ring-2 hover:ring-foreground/20 transition-all duration-200"
-        >
+        <div className="relative bg-card border border-border rounded-xl overflow-hidden flex flex-col hover:ring-2 hover:ring-foreground/20 transition-all duration-200">
             {/* Image preview */}
             {hasImage && (
                 <div className="h-36 overflow-hidden border-b border-border">
@@ -57,7 +51,7 @@ function ResourceCard({ post }: { post: Post }) {
                 </div>
             )}
 
-            <div className="p-5 md:p-8 flex-1">
+            <Link href={`/posts/${post.id}`} className="p-5 md:p-8 flex-1 block">
                 {/* Card top row */}
                 <div className="flex justify-between items-center mb-6">
                     <div className="flex items-center gap-3">
@@ -67,21 +61,12 @@ function ResourceCard({ post }: { post: Post }) {
                         >
                             {initials(authorName)}
                         </div>
-                        <div className="flex items-center">
-                            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider leading-none">
-                                {authorName}
-                            </span>
-                        </div>
+                        <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider leading-none">
+                            {authorName}
+                        </span>
                     </div>
-                    <div className="flex items-center gap-2">
-                        {hasPdf && (
-                            <span className="flex items-center gap-1 text-[9px] font-bold text-sky-400 uppercase tracking-wider leading-none">
-                                <Download className="size-2.5" /> PDF
-                            </span>
-                        )}
-                        <div className="text-[10px] font-black uppercase tracking-tighter text-muted-foreground shrink-0 leading-none">
-                            {dateLabel}
-                        </div>
+                    <div className="text-[10px] font-black uppercase tracking-tighter text-muted-foreground shrink-0 leading-none">
+                        {dateLabel}
                     </div>
                 </div>
 
@@ -108,55 +93,68 @@ function ResourceCard({ post }: { post: Post }) {
                         ))}
                     </div>
                 )}
-            </div>
+            </Link>
 
             {/* Card footer */}
             <div className="px-5 md:px-8 py-4 md:py-5 border-t border-border flex items-center justify-between text-[11px] font-bold text-muted-foreground uppercase tracking-widest">
-                <div className="flex items-center gap-2">
+                <Link href={`/posts/${post.id}`} className="flex items-center gap-2 hover:text-foreground transition-colors">
                     View Details
+                </Link>
+                <div className="flex items-center gap-4">
+                    {post.comments_count !== undefined && (
+                        <span className="flex items-center gap-1">
+                            <MessageSquare className="size-3" />
+                            {post.comments_count}
+                        </span>
+                    )}
+                    {post.github_url && (
+                        <a
+                            href={post.github_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={(e) => e.stopPropagation()}
+                            className="flex items-center gap-1 text-violet-400 hover:text-violet-300 transition-colors"
+                        >
+                            <ExternalLink className="size-3.5" />
+                            Link
+                        </a>
+                    )}
                 </div>
-                {post.comments_count !== undefined && (
-                    <span className="flex items-center gap-1">
-                        <MessageSquare className="size-3" />
-                        {post.comments_count}
-                    </span>
-                )}
             </div>
-        </Link>
+        </div>
     );
 }
 
-export default function ResourcesIndex({ posts, filters }: Props) {
+export default function ProjectsIndex({ posts, filters }: Props) {
     const { auth } = usePage<SharedData>().props;
     const [search, setSearch] = useState(filters.search ?? '');
-    const [hasPdf, setHasPdf] = useState(filters.has_pdf ?? false);
+    const [dateFrom, setDateFrom] = useState(filters.date_from ?? '');
+    const [dateTo, setDateTo] = useState(filters.date_to ?? '');
     const [authModalOpen, setAuthModalOpen] = useState(false);
 
     function applyFilters() {
-        router.get('/resources', {
+        router.get('/projects', {
             search: search || undefined,
-            has_pdf: hasPdf ? '1' : undefined,
+            date_from: dateFrom || undefined,
+            date_to: dateTo || undefined,
         }, { preserveState: true, preserveScroll: true });
     }
 
-    function togglePdf(checked: boolean) {
-        setHasPdf(checked);
-        router.get('/resources', {
-            search: search || undefined,
-            has_pdf: checked ? '1' : undefined,
-        }, { preserveState: true, preserveScroll: true });
+    function clearFilters() {
+        setSearch(''); setDateFrom(''); setDateTo('');
+        router.get('/projects', {}, { preserveState: true, preserveScroll: true });
     }
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Resources" />
+            <Head title="Projects" />
 
             <div className="flex-1 overflow-y-auto [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-border [&::-webkit-scrollbar-track]:bg-transparent">
                 <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 py-8 md:py-12">
 
                     {/* ── Compact Header ── */}
                     <div className="flex items-center justify-between mb-3">
-                        <h1 className="text-xl font-bold text-foreground">Resources</h1>
+                        <h1 className="text-xl font-bold text-foreground">Projects</h1>
                         {auth.user ? (
                             <Link href="/posts/create" className="bg-primary text-primary-foreground size-8 flex items-center justify-center rounded-md shrink-0 hover:opacity-90 transition-opacity">
                                 <Plus className="size-4" />
@@ -179,30 +177,24 @@ export default function ResourcesIndex({ posts, filters }: Props) {
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
                                 onKeyDown={(e) => e.key === 'Enter' && applyFilters()}
-                                placeholder="Search resources..."
+                                placeholder="Search projects..."
                                 className="w-full pl-9 pr-3 py-2 bg-card border border-border rounded-lg text-sm text-foreground placeholder:text-muted-foreground/50 outline-none focus:ring-1 focus:ring-ring"
                             />
                         </div>
-                        <label className="flex items-center gap-2 px-3 py-2 bg-card border border-border rounded-lg text-sm text-muted-foreground cursor-pointer">
-                            <input
-                                type="checkbox"
-                                checked={hasPdf}
-                                onChange={(e) => togglePdf(e.target.checked)}
-                                className="size-3.5"
-                            />
-                            <FileText className="size-3.5" /> PDF
-                        </label>
+                        {search && (
+                            <button type="button" onClick={clearFilters} className="px-4 py-2 bg-card border border-border rounded-lg text-sm text-muted-foreground">Clear</button>
+                        )}
                     </div>
 
-                    {/* ── Resources Section ── */}
+                    {/* ── Projects Grid ── */}
                     <div className="mb-20">
                         <div className="flex items-center justify-between mb-10">
                             <div className="flex items-center gap-4">
-                                <span className="px-3 py-1 bg-sky-500/10 text-sky-400 text-xs font-bold tracking-[0.2em] rounded-full border border-sky-500/20">
-                                    RESOURCES
+                                <span className="px-3 py-1 bg-violet-500/10 text-violet-400 text-xs font-bold tracking-[0.2em] rounded-full border border-violet-500/20">
+                                    PROJECTS
                                 </span>
                                 <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-widest">
-                                    Available Materials ({posts.total ?? posts.data.length})
+                                    Community Builds ({posts.total ?? posts.data.length})
                                 </h2>
                             </div>
                             <div className="h-px grow mx-8 bg-border" />
@@ -211,14 +203,14 @@ export default function ResourcesIndex({ posts, filters }: Props) {
                         {posts.data.length === 0 ? (
                             <div className="flex flex-col items-center justify-center py-24 rounded-3xl border border-dashed border-border/60 bg-background">
                                 <div className="w-16 h-16 rounded-full bg-muted/50 flex items-center justify-center mb-4">
-                                    <span className="material-symbols-outlined text-3xl text-muted-foreground/40">folder_open</span>
+                                    <FolderGit2 className="size-7 text-muted-foreground/40" />
                                 </div>
-                                <p className="text-muted-foreground font-light tracking-wide">No resources found. Try adjusting your filters.</p>
+                                <p className="text-muted-foreground font-light tracking-wide">No projects yet. Be the first to share one.</p>
                             </div>
                         ) : (
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                                 {posts.data.map((post) => (
-                                    <ResourceCard key={post.id} post={post} />
+                                    <ProjectCard key={post.id} post={post} />
                                 ))}
                             </div>
                         )}
@@ -260,7 +252,7 @@ export default function ResourcesIndex({ posts, filters }: Props) {
 
             <AuthPromptModal
                 open={authModalOpen}
-                message="Please login to share a resource."
+                message="Please login to share a project."
                 onCancel={() => setAuthModalOpen(false)}
             />
         </AppLayout>

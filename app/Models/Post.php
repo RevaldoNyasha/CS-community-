@@ -26,6 +26,7 @@ class Post extends Model
         'file_path',
         'file_size',
         'event_date',
+        'github_url',
     ];
 
     /** @var list<string> */
@@ -37,8 +38,8 @@ class Post extends Model
     protected function casts(): array
     {
         return [
-            'type' => PostType::class ,
-            'status' => PostStatus::class ,
+            'type' => PostType::class,
+            'status' => PostStatus::class,
             'event_date' => 'date',
         ];
     }
@@ -55,8 +56,8 @@ class Post extends Model
     /** @return Attribute<string|null, never> */
     protected function attachmentUrl(): Attribute
     {
-        return Attribute::get(fn(): ?string => $this->file_path
-        ?Storage::disk('public')->url($this->file_path)
+        return Attribute::get(fn (): ?string => $this->file_path
+        ? Storage::disk('public')->url($this->file_path)
         : null
         );
     }
@@ -65,7 +66,7 @@ class Post extends Model
     protected function attachmentIsImage(): Attribute
     {
         return Attribute::get(function (): bool {
-            if (!$this->file_path) {
+            if (! $this->file_path) {
                 return false;
             }
 
@@ -95,8 +96,12 @@ class Post extends Model
         return $this->hasMany(Like::class);
     }
 
-    public function isLikedBy(User $user): bool
+    public function isLikedBy(?User $user): bool
     {
+        if ($user === null) {
+            return false;
+        }
+
         return $this->likes()->where('user_id', $user->id)->exists();
     }
 

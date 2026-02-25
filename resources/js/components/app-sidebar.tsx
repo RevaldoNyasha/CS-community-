@@ -2,6 +2,7 @@ import { Link, usePage } from '@inertiajs/react';
 import {
     BookOpen,
     Folder,
+    FolderGit2,
     LayoutGrid,
     Lightbulb,
     PenSquare,
@@ -39,6 +40,11 @@ const mainNavItems: NavItem[] = [
         title: 'Hackathons',
         href: '/hackathons',
         icon: Trophy,
+    },
+    {
+        title: 'Projects',
+        href: '/projects',
+        icon: FolderGit2,
     },
     {
         title: 'Submit Post',
@@ -95,11 +101,35 @@ const footerNavItems: NavItem[] = [
     },
 ];
 
+const guestNavItems: NavItem[] = [
+    {
+        title: 'Resources',
+        href: '/resources',
+        icon: BookOpen,
+    },
+    {
+        title: 'Hackathons',
+        href: '/hackathons',
+        icon: Trophy,
+    },
+    {
+        title: 'Projects',
+        href: '/projects',
+        icon: FolderGit2,
+    },
+];
+
 export function AppSidebar() {
     const { auth } = usePage<SharedData>().props;
-    const items: (NavItem | NavGroup)[] = auth.isAdmin
-        ? [...mainNavItems, adminNavGroup]
-        : mainNavItems;
+
+    let items: (NavItem | NavGroup)[];
+    if (!auth.user) {
+        items = guestNavItems;
+    } else if (auth.isAdmin) {
+        items = [...mainNavItems, adminNavGroup];
+    } else {
+        items = mainNavItems;
+    }
 
     return (
         <Sidebar collapsible="icon" variant="inset" className="text-foreground">

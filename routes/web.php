@@ -26,22 +26,32 @@ Route::get('/', function () {
     ]);
 })->name('home');
 
-// User routes
+// Public routes (no authentication required)
+Route::get('resources', [PostController::class, 'index'])
+    ->name('resources.index')
+    ->defaults('type', 'resource');
+
+Route::get('hackathons', [PostController::class, 'index'])
+    ->name('hackathons.index')
+    ->defaults('type', 'hackathon');
+
+Route::get('projects', [PostController::class, 'index'])
+    ->name('projects.index')
+    ->defaults('type', 'project');
+
+// posts/create must be declared BEFORE posts/{post} to avoid the wildcard capturing it
+Route::get('posts/create', [PostController::class, 'create'])
+    ->middleware(['auth', 'verified'])
+    ->name('posts.create');
+
+Route::get('posts/{post}', [PostController::class, 'show'])->name('posts.show');
+Route::get('posts/{post}/download', [PostController::class, 'download'])->name('posts.download');
+
+// Authenticated routes
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', DashboardController::class)->name('dashboard');
 
-    Route::get('resources', [PostController::class, 'index'])
-        ->name('resources.index')
-        ->defaults('type', 'resource');
-
-    Route::get('hackathons', [PostController::class, 'index'])
-        ->name('hackathons.index')
-        ->defaults('type', 'hackathon');
-
-    Route::get('posts/create', [PostController::class, 'create'])->name('posts.create');
     Route::post('posts', [PostController::class, 'store'])->name('posts.store');
-    Route::get('posts/{post}', [PostController::class, 'show'])->name('posts.show');
-    Route::get('posts/{post}/download', [PostController::class, 'download'])->name('posts.download');
 
     Route::post('posts/{post}/like', [LikeController::class, 'toggle'])->name('posts.like');
 

@@ -24,7 +24,7 @@ function isNavGroup(item: NavItem | NavGroup): item is NavGroup {
 }
 
 const menuBtnClass =
-    '!rounded-sm text-[13px] text-muted-foreground font-medium hover:!bg-muted hover:!text-foreground transition-all data-[active=true]:bg-gradient-to-r data-[active=true]:from-primary/10 data-[active=true]:to-transparent data-[active=true]:!text-primary group-data-[collapsible=icon]:!border-0 group-data-[collapsible=icon]:!p-0 group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:items-center group-data-[collapsible=icon]:justify-center';
+    '!rounded-sm text-[13px] text-muted-foreground font-medium hover:!bg-muted hover:!text-foreground transition-all data-[active=true]:!bg-transparent data-[active=true]:!text-foreground data-[active=true]:font-bold group-data-[collapsible=icon]:!border-0 group-data-[collapsible=icon]:!p-0 group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:items-center group-data-[collapsible=icon]:justify-center';
 
 export function NavMain({ items = [] }: { items: (NavItem | NavGroup)[] }) {
     const { isCurrentUrl } = useCurrentUrl();
@@ -75,7 +75,7 @@ export function NavMain({ items = [] }: { items: (NavItem | NavGroup)[] }) {
                                                     <SidebarMenuSubButton
                                                         asChild
                                                         isActive={isCurrentUrl(child.href)}
-                                                        className="!rounded-none text-muted-foreground hover:!bg-secondary hover:!text-foreground data-[active=true]:!bg-secondary data-[active=true]:!text-primary"
+                                                        className="!rounded-none text-muted-foreground hover:!bg-secondary hover:!text-foreground data-[active=true]:bg-transparent! data-[active=true]:text-foreground! data-[active=true]:font-bold"
                                                     >
                                                         <Link href={child.href} prefetch>
                                                             <span>{child.title}</span>

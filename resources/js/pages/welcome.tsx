@@ -1,5 +1,5 @@
 import { Head, Link, usePage } from '@inertiajs/react';
-import { Menu, X } from 'lucide-react';
+import { BookOpen, FolderGit2, Menu, Trophy, X } from 'lucide-react';
 import { useState } from 'react';
 import { dashboard, login, register } from '@/routes';
 import type { SharedData } from '@/types';
@@ -28,11 +28,7 @@ export default function Welcome({
                         {/* Logo */}
                         <div className="flex lg:flex-1">
                             <Link href="/" className="-m-1.5 p-1.5 flex items-center gap-3">
-                                <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary">
-                                    <svg className="w-4 h-4 text-primary-foreground" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
-                                        <path strokeLinecap="square" strokeLinejoin="miter" d="M3 3h8v8H3V3zm10 0h8v8h-8V3zM3 13h8v8H3v-8zm10 0h8v8h-8v-8z" />
-                                    </svg>
-                                </div>
+                                <img src="/newIcons/navbarIcon.png" alt="DEV-CRAFT" className="size-8 object-contain" />
                                 <span className="text-sm font-semibold text-foreground tracking-widest uppercase">DEV-CRAFT</span>
                             </Link>
                         </div>
@@ -74,11 +70,8 @@ export default function Welcome({
                                         Log in <span aria-hidden="true">&rarr;</span>
                                     </Link>
                                     {canRegister && (
-                                        <Link
-                                            href={register().url}
-                                            className="rounded-md bg-primary px-3.5 py-2 text-sm font-semibold text-primary-foreground shadow hover:bg-primary/90 transition-colors"
-                                        >
-                                            Register
+                                        <Link href={register().url} className="text-sm font-semibold text-foreground hover:text-muted-foreground transition-colors">
+                                            Register <span aria-hidden="true">&rarr;</span>
                                         </Link>
                                     )}
                                 </>
@@ -93,11 +86,7 @@ export default function Welcome({
                             <div className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-background p-6 sm:max-w-sm sm:ring-1 sm:ring-border">
                                 <div className="flex items-center justify-between">
                                     <Link href="/" className="-m-1.5 p-1.5 flex items-center gap-3">
-                                        <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary">
-                                            <svg className="w-4 h-4 text-primary-foreground" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
-                                                <path strokeLinecap="square" strokeLinejoin="miter" d="M3 3h8v8H3V3zm10 0h8v8h-8V3zM3 13h8v8H3v-8zm10 0h8v8h-8v-8z" />
-                                            </svg>
-                                        </div>
+                                        <img src="/newIcons/navbarIcon.png" alt="DEV-CRAFT" className="size-8 object-contain" />
                                         <span className="text-sm font-semibold text-foreground tracking-widest uppercase">DEV-CRAFT</span>
                                     </Link>
                                     <button
@@ -172,7 +161,7 @@ export default function Welcome({
                         />
                     </div>
 
-                    <div className="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
+                    <div className="mx-auto max-w-2xl py-20 sm:py-24 lg:py-28">
                         {/* Announcement pill */}
                         <div className="hidden sm:mb-8 sm:flex sm:justify-center">
                             <div className="relative rounded-full px-3 py-1 text-sm text-muted-foreground ring-1 ring-border hover:ring-primary/30">
@@ -196,16 +185,42 @@ export default function Welcome({
                                 DEV-CRAFT is a platform for computer science students to share resources, collaborate on hackathons, and level up their skills together.
                             </p>
 
-                            {/* CTA buttons */}
-                            <div className="mt-10 flex items-center justify-center gap-x-6">
+                            {/* Section cards */}
+                            <div className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-4 text-left">
                                 <Link
-                                    href={auth.user ? dashboard().url : (canRegister ? register().url : login().url)}
-                                    className="rounded-md bg-primary px-3.5 py-2.5 text-sm font-semibold text-primary-foreground shadow hover:bg-primary/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-colors"
+                                    href="/hackathons"
+                                    className="group flex flex-col gap-3 p-5 bg-card/60 border border-border rounded-xl hover:border-primary/40 hover:bg-card transition-all"
                                 >
-                                    {auth.user ? 'Go to Dashboard' : 'Get started'}
+                                    <Trophy className="size-5 text-foreground" />
+                                    <div>
+                                        <h3 className="font-semibold text-foreground mb-1">Hackathons</h3>
+                                        <p className="text-xs text-muted-foreground leading-relaxed">Discover and join upcoming hackathons in the NUST CS community.</p>
+                                    </div>
+                                    <span className="text-xs font-semibold text-primary group-hover:underline mt-auto">Browse →</span>
                                 </Link>
-                                <Link href={login().url} className="text-sm font-semibold text-foreground hover:text-muted-foreground transition-colors">
-                                    Log in <span aria-hidden="true">→</span>
+
+                                <Link
+                                    href="/projects"
+                                    className="group flex flex-col gap-3 p-5 bg-card/60 border border-border rounded-xl hover:border-primary/40 hover:bg-card transition-all"
+                                >
+                                    <FolderGit2 className="size-5 text-foreground" />
+                                    <div>
+                                        <h3 className="font-semibold text-foreground mb-1">Projects</h3>
+                                        <p className="text-xs text-muted-foreground leading-relaxed">Browse community-built projects and share your own work with others.</p>
+                                    </div>
+                                    <span className="text-xs font-semibold text-primary group-hover:underline mt-auto">Explore →</span>
+                                </Link>
+
+                                <Link
+                                    href="/resources"
+                                    className="group flex flex-col gap-3 p-5 bg-card/60 border border-border rounded-xl hover:border-primary/40 hover:bg-card transition-all"
+                                >
+                                    <BookOpen className="size-5 text-foreground" />
+                                    <div>
+                                        <h3 className="font-semibold text-foreground mb-1">Resources</h3>
+                                        <p className="text-xs text-muted-foreground leading-relaxed">Access study materials and guides shared by fellow students.</p>
+                                    </div>
+                                    <span className="text-xs font-semibold text-primary group-hover:underline mt-auto">View all →</span>
                                 </Link>
                             </div>
                         </div>

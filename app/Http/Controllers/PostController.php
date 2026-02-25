@@ -23,24 +23,24 @@ class PostController extends Controller
 
         $baseQuery = Post::query()
             ->approved()
-            ->when($postType, fn($query) => $query->ofType($postType))
+            ->when($postType, fn ($query) => $query->ofType($postType))
             ->when($request->filled('search'), function ($query) use ($request) {
-            $search = $request->input('search');
-            $query->where(function ($q) use ($search) {
+                $search = $request->input('search');
+                $query->where(function ($q) use ($search) {
                     $q->where('title', 'like', "%{$search}%")
                         ->orWhere('content', 'like', "%{$search}%");
                 }
                 );
             })
             ->when($request->filled('date_from'), function ($query) use ($request) {
-            $query->whereDate('created_at', '>=', $request->input('date_from'));
-        })
+                $query->whereDate('created_at', '>=', $request->input('date_from'));
+            })
             ->when($request->filled('date_to'), function ($query) use ($request) {
-            $query->whereDate('created_at', '<=', $request->input('date_to'));
-        })
+                $query->whereDate('created_at', '<=', $request->input('date_to'));
+            })
             ->when($request->boolean('has_pdf'), function ($query) {
-            $query->whereNotNull('file_path')->where('file_path', 'like', '%.pdf');
-        })
+                $query->whereNotNull('file_path')->where('file_path', 'like', '%.pdf');
+            })
             ->with(['user:id,name', 'tags'])
             ->withCount(['comments', 'likes']);
 
@@ -50,6 +50,7 @@ class PostController extends Controller
         $pageMap = [
             'resource' => 'resources/index',
             'hackathon' => 'hackathons/index',
+            'project' => 'projects/index',
         ];
 
         $page = $pageMap[$type] ?? 'resources/index';
@@ -67,9 +68,9 @@ class PostController extends Controller
 
             $upcoming = (clone $baseQuery)
                 ->where(function ($q) use ($today) {
-                $q->whereNull('event_date')
-                    ->orWhere('event_date', '>=', $today);
-            })
+                    $q->whereNull('event_date')
+                        ->orWhere('event_date', '>=', $today);
+                })
                 ->orderBy('event_date', 'asc')
                 ->get();
 
@@ -150,7 +151,7 @@ class PostController extends Controller
     public function show(Post $post): Response
     {
         abort_unless(
-            $post->status === PostStatus::Approved || $post->user_id === auth()->id() || auth()->user()->isAdmin(),
+            $post->status === PostStatus::Approved || $post->user_id === auth()->id() || (auth()->user()?->isAdmin() ?? false),
             403,
         );
 

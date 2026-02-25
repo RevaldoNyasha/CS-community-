@@ -1,5 +1,7 @@
 import { Head, Link, useForm, usePage } from '@inertiajs/react';
-import { Download, FileText } from 'lucide-react';
+import { Download, ExternalLink, FileText, MessageSquare } from 'lucide-react';
+import { useState } from 'react';
+import AuthPromptModal from '@/components/auth-prompt-modal';
 import AppLayout from '@/layouts/app-layout';
 import { timeAgo } from '@/lib/time-ago';
 import type { BreadcrumbItem, Post, SharedData } from '@/types';
@@ -27,9 +29,10 @@ function typeBadgeClass(type: string) {
 
 export default function PostShow({ post }: Props) {
     const { auth } = usePage<SharedData>().props;
+    const [authModalOpen, setAuthModalOpen] = useState(false);
 
-    const backHref = post.type === 'resource' ? '/resources' : post.type === 'hackathon' ? '/hackathons' : '/dashboard';
-    const backLabel = post.type === 'resource' ? 'Resources' : post.type === 'hackathon' ? 'Hackathons' : 'Feed';
+    const backHref = post.type === 'resource' ? '/resources' : post.type === 'hackathon' ? '/hackathons' : post.type === 'project' ? '/projects' : '/dashboard';
+    const backLabel = post.type === 'resource' ? 'Resources' : post.type === 'hackathon' ? 'Hackathons' : post.type === 'project' ? 'Projects' : 'Feed';
 
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Dashboard', href: '/dashboard' },
@@ -43,7 +46,6 @@ export default function PostShow({ post }: Props) {
         e.preventDefault();
         submitComment(`/posts/${post.id}/comments`, { onSuccess: () => reset() });
     }
-
 
     const authorName = post.user?.name ?? 'Admin';
     const commentCount = post.comments?.length ?? 0;
@@ -68,7 +70,7 @@ export default function PostShow({ post }: Props) {
                 </nav>
 
                 {/* ── Article ── */}
-                <main className="max-w-4xl mx-auto px-4 py-12">
+                <main className="max-w-4xl mx-auto px-4 py-6 md:py-12">
                     <article className="space-y-8">
 
                         {/* Header */}
@@ -86,7 +88,7 @@ export default function PostShow({ post }: Props) {
                             </div>
 
                             {/* Title */}
-                            <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight text-foreground leading-[1.15]">
+                            <h1 className="text-2xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-foreground leading-[1.15]">
                                 {post.title}
                             </h1>
 
@@ -157,6 +159,19 @@ export default function PostShow({ post }: Props) {
                             </div>
                         )}
 
+                        {/* Project link (GitHub / Google Drive) */}
+                        {post.github_url && (
+                            <a
+                                href={post.github_url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-2 px-4 py-2 border border-border rounded-lg bg-card hover:border-violet-500/40 hover:text-violet-400 text-muted-foreground transition-colors text-sm font-medium"
+                            >
+                                <ExternalLink className="size-4" />
+                                View Project
+                            </a>
+                        )}
+
                         {/* Body */}
                         <div className="prose prose-invert max-w-none prose-lg prose-slate">
                             {post.content?.split('\n').filter(Boolean).map((para, i) => (
@@ -179,30 +194,41 @@ export default function PostShow({ post }: Props) {
                             </h2>
                         </div>
 
-                        {/* Comment form */}
-                        <form onSubmit={handleSubmit} className="bg-muted/20 border border-border rounded-xl p-4 shadow-sm">
-                            <div className="flex flex-col space-y-4">
-                                <textarea
-                                    value={data.comment}
-                                    onChange={(e) => setData('comment', e.target.value)}
-                                    className="w-full bg-background border border-border rounded-lg p-4 text-foreground placeholder:text-muted-foreground/50 focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none resize-none text-sm"
-                                    placeholder="Write a comment..."
-                                    rows={4}
-                                />
-                                {errors.comment && (
-                                    <p className="text-xs text-destructive">{errors.comment}</p>
-                                )}
-                                <div className="flex justify-end">
-                                    <button
-                                        type="submit"
-                                        disabled={processing || !data.comment.trim()}
-                                        className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-2 px-6 rounded-lg transition-all shadow-lg shadow-primary/20 hover:shadow-primary/40 active:scale-[0.98] text-sm disabled:opacity-50 disabled:cursor-not-allowed"
-                                    >
-                                        Post Comment
-                                    </button>
+                        {/* Comment form or login prompt */}
+                        {auth.user ? (
+                            <form onSubmit={handleSubmit} className="bg-muted/20 border border-border rounded-xl p-4 shadow-sm">
+                                <div className="flex flex-col space-y-4">
+                                    <textarea
+                                        value={data.comment}
+                                        onChange={(e) => setData('comment', e.target.value)}
+                                        className="w-full bg-background border border-border rounded-lg p-4 text-foreground placeholder:text-muted-foreground/50 focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none resize-none text-sm"
+                                        placeholder="Write a comment..."
+                                        rows={4}
+                                    />
+                                    {errors.comment && (
+                                        <p className="text-xs text-destructive">{errors.comment}</p>
+                                    )}
+                                    <div className="flex justify-end">
+                                        <button
+                                            type="submit"
+                                            disabled={processing || !data.comment.trim()}
+                                            className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-2 px-6 rounded-lg transition-all shadow-lg shadow-primary/20 hover:shadow-primary/40 active:scale-[0.98] text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                                        >
+                                            Post Comment
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
-                        </form>
+                            </form>
+                        ) : (
+                            <button
+                                type="button"
+                                onClick={() => setAuthModalOpen(true)}
+                                className="w-full flex items-center justify-center gap-3 bg-muted/20 border border-dashed border-border rounded-xl p-6 text-muted-foreground hover:text-foreground hover:border-primary/30 transition-all"
+                            >
+                                <MessageSquare className="size-4" />
+                                <span className="text-sm font-medium">Login to Comment</span>
+                            </button>
+                        )}
 
                         {/* Comment list or empty state */}
                         {commentCount === 0 ? (
@@ -230,7 +256,7 @@ export default function PostShow({ post }: Props) {
                                                     <span className="text-muted-foreground/40">·</span>
                                                     <span className="text-muted-foreground">{timeAgo(comment.created_at)}</span>
                                                 </div>
-                                                {(comment.user_id === auth.user.id || auth.isAdmin) && (
+                                                {auth.user && (comment.user_id === auth.user.id || auth.isAdmin) && (
                                                     <Link
                                                         href={`/comments/${comment.id}`}
                                                         method="delete"
@@ -248,6 +274,12 @@ export default function PostShow({ post }: Props) {
                             </div>
                         )}
                     </section>
+
+                    <AuthPromptModal
+                        open={authModalOpen}
+                        message="Please login to leave a comment."
+                        onCancel={() => setAuthModalOpen(false)}
+                    />
 
                     {/* ── Footer ── */}
                     <footer className="mt-16 py-12 border-t border-border">

@@ -88,39 +88,39 @@
 
 /* ===== LIGHT THEME (default) ===== */
 :root {
-    --background: #ffffff;
-    --foreground: #0c0c0c;
-    --card: #ffffff;
-    --card-foreground: #0c0c0c;
-    --popover: #ffffff;
-    --popover-foreground: #0c0c0c;
-    --primary: #18181b;
-    --primary-foreground: #fafafa;
-    --secondary: #f4f4f5;
-    --secondary-foreground: #18181b;
-    --muted: #f4f4f5;
-    --muted-foreground: #71717a;
-    --accent: #f4f4f5;
-    --accent-foreground: #18181b;
-    --destructive: #ef4444;
-    --destructive-foreground: #fafafa;
-    --border: #e4e4e7;
-    --input: #e4e4e7;
-    --ring: #18181b;
+    --background: #c8cacd;
+    --foreground: #111318;
+    --card: #d8dadd;
+    --card-foreground: #111318;
+    --popover: #d8dadd;
+    --popover-foreground: #111318;
+    --primary: #4a7fa8;
+    --primary-foreground: #ffffff;
+    --secondary: #b8babe;
+    --secondary-foreground: #111318;
+    --muted: #b8babe;
+    --muted-foreground: #4a4d57;
+    --accent: #b8babe;
+    --accent-foreground: #111318;
+    --destructive: #dc2626;
+    --destructive-foreground: #ffffff;
+    --border: #a8abb0;
+    --input: #cfd1d4;
+    --ring: #4a7fa8;
     --chart-1: #16a34a;
     --chart-2: #d97706;
     --chart-3: #7c3aed;
-    --chart-4: #2563eb;
+    --chart-4: #4a7fa8;
     --chart-5: #dc2626;
     --radius: 8px;
-    --sidebar: #f9f9f9;
-    --sidebar-foreground: #18181b;
-    --sidebar-primary: #18181b;
-    --sidebar-primary-foreground: #fafafa;
-    --sidebar-accent: #f4f4f5;
-    --sidebar-accent-foreground: #18181b;
-    --sidebar-border: #e4e4e7;
-    --sidebar-ring: #18181b;
+    --sidebar: #b8babe;
+    --sidebar-foreground: #111318;
+    --sidebar-primary: #4a7fa8;
+    --sidebar-primary-foreground: #ffffff;
+    --sidebar-accent: #a8abb0;
+    --sidebar-accent-foreground: #111318;
+    --sidebar-border: #a8abb0;
+    --sidebar-ring: #4a7fa8;
 }
 
 /* ===== DARK THEME ===== */
@@ -407,12 +407,12 @@
 
 /* App-wide primary button style */
 .btn-primary {
-    background-color: #14b8a6;
-    color: white;
+    background-color: var(--primary);
+    color: var(--primary-foreground);
     font-weight: 600;
     padding: 0.5rem 1.5rem;
     border-radius: 0.375rem;
-    box-shadow: 0 4px 12px rgba(20, 184, 166, 0.15);
+    box-shadow: 0 4px 12px color-mix(in srgb, var(--primary) 25%, transparent);
     transition: all 0.2s ease;
     border: none;
     cursor: pointer;
@@ -420,9 +420,9 @@
 }
 
 .btn-primary:hover {
-    background-color: #0d9488;
+    background-color: color-mix(in srgb, var(--primary) 88%, black);
     transform: translateY(-1px);
-    box-shadow: 0 6px 16px rgba(20, 184, 166, 0.2);
+    box-shadow: 0 6px 16px color-mix(in srgb, var(--primary) 30%, transparent);
 }
 
 .btn-primary:active {

@@ -1,9 +1,9 @@
-import { Form, Head } from '@inertiajs/react';
+import { Form, Head, Link } from '@inertiajs/react';
 import InputError from '@/components/input-error';
 import TextLink from '@/components/text-link';
 import { Spinner } from '@/components/ui/spinner';
 import AuthLayout from '@/layouts/auth-layout';
-import { login } from '@/routes';
+import { home, login } from '@/routes';
 import { store } from '@/routes/register';
 
 const underlineInput = "w-full bg-transparent border-0 border-b border-border/60 rounded-none px-0 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary focus:ring-0 transition-colors";
@@ -90,6 +90,14 @@ export default function Register() {
                                 {processing && <Spinner className="mr-2" />}
                                 Create account
                             </button>
+
+                            <Link
+                                href={home()}
+                                tabIndex={7}
+                                className="w-full py-2.5 border border-border text-sm font-semibold tracking-wide text-muted-foreground hover:text-foreground hover:border-foreground/30 transition-all flex items-center justify-center"
+                            >
+                                Cancel
+                            </Link>
 
                             <p className="text-center text-xs text-muted-foreground pt-1">
                                 Already have an account?{' '}

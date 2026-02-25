@@ -1,5 +1,5 @@
 import { Head, useForm } from '@inertiajs/react';
-import { X, Paperclip } from 'lucide-react';
+import { ExternalLink, Paperclip, X } from 'lucide-react';
 import AppLayout from '@/layouts/app-layout';
 import {
     Select,
@@ -27,6 +27,7 @@ export default function PostCreate() {
         content: '',
         type: 'resource',
         tags: '',
+        github_url: '',
         attachment: null as File | null,
     });
 
@@ -71,13 +72,14 @@ export default function PostCreate() {
                             {/* Type */}
                             <div className="space-y-2">
                                 <label htmlFor="post-type" className={labelClass}>Type</label>
-                                <Select value={data.type} onValueChange={(value) => setData('type', value as 'resource' | 'hackathon')}>
+                                <Select value={data.type} onValueChange={(value) => setData('type', value as 'resource' | 'hackathon' | 'project')}>
                                     <SelectTrigger className={inputClass}>
                                         <SelectValue placeholder="Select type" />
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectItem value="resource" className="rounded-md">Resource</SelectItem>
                                         <SelectItem value="hackathon" className="rounded-md">Hackathon</SelectItem>
+                                        <SelectItem value="project" className="rounded-md">Project</SelectItem>
                                     </SelectContent>
                                 </Select>
                                 {errors.type && <p className="text-xs text-destructive mt-1">{errors.type}</p>}
@@ -110,6 +112,30 @@ export default function PostCreate() {
                                 />
                                 {errors.content && <p className="text-xs text-destructive mt-1">{errors.content}</p>}
                             </div>
+
+                            {/* Project Link — only for projects */}
+                            {data.type === 'project' && (
+                                <div className="space-y-2">
+                                    <label htmlFor="post-project-link" className={labelClass}>
+                                        Project Link{' '}
+                                        <span className="lowercase font-normal opacity-70">(GitHub or Google Drive, optional)</span>
+                                    </label>
+                                    <div className="relative">
+                                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <ExternalLink className="size-4 text-muted-foreground/60" />
+                                        </div>
+                                        <input
+                                            id="post-project-link"
+                                            type="url"
+                                            value={data.github_url}
+                                            onChange={(e) => setData('github_url', e.target.value)}
+                                            className={inputClass + ' pl-10'}
+                                            placeholder="https://github.com/username/repo or https://drive.google.com/..."
+                                        />
+                                    </div>
+                                    {errors.github_url && <p className="text-xs text-destructive mt-1">{errors.github_url}</p>}
+                                </div>
+                            )}
 
                             {/* Tags */}
                             <div className="space-y-2">

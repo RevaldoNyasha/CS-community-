@@ -25,7 +25,7 @@
         {{-- Inline style to set the HTML background color based on our theme --}}
         <style>
             html {
-                background-color: #ffffff;
+                background-color: #c8cacd;
             }
             html.dark {
                 background-color: #0d1117;

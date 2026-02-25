@@ -1,4 +1,4 @@
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import { Fragment } from 'react';
 import {
     Breadcrumb,
@@ -8,20 +8,25 @@ import {
     BreadcrumbPage,
     BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
-import type { BreadcrumbItem as BreadcrumbItemType } from '@/types';
+import type { BreadcrumbItem as BreadcrumbItemType, SharedData } from '@/types';
 
 export function Breadcrumbs({
     breadcrumbs,
 }: {
     breadcrumbs: BreadcrumbItemType[];
 }) {
+    const { auth } = usePage<SharedData>().props;
+    const visibleBreadcrumbs = auth.user
+        ? breadcrumbs
+        : breadcrumbs.filter((item) => item.href !== '/dashboard');
+
     return (
         <>
-            {breadcrumbs.length > 0 && (
+            {visibleBreadcrumbs.length > 0 && (
                 <Breadcrumb>
                     <BreadcrumbList>
-                        {breadcrumbs.map((item, index) => {
-                            const isLast = index === breadcrumbs.length - 1;
+                        {visibleBreadcrumbs.map((item, index) => {
+                            const isLast = index === visibleBreadcrumbs.length - 1;
                             return (
                                 <Fragment key={index}>
                                     <BreadcrumbItem>

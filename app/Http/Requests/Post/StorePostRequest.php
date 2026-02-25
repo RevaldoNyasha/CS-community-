@@ -20,10 +20,11 @@ class StorePostRequest extends FormRequest
         return [
             'title' => ['required', 'string', 'max:255'],
             'content' => ['required', 'string'],
-            'type' => ['required', 'string', 'in:resource,hackathon'],
+            'type' => ['required', 'string', 'in:resource,hackathon,project'],
             'attachment' => ['nullable', 'file', File::types(['pdf', 'jpg', 'jpeg', 'png', 'gif', 'webp'])->max(7 * 1024)],
             'tags' => ['nullable', 'string', 'max:255'],
             'event_date' => ['nullable', 'date'],
+            'github_url' => ['nullable', 'url', 'max:500'],
         ];
     }
 }

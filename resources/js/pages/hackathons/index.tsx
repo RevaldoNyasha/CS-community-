@@ -1,8 +1,9 @@
-import { Head, Link, router } from '@inertiajs/react';
+import { Head, Link, router, usePage } from '@inertiajs/react';
 import { Plus } from 'lucide-react';
 import { useState } from 'react';
+import AuthPromptModal from '@/components/auth-prompt-modal';
 import AppLayout from '@/layouts/app-layout';
-import type { BreadcrumbItem, Post } from '@/types';
+import type { BreadcrumbItem, Post, SharedData } from '@/types';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: '/dashboard' },
@@ -14,13 +15,13 @@ type Props = { upcoming: Post[]; finished: Post[]; filters: Filters };
 
 /* Accent colors for upcoming (green) and finished (red) hackathons */
 const UPCOMING_ACCENT = [
-    { color: 'green', dateBg: 'bg-green-600', shadow: 'shadow-[0_0_15px_rgba(34,197,94,0.15)]', hover: 'group-hover:text-green-400', icon: 'text-green-500' },
-    { color: 'emerald', dateBg: 'bg-emerald-600', shadow: 'shadow-[0_0_15px_rgba(16,185,129,0.15)]', hover: 'group-hover:text-emerald-400', icon: 'text-emerald-500' },
+    { dateBg: 'bg-green-600', icon: 'text-green-500' },
+    { dateBg: 'bg-emerald-600', icon: 'text-emerald-500' },
 ];
 
 const FINISHED_ACCENT = [
-    { color: 'red', dateBg: 'bg-red-600', shadow: 'shadow-[0_0_15px_rgba(239,68,68,0.15)]', hover: 'group-hover:text-red-400', icon: 'text-red-500' },
-    { color: 'rose', dateBg: 'bg-rose-600', shadow: 'shadow-[0_0_15px_rgba(244,63,94,0.15)]', hover: 'group-hover:text-rose-400', icon: 'text-rose-500' },
+    { dateBg: 'bg-red-600', icon: 'text-red-500' },
+    { dateBg: 'bg-rose-600', icon: 'text-rose-500' },
 ];
 
 function HackathonCard({ post, index, variant }: { post: Post; index: number; variant: 'upcoming' | 'finished' }) {
@@ -35,9 +36,9 @@ function HackathonCard({ post, index, variant }: { post: Post; index: number; va
     return (
         <Link
             href={`/posts/${post.id}`}
-            className="group relative bg-card border border-border rounded-xl overflow-hidden flex flex-col hover:border-primary/20 transition-all duration-300 shadow-lg"
+            className="relative bg-card border border-border rounded-xl overflow-hidden flex flex-col hover:ring-2 hover:ring-foreground/20 transition-all duration-200"
         >
-            <div className="p-8 flex-1">
+            <div className="p-5 md:p-8 flex-1">
                 {/* Card top row */}
                 <div className="flex justify-between items-start mb-6">
                     <div className="flex items-center gap-3">
@@ -49,14 +50,14 @@ function HackathonCard({ post, index, variant }: { post: Post; index: number; va
                         </span>
                     </div>
                     {dateLabel && (
-                        <div className={`px-3 py-1.5 rounded-lg ${accent.dateBg} text-white text-[10px] font-black uppercase tracking-tighter ${accent.shadow} shrink-0`}>
+                        <div className={`px-3 py-1.5 rounded-lg ${accent.dateBg} text-white text-[10px] font-black uppercase tracking-tighter shrink-0`}>
                             {dateLabel}
                         </div>
                     )}
                 </div>
 
                 {/* Title */}
-                <h3 className={`text-xl font-bold text-foreground mb-4 ${accent.hover} transition-colors leading-tight line-clamp-2`}>
+                <h3 className="text-xl font-bold text-foreground mb-4 leading-tight line-clamp-2">
                     {post.title}
                 </h3>
 
@@ -81,7 +82,7 @@ function HackathonCard({ post, index, variant }: { post: Post; index: number; va
             </div>
 
             {/* Card footer */}
-            <div className="px-8 py-5 border-t border-border flex items-center justify-between text-[11px] font-bold text-muted-foreground uppercase tracking-widest">
+            <div className="px-5 md:px-8 py-4 md:py-5 border-t border-border flex items-center justify-between text-[11px] font-bold text-muted-foreground uppercase tracking-widest">
                 <div className="flex items-center gap-2">
                     <span className="material-symbols-outlined text-[16px] text-muted-foreground">emoji_events</span>
                     View Details
@@ -92,15 +93,13 @@ function HackathonCard({ post, index, variant }: { post: Post; index: number; va
 }
 
 export default function HackathonsIndex({ upcoming, finished, filters }: Props) {
+    const { auth } = usePage<SharedData>().props;
     const [search, setSearch] = useState(filters.search ?? '');
-    const [dateFrom, setDateFrom] = useState(filters.date_from ?? '');
-    const [dateTo, setDateTo] = useState(filters.date_to ?? '');
+    const [authModalOpen, setAuthModalOpen] = useState(false);
 
     function applyFilters() {
         router.get('/hackathons', {
             search: search || undefined,
-            date_from: dateFrom || undefined,
-            date_to: dateTo || undefined,
         }, { preserveState: true, preserveScroll: true });
     }
 
@@ -109,71 +108,36 @@ export default function HackathonsIndex({ upcoming, finished, filters }: Props) 
             <Head title="Hackathons" />
 
             <div className="flex-1 overflow-y-auto [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-border [&::-webkit-scrollbar-track]:bg-transparent">
-                <div className="max-w-7xl mx-auto px-6 lg:px-8 py-12">
+                <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 py-8 md:py-12">
 
-                    {/* ── Hero Header ── */}
-                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 mb-16">
-                        <div>
-                            <h1 className="text-5xl font-extrabold tracking-tighter mb-4 text-foreground leading-tight">
-                                Hackathons Directory
-                            </h1>
-                            <p className="text-muted-foreground max-w-xl text-lg leading-relaxed font-light">
-                                Developer competitions for the most innovative builders. Filter by stack, date, and events.
-                            </p>
-                        </div>
-                        <Link
-                            href="/posts/create"
-                            className="btn-primary flex items-center gap-2 shrink-0 w-fit"
-                        >
-                            <Plus className="size-4" />
-                            Share Hackathon
-                        </Link>
+                    {/* ── Compact Header ── */}
+                    <div className="flex items-center justify-between mb-3">
+                        <h1 className="text-xl font-bold text-foreground">Hackathons</h1>
+                        {auth.user ? (
+                            <Link href="/posts/create" className="bg-primary text-primary-foreground size-8 flex items-center justify-center rounded-md shrink-0 hover:opacity-90 transition-opacity">
+                                <Plus className="size-4" />
+                            </Link>
+                        ) : (
+                            <button type="button" onClick={() => setAuthModalOpen(true)} className="bg-primary text-primary-foreground size-8 flex items-center justify-center rounded-md shrink-0 hover:opacity-90 transition-opacity">
+                                <Plus className="size-4" />
+                            </button>
+                        )}
                     </div>
 
-                    {/* ── Glass Search Bar ── */}
-                    <div className="rounded-2xl p-2 mb-16 shadow-2xl bg-secondary/10 backdrop-blur-xl border border-border">
-                        <div className="flex flex-col lg:flex-row gap-2 items-center">
-                            {/* Search input */}
-                            <div className="relative flex-grow w-full">
-                                <span className="absolute inset-y-0 left-5 flex items-center pointer-events-none">
-                                    <span className="material-symbols-outlined text-muted-foreground/60">search</span>
-                                </span>
-                                <input
-                                    type="text"
-                                    value={search}
-                                    onChange={(e) => setSearch(e.target.value)}
-                                    onKeyDown={(e) => e.key === 'Enter' && applyFilters()}
-                                    placeholder="Search by tech stack, name, or organizer..."
-                                    className="w-full pl-14 pr-6 py-4 rounded-xl border-none bg-transparent focus:ring-1 focus:ring-white/20 outline-none text-foreground placeholder:text-muted-foreground/40 text-sm"
-                                />
-                            </div>
-
-                            <div className="h-8 w-px bg-border/50 hidden lg:block mx-2" />
-
-                            {/* Date filters + button */}
-                            <div className="flex flex-col sm:flex-row gap-2 w-full lg:w-auto p-1">
-                                <input
-                                    type="date"
-                                    value={dateFrom}
-                                    onChange={(e) => setDateFrom(e.target.value)}
-                                    title="From date"
-                                    className="w-full lg:w-44 px-5 py-3.5 rounded-xl border-none bg-secondary/20 hover:bg-secondary/40 focus:bg-secondary/40 focus:ring-1 focus:ring-border outline-none text-sm text-muted-foreground"
-                                />
-                                <input
-                                    type="date"
-                                    value={dateTo}
-                                    onChange={(e) => setDateTo(e.target.value)}
-                                    title="To date"
-                                    className="w-full lg:w-44 px-5 py-3.5 rounded-xl border-none bg-secondary/20 hover:bg-secondary/40 focus:bg-secondary/40 focus:ring-1 focus:ring-border outline-none text-sm text-muted-foreground"
-                                />
-                                <button
-                                    type="button"
-                                    onClick={applyFilters}
-                                    className="btn-primary"
-                                >
-                                    Filter
-                                </button>
-                            </div>
+                    {/* ── Compact Search + Filters ── */}
+                    <div className="flex flex-wrap gap-2 mb-8">
+                        <div className="relative flex-1 min-w-45">
+                            <span className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+                                <span className="material-symbols-outlined text-[18px] text-muted-foreground/50">search</span>
+                            </span>
+                            <input
+                                type="text"
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
+                                onKeyDown={(e) => e.key === 'Enter' && applyFilters()}
+                                placeholder="Search hackathons..."
+                                className="w-full pl-9 pr-3 py-2 bg-card border border-border rounded-lg text-sm text-foreground placeholder:text-muted-foreground/50 outline-none focus:ring-1 focus:ring-ring"
+                            />
                         </div>
                     </div>
 
@@ -188,7 +152,7 @@ export default function HackathonsIndex({ upcoming, finished, filters }: Props) 
                                     Available Challenges ({upcoming.length})
                                 </h2>
                             </div>
-                            <div className="h-px flex-grow mx-8 bg-border" />
+                            <div className="h-px grow mx-8 bg-border" />
                         </div>
 
                         {upcoming.length === 0 ? (
@@ -218,7 +182,7 @@ export default function HackathonsIndex({ upcoming, finished, filters }: Props) 
                                     Past Events ({finished.length})
                                 </h2>
                             </div>
-                            <div className="h-px flex-grow mx-8 bg-border" />
+                            <div className="h-px grow mx-8 bg-border" />
                         </div>
 
                         {finished.length === 0 ? (
@@ -254,6 +218,12 @@ export default function HackathonsIndex({ upcoming, finished, filters }: Props) 
                     </footer>
                 </div>
             </div>
+
+            <AuthPromptModal
+                open={authModalOpen}
+                message="Please login to share a hackathon."
+                onCancel={() => setAuthModalOpen(false)}
+            />
         </AppLayout>
     );
 }
