@@ -12,13 +12,6 @@ const breadcrumbs: BreadcrumbItem[] = [
 type Filters = { search: string; date_from: string; date_to: string; has_pdf: boolean };
 type Props = { posts: PaginatedData<Post>; filters: Filters };
 
-/* Sky-blue category icon mapping */
-const RESOURCE_ICONS: Record<string, string> = {
-    pdf: 'picture_as_pdf',
-    image: 'image',
-    default: 'auto_stories',
-};
-
 /* Sky-blue accent colors for resources */
 const RESOURCE_ACCENT = [
     { color: 'sky', dateBg: 'bg-sky-600', shadow: 'shadow-[0_0_15px_rgba(14,165,233,0.15)]', hover: 'group-hover:text-sky-400', icon: 'text-sky-500' },
@@ -52,7 +45,6 @@ function initials(name: string): string {
 function ResourceCard({ post, index }: { post: Post; index: number }) {
     const hasPdf = post.file_path?.endsWith('.pdf');
     const hasImage = post.attachment_is_image && post.attachment_url;
-    const icon = hasPdf ? RESOURCE_ICONS.pdf : hasImage ? RESOURCE_ICONS.image : RESOURCE_ICONS.default;
     const accent = RESOURCE_ACCENT[index % RESOURCE_ACCENT.length];
     const dateLabel = new Date(post.created_at).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' });
     
@@ -170,7 +162,7 @@ export default function ResourcesIndex({ posts, filters }: Props) {
                     {/* ── Hero Header ── */}
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 mb-16">
                         <div>
-                            <h1 className="text-5xl font-extrabold tracking-tighter mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white via-neutral-200 to-neutral-500 leading-tight">
+                            <h1 className="text-5xl font-extrabold tracking-tighter mb-4 bg-clip-text text-transparent bg-linear-to-r from-white via-neutral-200 to-neutral-500 leading-tight">
                                 Resources Library
                             </h1>
                             <p className="text-muted-foreground max-w-xl text-lg leading-relaxed font-light">
@@ -187,10 +179,10 @@ export default function ResourcesIndex({ posts, filters }: Props) {
                     </div>
 
                     {/* ── Glass Search Bar ── */}
-                    <div className="rounded-2xl p-2 mb-16 shadow-2xl bg-white/[0.03] backdrop-blur-xl border border-white/[0.08]">
+                    <div className="rounded-2xl p-2 mb-16 shadow-2xl bg-white/3 backdrop-blur-xl border border-white/8">
                         <div className="flex flex-col lg:flex-row gap-2 items-center">
                             {/* Search input */}
-                            <div className="relative flex-grow w-full">
+                            <div className="relative grow w-full">
                                 <span className="absolute inset-y-0 left-5 flex items-center pointer-events-none">
                                     <span className="material-symbols-outlined text-muted-foreground/60">search</span>
                                 </span>
@@ -213,16 +205,16 @@ export default function ResourcesIndex({ posts, filters }: Props) {
                                     value={dateFrom}
                                     onChange={(e) => setDateFrom(e.target.value)}
                                     title="From date"
-                                    className="w-full lg:w-44 px-5 py-3.5 rounded-xl border-none bg-white/5 hover:bg-white/10 focus:bg-white/10 focus:ring-1 focus:ring-white/20 outline-none text-sm text-muted-foreground [color-scheme:dark]"
+                                    className="w-full lg:w-44 px-5 py-3.5 rounded-xl border-none bg-white/5 hover:bg-white/10 focus:bg-white/10 focus:ring-1 focus:ring-white/20 outline-none text-sm text-muted-foreground scheme-dark"
                                 />
                                 <input
                                     type="date"
                                     value={dateTo}
                                     onChange={(e) => setDateTo(e.target.value)}
                                     title="To date"
-                                    className="w-full lg:w-44 px-5 py-3.5 rounded-xl border-none bg-white/5 hover:bg-white/10 focus:bg-white/10 focus:ring-1 focus:ring-white/20 outline-none text-sm text-muted-foreground [color-scheme:dark]"
+                                    className="w-full lg:w-44 px-5 py-3.5 rounded-xl border-none bg-white/5 hover:bg-white/10 focus:bg-white/10 focus:ring-1 focus:ring-white/20 outline-none text-sm text-muted-foreground scheme-dark"
                                 />
-                                <label className="flex items-center gap-2 px-4 py-3.5 rounded-xl border-none bg-white/5 hover:bg-white/10 focus:bg-white/10 focus:ring-1 focus:ring-white/20 outline-none text-sm text-muted-foreground cursor-pointer [color-scheme:dark]">
+                                <label className="flex items-center gap-2 px-4 py-3.5 rounded-xl border-none bg-white/5 hover:bg-white/10 focus:bg-white/10 focus:ring-1 focus:ring-white/20 outline-none text-sm text-muted-foreground cursor-pointer scheme-dark">
                                     <input 
                                         type="checkbox" 
                                         checked={hasPdf} 
@@ -242,7 +234,7 @@ export default function ResourcesIndex({ posts, filters }: Props) {
                                     <button
                                         type="button"
                                         onClick={clearFilters}
-                                        className="px-5 py-3.5 rounded-xl border-none bg-white/5 hover:bg-white/10 focus:bg-white/10 focus:ring-1 focus:ring-white/20 outline-none text-sm text-muted-foreground font-medium [color-scheme:dark]"
+                                        className="px-5 py-3.5 rounded-xl border-none bg-white/5 hover:bg-white/10 focus:bg-white/10 focus:ring-1 focus:ring-white/20 outline-none text-sm text-muted-foreground font-medium scheme-dark"
                                     >
                                         Clear
                                     </button>
@@ -262,7 +254,7 @@ export default function ResourcesIndex({ posts, filters }: Props) {
                                     Available Materials ({posts.total ?? posts.data.length})
                                 </h2>
                             </div>
-                            <div className="h-px flex-grow mx-8 bg-neutral-900" />
+                            <div className="h-px grow mx-8 bg-neutral-900" />
                         </div>
 
                         {posts.data.length === 0 ? (
