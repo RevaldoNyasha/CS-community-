@@ -15,6 +15,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        if (app()->environment('production')) {
+            return;
+        }
+
         // Seeded admin — no admin signup allowed
         $admin = User::factory()->admin()->create([
             'name' => 'Revaldo',
