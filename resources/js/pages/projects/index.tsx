@@ -51,7 +51,7 @@ function ProjectCard({ post }: { post: Post }) {
                 </div>
             )}
 
-            <Link href={`/posts/${post.id}`} className="p-5 md:p-8 flex-1 block">
+            <Link href={`/posts/${post.slug}`} className="p-5 md:p-8 flex-1 block">
                 {/* Card top row */}
                 <div className="flex justify-between items-center mb-6">
                     <div className="flex items-center gap-3">
@@ -97,7 +97,7 @@ function ProjectCard({ post }: { post: Post }) {
 
             {/* Card footer */}
             <div className="px-5 md:px-8 py-4 md:py-5 border-t border-border flex items-center justify-between text-[11px] font-bold text-muted-foreground uppercase tracking-widest">
-                <Link href={`/posts/${post.id}`} className="flex items-center gap-2 hover:text-foreground transition-colors">
+                <Link href={`/posts/${post.slug}`} className="flex items-center gap-2 hover:text-foreground transition-colors">
                     View Details
                 </Link>
                 <div className="flex items-center gap-4">

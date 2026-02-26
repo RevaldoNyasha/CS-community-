@@ -44,7 +44,7 @@ export default function PostCard({ post }: Props) {
     function handleLike(e: React.MouseEvent) {
         e.preventDefault();
         e.stopPropagation();
-        router.post(`/posts/${post.id}/like`, {}, { preserveScroll: true });
+        router.post(`/posts/${post.slug}/like`, {}, { preserveScroll: true });
     }
 
     function handleCardClick(e: React.MouseEvent) {
@@ -72,7 +72,7 @@ export default function PostCard({ post }: Props) {
                                 {initials(authorName)}
                             </div>
                             <div>
-                                <Link href={`/posts/${post.id}`}>
+                                <Link href={`/posts/${post.slug}`}>
                                     <h4 className="text-sm font-bold text-foreground group-hover:text-primary transition-colors leading-tight line-clamp-1">
                                         {post.title}
                                     </h4>
@@ -140,7 +140,7 @@ export default function PostCard({ post }: Props) {
                             {post.likes_count ?? 0}
                         </button>
                         <Link
-                            href={`/posts/${post.id}`}
+                            href={`/posts/${post.slug}`}
                             className="flex items-center gap-1.5 hover:text-primary transition-colors text-[11px] font-bold uppercase tracking-wider"
                             onClick={(e) => e.stopPropagation()}
                         >
@@ -196,7 +196,7 @@ export default function PostCard({ post }: Props) {
                                 {post.likes_count ?? 0} Likes
                             </button>
                             <Link
-                                href={`/posts/${post.id}`}
+                                href={`/posts/${post.slug}`}
                                 className="ml-auto text-xs text-primary hover:text-primary/80 font-bold uppercase tracking-wider"
                             >
                                 Open →

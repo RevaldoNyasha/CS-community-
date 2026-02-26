@@ -37,14 +37,13 @@ export default function PostShow({ post }: Props) {
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Dashboard', href: '/dashboard' },
         { title: backLabel, href: backHref },
-        { title: post.title, href: `/posts/${post.id}` },
     ];
 
     const { data, setData, post: submitComment, processing, reset, errors } = useForm({ comment: '' });
 
     function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
-        submitComment(`/posts/${post.id}/comments`, { onSuccess: () => reset() });
+        submitComment(`/posts/${post.slug}/comments`, { onSuccess: () => reset() });
     }
 
     const authorName = post.user?.name ?? 'Admin';
@@ -125,7 +124,7 @@ export default function PostShow({ post }: Props) {
                                         className="text-xs text-primary hover:text-primary/80 font-medium">
                                         Open full size
                                     </a>
-                                    <a href={`/posts/${post.id}/download`}
+                                    <a href={`/posts/${post.slug}/download`}
                                         className="text-xs text-primary hover:text-primary/80 font-medium flex items-center gap-1">
                                         <Download className="size-3.5" /> Download
                                     </a>
@@ -135,7 +134,7 @@ export default function PostShow({ post }: Props) {
 
                         {/* PDF attachment */}
                         {post.attachment_url && !post.attachment_is_image && (
-                            <a href={`/posts/${post.id}/download`}
+                            <a href={`/posts/${post.slug}/download`}
                                 className="flex items-center gap-4 p-4 border border-border rounded-xl bg-card hover:border-primary/40 transition-colors">
                                 <FileText className="size-8 text-destructive shrink-0" />
                                 <div className="flex-1">

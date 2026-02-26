@@ -1,7 +1,8 @@
 import { Head, Link, usePage } from '@inertiajs/react';
-import { BookOpen, FolderGit2, Menu, Trophy, X } from 'lucide-react';
+import { BookOpen, FolderGit2, Menu, Moon, Sun, Trophy, X } from 'lucide-react';
 import { useState } from 'react';
 import { dashboard, login, register } from '@/routes';
+import { useAppearance } from '@/hooks/use-appearance';
 import type { SharedData } from '@/types';
 
 
@@ -13,6 +14,9 @@ export default function Welcome({
 }) {
     const { auth } = usePage<SharedData>().props;
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const { resolvedAppearance, updateAppearance } = useAppearance();
+
+    const toggleTheme = () => updateAppearance(resolvedAppearance === 'dark' ? 'light' : 'dark');
 
     return (
         <>
@@ -45,7 +49,7 @@ export default function Welcome({
 
 
                         {/* Desktop auth links */}
-                        <div className="hidden lg:flex lg:flex-1 lg:justify-end gap-6">
+                        <div className="hidden lg:flex lg:flex-1 lg:justify-end items-center gap-6">
                             {auth.user ? (
                                 <Link href={dashboard().url} className="text-sm font-semibold text-foreground hover:text-muted-foreground transition-colors">
                                     Dashboard <span aria-hidden="true">&rarr;</span>
@@ -62,6 +66,14 @@ export default function Welcome({
                                     )}
                                 </>
                             )}
+                            <button
+                                type="button"
+                                onClick={toggleTheme}
+                                className="text-muted-foreground hover:text-foreground transition-colors"
+                                aria-label="Toggle theme"
+                            >
+                                {resolvedAppearance === 'dark' ? <Sun className="size-4" /> : <Moon className="size-4" />}
+                            </button>
                         </div>
                     </nav>
 
@@ -88,6 +100,14 @@ export default function Welcome({
                                     <div className="-my-6 divide-y divide-border">
 
                                         <div className="py-6 space-y-2">
+                                            <button
+                                                type="button"
+                                                onClick={toggleTheme}
+                                                className="-mx-3 flex items-center gap-2 rounded-lg px-3 py-2.5 text-base font-semibold text-foreground hover:bg-secondary/40 w-full"
+                                            >
+                                                {resolvedAppearance === 'dark' ? <Sun className="size-4" /> : <Moon className="size-4" />}
+                                                {resolvedAppearance === 'dark' ? 'Light mode' : 'Dark mode'}
+                                            </button>
                                             {auth.user ? (
                                                 <Link
                                                     href={dashboard().url}

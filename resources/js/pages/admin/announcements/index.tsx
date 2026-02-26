@@ -61,7 +61,7 @@ export default function AdminAnnouncementsIndex({ announcements }: Props) {
             confirmVariant: 'danger',
             onConfirm: () => {
                 closeDialog();
-                router.delete(`/admin/announcements/${announcement.id}`);
+                router.delete(`/admin/announcements/${announcement.slug}`);
             },
         });
     }

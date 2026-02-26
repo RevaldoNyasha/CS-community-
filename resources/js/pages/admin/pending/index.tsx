@@ -50,7 +50,7 @@ export default function AdminPendingIndex({ posts }: Props) {
             confirmVariant: 'primary',
             onConfirm: () => {
                 closeDialog();
-                router.post(`/admin/posts/${post.id}/approve`);
+                router.post(`/admin/posts/${post.slug}/approve`);
             },
         });
     }
@@ -64,7 +64,7 @@ export default function AdminPendingIndex({ posts }: Props) {
             confirmVariant: 'danger',
             onConfirm: () => {
                 closeDialog();
-                router.delete(`/admin/posts/${post.id}`);
+                router.delete(`/admin/posts/${post.slug}`);
             },
         });
     }

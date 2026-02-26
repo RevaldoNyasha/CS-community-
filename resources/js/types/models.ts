@@ -7,6 +7,7 @@ export type Tag = {
 
 export type Post = {
     id: number;
+    slug: string;
     title: string;
     content: string;
     type: 'resource' | 'hackathon' | 'project' | 'announcement';

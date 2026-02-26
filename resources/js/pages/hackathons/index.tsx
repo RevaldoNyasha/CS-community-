@@ -35,7 +35,7 @@ function HackathonCard({ post, index, variant }: { post: Post; index: number; va
 
     return (
         <Link
-            href={`/posts/${post.id}`}
+            href={`/posts/${post.slug}`}
             className="relative bg-card border border-border rounded-xl overflow-hidden flex flex-col hover:ring-2 hover:ring-foreground/20 transition-all duration-200"
         >
             <div className="p-5 md:p-8 flex-1">

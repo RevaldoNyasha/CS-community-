@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class Post extends Model
 {
@@ -19,6 +20,7 @@ class Post extends Model
 
     protected $fillable = [
         'title',
+        'slug',
         'content',
         'type',
         'status',
@@ -44,13 +46,38 @@ class Post extends Model
         ];
     }
 
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
+
     protected static function booted(): void
     {
+        static::creating(function (Post $post): void {
+            if (empty($post->slug)) {
+                $post->slug = static::generateUniqueSlug($post->title);
+            }
+        });
+
         static::deleting(function (Post $post): void {
             if ($post->file_path && Storage::disk('public')->exists($post->file_path)) {
                 Storage::disk('public')->delete($post->file_path);
             }
         });
+    }
+
+    public static function generateUniqueSlug(string $title): string
+    {
+        $slug = Str::slug($title);
+        $original = $slug;
+        $count = 1;
+
+        while (static::where('slug', $slug)->exists()) {
+            $slug = "{$original}-{$count}";
+            $count++;
+        }
+
+        return $slug;
     }
 
     /** @return Attribute<string|null, never> */

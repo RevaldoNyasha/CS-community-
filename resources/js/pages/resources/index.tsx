@@ -47,7 +47,7 @@ function ResourceCard({ post }: { post: Post }) {
 
     return (
         <Link
-            href={`/posts/${post.id}`}
+            href={`/posts/${post.slug}`}
             className="relative bg-card border border-border rounded-xl overflow-hidden flex flex-col hover:ring-2 hover:ring-foreground/20 transition-all duration-200"
         >
             {/* Image preview */}
