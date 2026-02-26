@@ -16,7 +16,7 @@ class AdminUserController extends Controller
     {
         $users = User::query()
             ->latest()
-            ->paginate(20);
+            ->paginate(10);
 
         return Inertia::render('admin/users/index', [
             'users' => $users,

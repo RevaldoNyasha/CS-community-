@@ -16,7 +16,7 @@ class AdminPendingController extends Controller
             ->pending()
             ->with('user:id,name')
             ->latest()
-            ->paginate(20);
+            ->paginate(10);
 
         return Inertia::render('admin/pending/index', [
             'posts' => $posts,

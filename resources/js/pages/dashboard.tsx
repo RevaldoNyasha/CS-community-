@@ -180,8 +180,8 @@ export default function Dashboard({ recentPosts, pendingCount, popularTags, rece
                                 <h3 className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] mb-4">Guidelines</h3>
                                 <div className="space-y-3">
                                     {['Post clean, formatted code blocks.', 'Be professional and constructive.', 'No spam or self-promotion.'].map((rule) => (
-                                        <div key={rule} className="flex items-start gap-3">
-                                            <span className="material-symbols-outlined text-[14px] text-muted-foreground/60 mt-0.5">check_circle_outline</span>
+                                        <div key={rule} className="flex items-center gap-3">
+                                            <span className="material-symbols-outlined text-[14px] text-muted-foreground/60">check_circle_outline</span>
                                             <p className="text-[11px] text-secondary-foreground leading-tight">{rule}</p>
                                         </div>
                                     ))}

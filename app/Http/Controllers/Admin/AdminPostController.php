@@ -20,7 +20,7 @@ class AdminPostController extends Controller
             ->when($request->input('type'), fn ($query, $type) => $query->where('type', $type))
             ->when($request->input('status'), fn ($query, $status) => $query->where('status', $status))
             ->latest()
-            ->paginate(20);
+            ->paginate(10);
 
         return Inertia::render('admin/posts/index', [
             'posts' => $posts,

@@ -4,10 +4,7 @@ import { useState } from 'react';
 import { dashboard, login, register } from '@/routes';
 import type { SharedData } from '@/types';
 
-const navigation = [
-    { name: 'Resources', href: '/resources' },
-    { name: 'Hackathons', href: '/hackathons' },
-];
+
 
 export default function Welcome({
     canRegister = true,
@@ -45,18 +42,7 @@ export default function Welcome({
                             </button>
                         </div>
 
-                        {/* Desktop nav links */}
-                        <div className="hidden lg:flex lg:gap-x-12">
-                            {navigation.map((item) => (
-                                <Link
-                                    key={item.name}
-                                    href={item.href}
-                                    className="text-sm font-semibold text-foreground hover:text-muted-foreground transition-colors"
-                                >
-                                    {item.name}
-                                </Link>
-                            ))}
-                        </div>
+
 
                         {/* Desktop auth links */}
                         <div className="hidden lg:flex lg:flex-1 lg:justify-end gap-6">
@@ -100,18 +86,7 @@ export default function Welcome({
                                 </div>
                                 <div className="mt-6 flow-root">
                                     <div className="-my-6 divide-y divide-border">
-                                        <div className="space-y-2 py-6">
-                                            {navigation.map((item) => (
-                                                <Link
-                                                    key={item.name}
-                                                    href={item.href}
-                                                    onClick={() => setMobileMenuOpen(false)}
-                                                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-foreground hover:bg-secondary/40"
-                                                >
-                                                    {item.name}
-                                                </Link>
-                                            ))}
-                                        </div>
+
                                         <div className="py-6 space-y-2">
                                             {auth.user ? (
                                                 <Link

@@ -1,4 +1,4 @@
-import { Head, router } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
 import { useState } from 'react';
 import ConfirmDialog from '@/components/confirm-dialog';
 import AdminLayout from '@/layouts/admin-layout';
@@ -112,6 +112,22 @@ export default function AdminPendingIndex({ posts }: Props) {
                                     </div>
                                 </div>
                             </div>
+                        ))}
+                    </div>
+                )}
+                {posts.last_page > 1 && (
+                    <div className="flex justify-center gap-1.5">
+                        {posts.links.map((link, i) => (
+                            <Link
+                                key={i}
+                                href={link.url ?? '#'}
+                                className={`px-3 py-1.5 text-xs font-semibold rounded-md border transition-colors ${
+                                    link.active
+                                        ? 'border-primary bg-primary/10 text-primary'
+                                        : 'border-border text-muted-foreground hover:border-primary/40 hover:text-foreground'
+                                } ${!link.url ? 'pointer-events-none opacity-40' : ''}`}
+                                dangerouslySetInnerHTML={{ __html: link.label }}
+                            />
                         ))}
                     </div>
                 )}

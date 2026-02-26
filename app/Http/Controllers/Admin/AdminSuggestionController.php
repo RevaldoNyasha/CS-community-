@@ -15,7 +15,7 @@ class AdminSuggestionController extends Controller
         $suggestions = Suggestion::query()
             ->with('user:id,name')
             ->latest()
-            ->paginate(20);
+            ->paginate(10);
 
         return Inertia::render('admin/suggestions/index', [
             'suggestions' => $suggestions,

@@ -21,7 +21,7 @@ class AdminAnnouncementController extends Controller
             ->approved()
             ->with('user:id,name')
             ->latest()
-            ->paginate(20);
+            ->paginate(10);
 
         return Inertia::render('admin/announcements/index', [
             'announcements' => $announcements,

@@ -1,7 +1,6 @@
 import { Link, usePage } from '@inertiajs/react';
 import {
     BookOpen,
-    Folder,
     FolderGit2,
     LayoutGrid,
     Lightbulb,
@@ -9,7 +8,6 @@ import {
     ShieldCheck,
     Trophy,
 } from 'lucide-react';
-import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
 import {
@@ -93,13 +91,7 @@ const adminNavGroup: NavGroup = {
     ],
 };
 
-const footerNavItems: NavItem[] = [
-    {
-        title: 'Repository',
-        href: 'https://github.com/laravel/react-starter-kit',
-        icon: Folder,
-    },
-];
+
 
 const guestNavItems: NavItem[] = [
     {
@@ -150,7 +142,6 @@ export function AppSidebar() {
             </SidebarContent>
 
             <SidebarFooter className="border-t border-border">
-                <NavFooter items={footerNavItems} className="mt-auto" />
                 <NavUser />
             </SidebarFooter>
         </Sidebar>

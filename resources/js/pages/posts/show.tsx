@@ -256,7 +256,7 @@ export default function PostShow({ post }: Props) {
                                                     <span className="text-muted-foreground/40">·</span>
                                                     <span className="text-muted-foreground">{timeAgo(comment.created_at)}</span>
                                                 </div>
-                                                {auth.user && (comment.user_id === auth.user.id || auth.isAdmin) && (
+                                                {auth.user && comment.user_id === auth.user.id && (
                                                     <Link
                                                         href={`/comments/${comment.id}`}
                                                         method="delete"

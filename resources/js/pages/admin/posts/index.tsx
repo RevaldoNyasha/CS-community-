@@ -80,7 +80,7 @@ export default function AdminPostsIndex({ posts, filters }: Props) {
     return (
         <AdminLayout breadcrumbs={breadcrumbs}>
             <Head title="Manage Posts" />
-            <div className="flex h-full flex-1 flex-col gap-6 p-6 lg:p-8 bg-background">
+            <div className="flex h-full flex-1 flex-col gap-4 p-4 lg:p-6 bg-background">
                 <div>
                     <h1 className="text-xl font-semibold tracking-tight text-foreground">All Posts</h1>
                     <p className="text-xs text-muted-foreground mt-0.5">Manage all posts across the platform.</p>
@@ -107,32 +107,32 @@ export default function AdminPostsIndex({ posts, filters }: Props) {
                     <table className="w-full text-sm">
                         <thead>
                             <tr className="border-b border-border bg-secondary/20">
-                                <th className="px-5 py-3 text-left text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">Title</th>
-                                <th className="px-5 py-3 text-left text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">Author</th>
-                                <th className="px-5 py-3 text-left text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">Type</th>
-                                <th className="px-5 py-3 text-left text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">Status</th>
-                                <th className="px-5 py-3 text-left text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">Date</th>
-                                <th className="px-5 py-3 text-right text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">Actions</th>
+                                <th className="px-4 py-2.5 text-left text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">Title</th>
+                                <th className="px-4 py-2.5 text-left text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">Author</th>
+                                <th className="px-4 py-2.5 text-left text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">Type</th>
+                                <th className="px-4 py-2.5 text-left text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">Status</th>
+                                <th className="px-4 py-2.5 text-left text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">Date</th>
+                                <th className="px-4 py-2.5 text-right text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             {posts.data.length === 0 ? (
                                 <tr>
-                                    <td colSpan={6} className="px-5 py-8 text-center text-muted-foreground text-sm">
+                                    <td colSpan={6} className="px-4 py-6 text-center text-muted-foreground text-sm">
                                         No posts found.
                                     </td>
                                 </tr>
                             ) : (
                                 posts.data.map((post) => (
                                     <tr key={post.id} className="border-b border-border last:border-0 hover:bg-secondary/10 transition-colors">
-                                        <td className="px-5 py-3 font-medium text-foreground">{post.title}</td>
-                                        <td className="px-5 py-3 text-muted-foreground">{post.user?.name ?? 'Admin'}</td>
-                                        <td className="px-5 py-3">
+                                        <td className="px-4 py-2.5 font-medium text-foreground">{post.title}</td>
+                                        <td className="px-4 py-2.5 text-muted-foreground">{post.user?.name ?? 'Admin'}</td>
+                                        <td className="px-4 py-2.5">
                                             <span className="border border-primary/30 bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-primary uppercase rounded">
                                                 {post.type}
                                             </span>
                                         </td>
-                                        <td className="px-5 py-3">
+                                        <td className="px-4 py-2.5">
                                             <span className={`px-2 py-0.5 text-[10px] font-medium uppercase rounded ${
                                                 post.status === 'approved'
                                                     ? 'border border-emerald-500/30 bg-emerald-500/10 text-emerald-400'
@@ -141,10 +141,10 @@ export default function AdminPostsIndex({ posts, filters }: Props) {
                                                 {post.status}
                                             </span>
                                         </td>
-                                        <td className="px-5 py-3 text-muted-foreground">
+                                        <td className="px-4 py-2.5 text-muted-foreground">
                                             {new Date(post.created_at).toLocaleDateString()}
                                         </td>
-                                        <td className="px-5 py-3 text-right">
+                                        <td className="px-4 py-2.5 text-right">
                                             <div className="flex justify-end gap-2">
                                                 {post.status === 'pending' && (
                                                     <button onClick={() => handleApprove(post)} className={btnPrimary}>
