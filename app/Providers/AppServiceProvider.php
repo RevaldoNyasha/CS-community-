@@ -24,7 +24,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        if (app()->isProduction()) {
+        if (app()->isProduction() && ! app()->runningUnitTests()) {
             URL::forceScheme('https');
         }
 

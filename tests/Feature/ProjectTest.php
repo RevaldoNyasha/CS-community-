@@ -12,7 +12,7 @@ test('guests can view the projects page', function () {
 test('guests can view an approved project post', function () {
     $post = Post::factory()->approved()->project()->create();
 
-    $this->get("/posts/{$post->id}")->assertSuccessful();
+    $this->get("/posts/{$post->slug}")->assertSuccessful();
 });
 
 test('guests are redirected to login when submitting a project', function () {

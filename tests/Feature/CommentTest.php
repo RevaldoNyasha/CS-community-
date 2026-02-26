@@ -9,7 +9,7 @@ test('users can add a comment to an approved post', function () {
     $post = Post::factory()->approved()->resource()->create();
 
     $this->actingAs($user)
-        ->post("/posts/{$post->id}/comments", [
+        ->post("/posts/{$post->slug}/comments", [
             'comment' => 'Great resource!',
         ])
         ->assertRedirect();

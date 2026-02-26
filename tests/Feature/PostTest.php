@@ -20,13 +20,13 @@ test('guests can view the hackathons page', function () {
 test('guests can view an approved post', function () {
     $post = Post::factory()->approved()->resource()->create();
 
-    $this->get("/posts/{$post->id}")->assertSuccessful();
+    $this->get("/posts/{$post->slug}")->assertSuccessful();
 });
 
 test('guests cannot view a pending post', function () {
     $post = Post::factory()->resource()->create(); // pending by default
 
-    $this->get("/posts/{$post->id}")->assertForbidden();
+    $this->get("/posts/{$post->slug}")->assertForbidden();
 });
 
 test('guests are redirected to login when accessing post create page', function () {
@@ -44,7 +44,7 @@ test('guests are redirected to login when submitting a post', function () {
 test('guests are redirected to login when commenting', function () {
     $post = Post::factory()->approved()->resource()->create();
 
-    $this->post("/posts/{$post->id}/comments", [
+    $this->post("/posts/{$post->slug}/comments", [
         'comment' => 'Hello',
     ])->assertRedirect(route('login'));
 });
@@ -98,7 +98,7 @@ test('users can view a single approved post', function () {
     $post = Post::factory()->approved()->resource()->create();
 
     $this->actingAs($user)
-        ->get("/posts/{$post->id}")
+        ->get("/posts/{$post->slug}")
         ->assertSuccessful();
 });
 
@@ -107,7 +107,7 @@ test('users cannot view other users pending posts', function () {
     $post = Post::factory()->resource()->create(); // pending by default
 
     $this->actingAs($user)
-        ->get("/posts/{$post->id}")
+        ->get("/posts/{$post->slug}")
         ->assertForbidden();
 });
 
@@ -116,7 +116,7 @@ test('users can view their own pending posts', function () {
     $post = Post::factory()->resource()->create(['user_id' => $user->id]);
 
     $this->actingAs($user)
-        ->get("/posts/{$post->id}")
+        ->get("/posts/{$post->slug}")
         ->assertSuccessful();
 });
 

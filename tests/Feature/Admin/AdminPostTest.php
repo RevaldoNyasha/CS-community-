@@ -17,7 +17,7 @@ test('admin can approve a pending post', function () {
     $post = Post::factory()->resource()->create();
 
     $this->actingAs($admin)
-        ->post("/admin/posts/{$post->id}/approve")
+        ->post("/admin/posts/{$post->slug}/approve")
         ->assertRedirect();
 
     expect($post->fresh()->status->value)->toBe('approved');
@@ -28,7 +28,7 @@ test('admin can delete a post', function () {
     $post = Post::factory()->approved()->resource()->create();
 
     $this->actingAs($admin)
-        ->delete("/admin/posts/{$post->id}")
+        ->delete("/admin/posts/{$post->slug}")
         ->assertRedirect();
 
     $this->assertDatabaseMissing('posts', ['id' => $post->id]);
@@ -47,7 +47,7 @@ test('non-admin cannot approve posts', function () {
     $post = Post::factory()->resource()->create();
 
     $this->actingAs($user)
-        ->post("/admin/posts/{$post->id}/approve")
+        ->post("/admin/posts/{$post->slug}/approve")
         ->assertForbidden();
 });
 
@@ -64,7 +64,7 @@ test('deleting a post removes its attachment file from storage', function () {
     Storage::disk('public')->assertExists($filePath);
 
     $this->actingAs($admin)
-        ->delete("/admin/posts/{$post->id}")
+        ->delete("/admin/posts/{$post->slug}")
         ->assertRedirect();
 
     $this->assertDatabaseMissing('posts', ['id' => $post->id]);

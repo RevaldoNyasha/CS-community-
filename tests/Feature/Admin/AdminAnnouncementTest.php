@@ -34,7 +34,7 @@ test('admin can delete an announcement', function () {
     $post = Post::factory()->approved()->announcement()->create(['user_id' => $admin->id]);
 
     $this->actingAs($admin)
-        ->delete("/admin/announcements/{$post->id}")
+        ->delete("/admin/announcements/{$post->slug}")
         ->assertRedirect();
 
     $this->assertDatabaseMissing('posts', ['id' => $post->id]);

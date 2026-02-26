@@ -6,7 +6,7 @@ use App\Models\User;
 test('guests cannot toggle likes', function () {
     $post = Post::factory()->approved()->create();
 
-    $this->post("/posts/{$post->id}/like")
+    $this->post("/posts/{$post->slug}/like")
         ->assertRedirect(route('login'));
 });
 
@@ -15,7 +15,7 @@ test('users can like a post', function () {
     $post = Post::factory()->approved()->create();
 
     $this->actingAs($user)
-        ->post("/posts/{$post->id}/like")
+        ->post("/posts/{$post->slug}/like")
         ->assertRedirect();
 
     $this->assertDatabaseHas('likes', [
@@ -29,7 +29,7 @@ test('users can unlike a post by toggling', function () {
     $post = Post::factory()->approved()->create();
 
     // Like first
-    $this->actingAs($user)->post("/posts/{$post->id}/like");
+    $this->actingAs($user)->post("/posts/{$post->slug}/like");
 
     $this->assertDatabaseHas('likes', [
         'post_id' => $post->id,
@@ -37,7 +37,7 @@ test('users can unlike a post by toggling', function () {
     ]);
 
     // Unlike by toggling
-    $this->actingAs($user)->post("/posts/{$post->id}/like");
+    $this->actingAs($user)->post("/posts/{$post->slug}/like");
 
     $this->assertDatabaseMissing('likes', [
         'post_id' => $post->id,
