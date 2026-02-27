@@ -4,7 +4,7 @@ import emailjs from '@emailjs/browser';
 import InputError from '@/components/input-error';
 
 const EMAILJS_SERVICE_ID  = 'service_7n2dl0m';
-const EMAILJS_TEMPLATE_ID = 'template_jpp2odd';
+const EMAILJS_TEMPLATE_ID = 'template_nt8k8qf';
 const EMAILJS_PUBLIC_KEY  = '74UTwMFilKvu2q1wj';
 import TextLink from '@/components/text-link';
 import { Spinner } from '@/components/ui/spinner';
