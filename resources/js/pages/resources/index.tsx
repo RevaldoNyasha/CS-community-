@@ -41,7 +41,7 @@ function ResourceCard({ post }: { post: Post }) {
     const hasPdf = post.file_path?.endsWith('.pdf');
     const hasImage = post.attachment_is_image && post.attachment_url;
     const dateLabel = new Date(post.created_at).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' });
-    
+
     const authorName = post.user?.name ?? 'Shared';
     const avatarStyle = avatarColor(authorName);
 
@@ -249,7 +249,7 @@ export default function ResourcesIndex({ posts, filters }: Props) {
                                 © {new Date().getFullYear()} DEV-CRAFT Community
                             </p>
                             <div className="flex gap-8">
-                                {['Terms', 'Privacy', 'API'].map((item) => (
+                                {['Developed by Cyber Squad (NUST)'].map((item) => (
                                     <a key={item} href="#" className="text-muted-foreground hover:text-foreground transition-colors text-xs font-bold uppercase tracking-widest">{item}</a>
                                 ))}
                             </div>

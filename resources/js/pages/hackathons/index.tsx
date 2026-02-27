@@ -25,7 +25,7 @@ const FINISHED_ACCENT = [
 ];
 
 function HackathonCard({ post, index, variant }: { post: Post; index: number; variant: 'upcoming' | 'finished' }) {
-    const accent = variant === 'upcoming' 
+    const accent = variant === 'upcoming'
         ? UPCOMING_ACCENT[index % UPCOMING_ACCENT.length]
         : FINISHED_ACCENT[index % FINISHED_ACCENT.length];
     const date = post.event_date ? new Date(post.event_date) : null;
@@ -208,7 +208,7 @@ export default function HackathonsIndex({ upcoming, finished, filters }: Props) 
                                 © {new Date().getFullYear()} DEV-CRAFT Community
                             </p>
                             <div className="flex gap-8">
-                                {['Terms', 'Privacy', 'API'].map((item) => (
+                                {['Developed by Cyber Squad (NUST)'].map((item) => (
                                     <a key={item} href="#" className="text-muted-foreground hover:text-foreground transition-colors text-xs font-bold uppercase tracking-widest">
                                         {item}
                                     </a>

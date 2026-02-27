@@ -241,7 +241,7 @@ export default function ProjectsIndex({ posts, filters }: Props) {
                                 © {new Date().getFullYear()} DEV-CRAFT Community
                             </p>
                             <div className="flex gap-8">
-                                {['Terms', 'Privacy', 'API'].map((item) => (
+                                {[ 'Developed by Cyber Squad (NUST)'].map((item) => (
                                     <a key={item} href="#" className="text-muted-foreground hover:text-foreground transition-colors text-xs font-bold uppercase tracking-widest">{item}</a>
                                 ))}
                             </div>
