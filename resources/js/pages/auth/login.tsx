@@ -28,18 +28,23 @@ export default function Login({ status, canRegister }: Props) {
         setForgotError('');
 
         try {
-            await emailjs.send(
+            const result = await emailjs.send(
                 import.meta.env.VITE_EMAILJS_SERVICE_ID,
                 import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
                 {
                     user_email: forgotEmail,
                     to_email: import.meta.env.VITE_EMAILJS_ADMIN_EMAIL,
                 },
-                import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
+                { publicKey: import.meta.env.VITE_EMAILJS_PUBLIC_KEY },
             );
-            setForgotSent(true);
-        } catch {
-            setForgotError('Failed to send. Please try again.');
+            if (result.status === 200) {
+                setForgotSent(true);
+            } else {
+                setForgotError(`Unexpected response (${result.status}). Please try again.`);
+            }
+        } catch (err: unknown) {
+            const msg = err instanceof Error ? err.message : String(err);
+            setForgotError(`Failed to send: ${msg}`);
         } finally {
             setForgotSending(false);
         }
@@ -145,22 +150,30 @@ export default function Login({ status, canRegister }: Props) {
                                                     className={underlineInput}
                                                 />
                                                 {forgotError && (
-                                                    <p className="text-xs text-destructive">{forgotError}</p>
+                                                    <p className="text-xs text-destructive/80 bg-destructive/10 border border-destructive/20 rounded-(--radius) px-2 py-1.5 wrap-break-word">
+                                                        {forgotError}
+                                                    </p>
                                                 )}
                                                 <button
                                                     type="submit"
                                                     disabled={forgotSending}
                                                     className="mt-1 w-full py-2 bg-secondary text-secondary-foreground text-xs font-semibold tracking-wide hover:brightness-105 disabled:opacity-50 transition-all flex items-center justify-center rounded-(--radius)"
                                                 >
-                                                    {forgotSending && <Spinner className="mr-2" />}
-                                                    Email admin to reset password
+                                                    {forgotSending ? (
+                                                        <>
+                                                            <Spinner className="mr-2" />
+                                                            Sending…
+                                                        </>
+                                                    ) : (
+                                                        'Email admin to reset password'
+                                                    )}
                                                 </button>
                                             </form>
                                         )}
                                     </>
                                 ) : (
-                                    <p className="text-xs text-green-400">
-                                        Email sent! Admin will reset your password shortly.
+                                    <p className="text-xs text-green-400/90 bg-green-400/10 border border-green-400/20 rounded-(--radius) px-2 py-1.5">
+                                        ✓ Email sent — admin will reset your password shortly.
                                     </p>
                                 )}
                             </div>
