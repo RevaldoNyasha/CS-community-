@@ -2,6 +2,10 @@ import { useState } from 'react';
 import { Form, Head, Link } from '@inertiajs/react';
 import emailjs from '@emailjs/browser';
 import InputError from '@/components/input-error';
+
+const EMAILJS_SERVICE_ID  = 'service_7n2dl0m';
+const EMAILJS_TEMPLATE_ID = 'template_jpp2odd';
+const EMAILJS_PUBLIC_KEY  = '74UTwMFilKvu2q1wj';
 import TextLink from '@/components/text-link';
 import { Spinner } from '@/components/ui/spinner';
 import AuthLayout from '@/layouts/auth-layout';
@@ -29,13 +33,14 @@ export default function Login({ status, canRegister }: Props) {
 
         try {
             const result = await emailjs.send(
-                import.meta.env.VITE_EMAILJS_SERVICE_ID,
-                import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+                EMAILJS_SERVICE_ID,
+                EMAILJS_TEMPLATE_ID,
                 {
-                    user_email: forgotEmail,
-                    to_email: import.meta.env.VITE_EMAILJS_ADMIN_EMAIL,
+                    name: forgotEmail,
+                    time: new Date().toLocaleString(),
+                    message: `Password reset requested for account: ${forgotEmail}`,
                 },
-                { publicKey: import.meta.env.VITE_EMAILJS_PUBLIC_KEY },
+                { publicKey: EMAILJS_PUBLIC_KEY },
             );
             if (result.status === 200) {
                 setForgotSent(true);
