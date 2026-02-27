@@ -85,7 +85,7 @@ export default function Register() {
                                 type="submit"
                                 tabIndex={5}
                                 data-test="register-user-button"
-                                className="w-full py-2.5 bg-primary text-primary-foreground text-sm font-semibold tracking-wide hover:brightness-110 disabled:opacity-50 transition-all flex items-center justify-center"
+                                className="w-full py-2.5 bg-primary text-primary-foreground text-sm font-semibold tracking-wide hover:brightness-110 disabled:opacity-50 transition-all flex items-center justify-center rounded-(--radius)"
                             >
                                 {processing && <Spinner className="mr-2" />}
                                 Create account
@@ -94,7 +94,7 @@ export default function Register() {
                             <Link
                                 href={home()}
                                 tabIndex={7}
-                                className="w-full py-2.5 border border-border text-sm font-semibold tracking-wide text-muted-foreground hover:text-foreground hover:border-foreground/30 transition-all flex items-center justify-center"
+                                className="w-full py-2.5 border border-border text-sm font-semibold tracking-wide text-muted-foreground hover:text-foreground hover:border-foreground/30 transition-all flex items-center justify-center rounded-(--radius)"
                             >
                                 Cancel
                             </Link>

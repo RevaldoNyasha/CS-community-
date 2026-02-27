@@ -160,7 +160,7 @@ export default function Welcome({
                         {/* Announcement pill */}
                         <div className="hidden sm:mb-8 sm:flex sm:justify-center">
                             <div className="relative rounded-full px-3 py-1 text-sm text-muted-foreground ring-1 ring-border hover:ring-primary/30">
-                                The CS community for NUST students.{' '}
+                                The CS community for CS students.{' '}
                                 <Link
                                     href={canRegister ? register().url : login().url}
                                     className="font-semibold text-primary hover:text-primary/80"
