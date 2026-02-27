@@ -1,11 +1,5 @@
-import { useState } from 'react';
 import { Form, Head, Link } from '@inertiajs/react';
-import emailjs from '@emailjs/browser';
 import InputError from '@/components/input-error';
-
-const EMAILJS_SERVICE_ID  = 'service_7n2dl0m';
-const EMAILJS_TEMPLATE_ID = 'template_nt8k8qf';
-const EMAILJS_PUBLIC_KEY  = '74UTwMFilKvu2q1wj';
 import TextLink from '@/components/text-link';
 import { Spinner } from '@/components/ui/spinner';
 import AuthLayout from '@/layouts/auth-layout';
@@ -20,41 +14,6 @@ type Props = {
 };
 
 export default function Login({ status, canRegister }: Props) {
-    const [forgotOpen, setForgotOpen] = useState(false);
-    const [forgotEmail, setForgotEmail] = useState('');
-    const [forgotSending, setForgotSending] = useState(false);
-    const [forgotSent, setForgotSent] = useState(false);
-    const [forgotError, setForgotError] = useState('');
-
-    const handleForgotSubmit = async (e: { preventDefault(): void }) => {
-        e.preventDefault();
-        setForgotSending(true);
-        setForgotError('');
-
-        try {
-            const result = await emailjs.send(
-                EMAILJS_SERVICE_ID,
-                EMAILJS_TEMPLATE_ID,
-                {
-                    name: forgotEmail,
-                    time: new Date().toLocaleString(),
-                    message: `Password reset requested for account: ${forgotEmail}`,
-                },
-                { publicKey: EMAILJS_PUBLIC_KEY },
-            );
-            if (result.status === 200) {
-                setForgotSent(true);
-            } else {
-                setForgotError(`Unexpected response (${result.status}). Please try again.`);
-            }
-        } catch (err: unknown) {
-            const msg = err instanceof Error ? err.message : String(err);
-            setForgotError(`Failed to send: ${msg}`);
-        } finally {
-            setForgotSending(false);
-        }
-    };
-
     return (
         <AuthLayout
             title="Log in to your account"
@@ -133,55 +92,14 @@ export default function Login({ status, canRegister }: Props) {
                                 </p>
                             )}
 
-                            <div className="text-center">
-                                {!forgotSent ? (
-                                    <>
-                                        <button
-                                            type="button"
-                                            onClick={() => setForgotOpen((o) => !o)}
-                                            className="text-xs text-muted-foreground hover:text-foreground transition-colors"
-                                        >
-                                            Forgot password?
-                                        </button>
-
-                                        {forgotOpen && (
-                                            <form onSubmit={handleForgotSubmit} className="mt-3 flex flex-col gap-2 text-left">
-                                                <input
-                                                    type="email"
-                                                    required
-                                                    value={forgotEmail}
-                                                    onChange={(e) => setForgotEmail(e.target.value)}
-                                                    placeholder="Your email address"
-                                                    className={underlineInput}
-                                                />
-                                                {forgotError && (
-                                                    <p className="text-xs text-destructive/80 bg-destructive/10 border border-destructive/20 rounded-(--radius) px-2 py-1.5 wrap-break-word">
-                                                        {forgotError}
-                                                    </p>
-                                                )}
-                                                <button
-                                                    type="submit"
-                                                    disabled={forgotSending}
-                                                    className="mt-1 w-full py-2 bg-secondary text-secondary-foreground text-xs font-semibold tracking-wide hover:brightness-105 disabled:opacity-50 transition-all flex items-center justify-center rounded-(--radius)"
-                                                >
-                                                    {forgotSending ? (
-                                                        <>
-                                                            <Spinner className="mr-2" />
-                                                            Sending…
-                                                        </>
-                                                    ) : (
-                                                        'Email admin to reset password'
-                                                    )}
-                                                </button>
-                                            </form>
-                                        )}
-                                    </>
-                                ) : (
-                                    <p className="text-xs text-green-400/90 bg-green-400/10 border border-green-400/20 rounded-(--radius) px-2 py-1.5">
-                                        ✓ Email sent — admin will reset your password shortly.
-                                    </p>
-                                )}
-                            </div>
+                            <p className="text-center text-xs text-muted-foreground">
+                                <Link
+                                    href="/password-reset-request"
+                                    className="hover:text-foreground transition-colors"
+                                >
+                                    Forgot password?
+                                </Link>
+                            </p>
                         </div>
                     </>
                 )}

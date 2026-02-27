@@ -86,4 +86,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('settings', AdminSettingsController::class)->name('settings');
 });
 
+Route::get('password-reset-request', function () {
+    return Inertia::render('auth/password-reset-request');
+})->name('password.contact');
+
 require __DIR__.'/settings.php';
