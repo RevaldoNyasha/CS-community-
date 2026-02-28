@@ -133,7 +133,7 @@ test('post creation requires title and content', function () {
 });
 
 test('users can create a post with an image attachment', function () {
-    Storage::fake('public');
+    Storage::fake('firebase');
     $user = User::factory()->create();
 
     $file = UploadedFile::fake()->image('photo.jpg', 640, 480)->size(500);
@@ -150,12 +150,12 @@ test('users can create a post with an image attachment', function () {
     $post = Post::where('title', 'Post with Image')->first();
 
     expect($post->file_path)->not->toBeNull();
-    Storage::disk('public')->assertExists($post->file_path);
+    Storage::disk('firebase')->assertExists($post->file_path);
     expect($post->attachment_is_image)->toBeTrue();
 });
 
 test('users can create a post with a pdf attachment', function () {
-    Storage::fake('public');
+    Storage::fake('firebase');
     $user = User::factory()->create();
 
     $file = UploadedFile::fake()->create('document.pdf', 500, 'application/pdf');
@@ -172,7 +172,7 @@ test('users can create a post with a pdf attachment', function () {
     $post = Post::where('title', 'Post with PDF')->first();
 
     expect($post->file_path)->not->toBeNull();
-    Storage::disk('public')->assertExists($post->file_path);
+    Storage::disk('firebase')->assertExists($post->file_path);
     expect($post->attachment_is_image)->toBeFalse();
 });
 
@@ -195,7 +195,7 @@ test('users can create a post without an attachment', function () {
 });
 
 test('attachment upload rejects files larger than 7mb', function () {
-    Storage::fake('public');
+    Storage::fake('firebase');
     $user = User::factory()->create();
 
     $file = UploadedFile::fake()->create('large.pdf', 8000, 'application/pdf');
@@ -211,7 +211,7 @@ test('attachment upload rejects files larger than 7mb', function () {
 });
 
 test('attachment upload rejects invalid file types', function () {
-    Storage::fake('public');
+    Storage::fake('firebase');
     $user = User::factory()->create();
 
     $file = UploadedFile::fake()->create('script.exe', 100, 'application/x-msdownload');

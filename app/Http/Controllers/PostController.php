@@ -12,7 +12,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class PostController extends Controller
 {
@@ -119,7 +118,7 @@ class PostController extends Controller
         $fileSize = null;
 
         if ($request->hasFile('attachment')) {
-            $filePath = $request->file('attachment')->store('attachments', 'public');
+            $filePath = $request->file('attachment')->store('cs-community', 'firebase');
             $fileSize = $request->file('attachment')->getSize();
         }
 
@@ -166,10 +165,10 @@ class PostController extends Controller
         ]);
     }
 
-    public function download(Post $post): StreamedResponse
+    public function download(Post $post): RedirectResponse
     {
-        abort_unless($post->file_path && Storage::disk('public')->exists($post->file_path), 404);
+        abort_unless($post->file_path && Storage::disk('firebase')->exists($post->file_path), 404);
 
-        return Storage::disk('public')->download($post->file_path);
+        return redirect(Storage::disk('firebase')->url($post->file_path));
     }
 }
