@@ -136,29 +136,27 @@ export default function PostCreate() {
                                 {errors.content && <p className="text-xs text-destructive mt-1">{errors.content}</p>}
                             </div>
 
-                            {/* Project Link — only for projects */}
-                            {data.type === 'project' && (
-                                <div className="space-y-2">
-                                    <label htmlFor="post-project-link" className={labelClass}>
-                                        Project Link{' '}
-                                        <span className="lowercase font-normal opacity-70">(GitHub or Google Drive, optional)</span>
-                                    </label>
-                                    <div className="relative">
-                                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                            <ExternalLink className="size-4 text-muted-foreground/60" />
-                                        </div>
-                                        <input
-                                            id="post-project-link"
-                                            type="url"
-                                            value={data.github_url}
-                                            onChange={(e) => setData('github_url', e.target.value)}
-                                            className={inputClass + ' pl-10'}
-                                            placeholder="https://github.com/username/repo or https://drive.google.com/..."
-                                        />
+                            {/* External Link — available for all post types */}
+                            <div className="space-y-2">
+                                <label htmlFor="post-external-link" className={labelClass}>
+                                    External Link{' '}
+                                    <span className="lowercase font-normal opacity-70">(optional — opens in a new tab)</span>
+                                </label>
+                                <div className="relative">
+                                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <ExternalLink className="size-4 text-muted-foreground/60" />
                                     </div>
-                                    {errors.github_url && <p className="text-xs text-destructive mt-1">{errors.github_url}</p>}
+                                    <input
+                                        id="post-external-link"
+                                        type="url"
+                                        value={data.github_url}
+                                        onChange={(e) => setData('github_url', e.target.value)}
+                                        className={inputClass + ' pl-10'}
+                                        placeholder="https://github.com/... or https://drive.google.com/... or any URL"
+                                    />
                                 </div>
-                            )}
+                                {errors.github_url && <p className="text-xs text-destructive mt-1">{errors.github_url}</p>}
+                            </div>
 
                             {/* Tags */}
                             <div className="space-y-2">
