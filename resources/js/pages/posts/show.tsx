@@ -160,7 +160,7 @@ export default function PostShow({ post }: Props) {
                             </div>
                         )}
 
-                        {/* Project link (GitHub / Google Drive) */}
+                        {/* External link */}
                         {post.github_url && (
                             <a
                                 href={post.github_url}
@@ -169,7 +169,7 @@ export default function PostShow({ post }: Props) {
                                 className="inline-flex items-center gap-2 px-4 py-2 border border-border rounded-lg bg-card hover:border-violet-500/40 hover:text-violet-400 text-muted-foreground transition-colors text-sm font-medium"
                             >
                                 <ExternalLink className="size-4" />
-                                View Project
+                                Open Link
                             </a>
                         )}
 
