@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
 use League\Flysystem\Filesystem;
+use League\Flysystem\FilesystemAdapter as FlysystemAdapter;
+use League\Flysystem\FilesystemOperator;
 use League\Flysystem\GoogleCloudStorage\GoogleCloudStorageAdapter;
 
 class AppServiceProvider extends ServiceProvider
@@ -38,18 +40,29 @@ class AppServiceProvider extends ServiceProvider
         Storage::extend('gcs', function ($app, array $config) {
             $client = new StorageClient([
                 'projectId' => $config['project_id'],
-                'keyFilePath' => $config['key_file'] ?? null,
+                'keyFile' => $config['key_file'] ?? null,
             ]);
 
             $bucket = $client->bucket($config['bucket']);
-
             $adapter = new GoogleCloudStorageAdapter($bucket, $config['root'] ?? '');
+            $baseUrl = 'https://storage.googleapis.com/'.($config['bucket'] ?? '');
 
-            return new FilesystemAdapter(
-                new Filesystem($adapter, $config),
-                $adapter,
-                $config
-            );
+            return new class(new Filesystem($adapter, $config), $adapter, $config, $baseUrl) extends FilesystemAdapter
+            {
+                public function __construct(
+                    FilesystemOperator $driver,
+                    FlysystemAdapter $adapter,
+                    array $config,
+                    private readonly string $gcsBaseUrl = '',
+                ) {
+                    parent::__construct($driver, $adapter, $config);
+                }
+
+                public function url($path): string
+                {
+                    return rtrim($this->gcsBaseUrl, '/').'/'.ltrim($path, '/');
+                }
+            };
         });
     }
 
