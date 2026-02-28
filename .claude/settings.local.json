@@ -22,7 +22,8 @@
       "Bash(\"C:\\\\Users\\\\Revaldo\\\\.config\\\\herd\\\\bin\\\\php.bat\" artisan test --compact --filter=Dashboard)",
       "Read(//c/Users/Revaldo/Documents/**)",
       "Bash(php vendor/bin/pest tests/Feature/Auth/AuthenticationTest.php --compact)",
-      "Bash(\"/c/Users/Revaldo/AppData/Local/Programs/Herd/resources/bin/php/php8.4/php.exe\" vendor/bin/pest tests/Feature/Auth/AuthenticationTest.php --compact)"
+      "Bash(\"/c/Users/Revaldo/AppData/Local/Programs/Herd/resources/bin/php/php8.4/php.exe\" vendor/bin/pest tests/Feature/Auth/AuthenticationTest.php --compact)",
+      "Bash(/c/Users/Revaldo/.config/herd/bin/php84/php.exe artisan test --compact --filter=Post)"
     ]
   },
   "enableAllProjectMcpServers": true,
