@@ -197,13 +197,19 @@ export default function PostShow({ post }: Props) {
                         {auth.user ? (
                             <form onSubmit={handleSubmit} className="bg-muted/20 border border-border rounded-xl p-4 shadow-sm">
                                 <div className="flex flex-col space-y-4">
-                                    <textarea
-                                        value={data.comment}
-                                        onChange={(e) => setData('comment', e.target.value)}
-                                        className="w-full bg-background border border-border rounded-lg p-4 text-foreground placeholder:text-muted-foreground/50 focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none resize-none text-sm"
-                                        placeholder="Write a comment..."
-                                        rows={4}
-                                    />
+                                    <div>
+                                        <textarea
+                                            value={data.comment}
+                                            onChange={(e) => setData('comment', e.target.value)}
+                                            className="w-full bg-background border border-border rounded-lg p-4 text-foreground placeholder:text-muted-foreground/50 focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none resize-none text-sm"
+                                            placeholder="Write a comment..."
+                                            rows={4}
+                                            maxLength={500}
+                                        />
+                                        <p className={`text-xs tabular-nums text-right mt-1 ${data.comment.length > 450 ? 'text-destructive' : 'text-muted-foreground'}`}>
+                                            {data.comment.length}/500
+                                        </p>
+                                    </div>
                                     {errors.comment && (
                                         <p className="text-xs text-destructive">{errors.comment}</p>
                                     )}
