@@ -194,11 +194,11 @@ test('users can create a post without an attachment', function () {
     expect($post->attachment_is_image)->toBeFalse();
 });
 
-test('attachment upload rejects files larger than 7mb', function () {
+test('attachment upload rejects files larger than 3mb', function () {
     Storage::fake('firebase');
     $user = User::factory()->create();
 
-    $file = UploadedFile::fake()->create('large.pdf', 8000, 'application/pdf');
+    $file = UploadedFile::fake()->create('large.pdf', 4000, 'application/pdf');
 
     $this->actingAs($user)
         ->post('/posts', [

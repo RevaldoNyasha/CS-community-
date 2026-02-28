@@ -1,4 +1,5 @@
 import { Head, useForm } from '@inertiajs/react';
+import { useState } from 'react';
 import { ExternalLink, Paperclip, X } from 'lucide-react';
 import AppLayout from '@/layouts/app-layout';
 import {
@@ -21,6 +22,9 @@ const inputClass =
 const labelClass =
     'block text-xs font-bold tracking-widest uppercase text-muted-foreground mb-1';
 
+const MAX_FILE_MB = 3;
+const MAX_CONTENT = 2000;
+
 export default function PostCreate() {
     const { data, setData, post, processing, errors, progress } = useForm({
         title: '',
@@ -30,6 +34,19 @@ export default function PostCreate() {
         github_url: '',
         attachment: null as File | null,
     });
+
+    const [fileError, setFileError] = useState<string | null>(null);
+
+    function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+        const file = e.target.files?.[0] ?? null;
+        if (file && file.size > MAX_FILE_MB * 1024 * 1024) {
+            setFileError(`File too large. Please upload a file of ${MAX_FILE_MB} MB or less.`);
+            e.target.value = '';
+            return;
+        }
+        setFileError(null);
+        setData('attachment', file);
+    }
 
     function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
@@ -101,7 +118,12 @@ export default function PostCreate() {
 
                             {/* Content */}
                             <div className="space-y-2">
-                                <label htmlFor="post-content" className={labelClass}>Content</label>
+                                <div className="flex items-center justify-between">
+                                    <label htmlFor="post-content" className={labelClass}>Content</label>
+                                    <span className={`text-xs tabular-nums ${data.content.length > MAX_CONTENT * 0.9 ? 'text-destructive' : 'text-muted-foreground'}`}>
+                                        {data.content.length}/{MAX_CONTENT}
+                                    </span>
+                                </div>
                                 <textarea
                                     id="post-content"
                                     value={data.content}
@@ -109,6 +131,7 @@ export default function PostCreate() {
                                     className={inputClass + ' resize-none'}
                                     placeholder="Describe your resource or hackathon in detail..."
                                     rows={4}
+                                    maxLength={MAX_CONTENT}
                                 />
                                 {errors.content && <p className="text-xs text-destructive mt-1">{errors.content}</p>}
                             </div>
@@ -189,16 +212,18 @@ export default function PostCreate() {
                                             cloud_upload
                                         </span>
                                         <p className="text-xs font-medium text-foreground">Click to upload or drag and drop</p>
-                                        <p className="text-xs text-muted-foreground mt-1">PDF or image (JPG, PNG, GIF, WebP). Max 7 MB.</p>
+                                        <p className="text-xs text-muted-foreground mt-1">PDF or image (JPG, PNG, GIF, WebP). Max 3 MB.</p>
                                         <input
                                             type="file"
                                             accept=".pdf,.jpg,.jpeg,.png,.gif,.webp"
-                                            onChange={(e) => setData('attachment', e.target.files?.[0] ?? null)}
+                                            onChange={handleFileChange}
                                             className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
                                         />
                                     </label>
                                 )}
-                                {errors.attachment && <p className="text-xs text-destructive mt-1">{errors.attachment}</p>}
+                                {(fileError || errors.attachment) && (
+                                    <p className="text-xs text-destructive mt-1">{fileError ?? errors.attachment}</p>
+                                )}
                             </div>
 
                             {/* Upload progress */}

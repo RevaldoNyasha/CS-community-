@@ -17,7 +17,17 @@ class StoreCommentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'comment' => ['required', 'string', 'max:1000'],
+            'comment' => ['required', 'string', 'max:500'],
+        ];
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'comment.max' => 'Comment must not exceed 500 characters.',
         ];
     }
 }
