@@ -52,21 +52,21 @@ test('non-admin cannot approve posts', function () {
 });
 
 test('deleting a post removes its attachment file from storage', function () {
-    Storage::fake('public');
+    Storage::fake('firebase');
 
     $admin = User::factory()->admin()->create();
 
-    $filePath = 'attachments/test-file.jpg';
-    Storage::disk('public')->put($filePath, 'fake image content');
+    $filePath = 'cs-community/test-file.jpg';
+    Storage::disk('firebase')->put($filePath, 'fake image content');
 
     $post = Post::factory()->approved()->resource()->withAttachment($filePath)->create();
 
-    Storage::disk('public')->assertExists($filePath);
+    Storage::disk('firebase')->assertExists($filePath);
 
     $this->actingAs($admin)
         ->delete("/admin/posts/{$post->slug}")
         ->assertRedirect();
 
     $this->assertDatabaseMissing('posts', ['id' => $post->id]);
-    Storage::disk('public')->assertMissing($filePath);
+    Storage::disk('firebase')->assertMissing($filePath);
 });

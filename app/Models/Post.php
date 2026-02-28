@@ -60,8 +60,8 @@ class Post extends Model
         });
 
         static::deleting(function (Post $post): void {
-            if ($post->file_path && Storage::disk('public')->exists($post->file_path)) {
-                Storage::disk('public')->delete($post->file_path);
+            if ($post->file_path && Storage::disk('firebase')->exists($post->file_path)) {
+                Storage::disk('firebase')->delete($post->file_path);
             }
         });
     }
@@ -84,7 +84,7 @@ class Post extends Model
     protected function attachmentUrl(): Attribute
     {
         return Attribute::get(fn (): ?string => $this->file_path
-        ? Storage::disk('public')->url($this->file_path)
+        ? Storage::disk('firebase')->url($this->file_path)
         : null
         );
     }
