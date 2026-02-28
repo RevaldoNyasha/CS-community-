@@ -64,7 +64,7 @@ return [
         'firebase' => [
             'driver' => 'gcs',
             'project_id' => env('FIREBASE_PROJECT_ID'),
-            'key_file' => json_decode(env('FIREBASE_CREDENTIALS'), true),
+            'key_file' => env('FIREBASE_CREDENTIALS') ? json_decode(env('FIREBASE_CREDENTIALS'), true) : null,
             'bucket' => env('FIREBASE_STORAGE_BUCKET'),
             'visibility' => 'public',
             'throw' => false,
