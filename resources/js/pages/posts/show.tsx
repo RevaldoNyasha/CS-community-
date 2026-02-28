@@ -125,6 +125,7 @@ export default function PostShow({ post }: Props) {
                                         Open full size
                                     </a>
                                     <a href={`/posts/${post.slug}/download`}
+                                        target="_blank" rel="noopener noreferrer"
                                         className="text-xs text-primary hover:text-primary/80 font-medium flex items-center gap-1">
                                         <Download className="size-3.5" /> Download
                                     </a>
@@ -135,6 +136,7 @@ export default function PostShow({ post }: Props) {
                         {/* PDF attachment */}
                         {post.attachment_url && !post.attachment_is_image && (
                             <a href={`/posts/${post.slug}/download`}
+                                target="_blank" rel="noopener noreferrer"
                                 className="flex items-center gap-4 p-4 border border-border rounded-xl bg-card hover:border-primary/40 transition-colors">
                                 <FileText className="size-8 text-destructive shrink-0" />
                                 <div className="flex-1">
