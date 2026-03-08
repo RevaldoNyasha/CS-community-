@@ -140,8 +140,8 @@ export default function Dashboard({ recentPosts, pendingCount, popularTags, rece
 
                             {/* ── Hackathons ── */}
                             <section className="bg-card border border-border rounded-lg p-5">
-                                <h3 className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
-                                    <span className="w-1 h-1 bg-muted-foreground rounded-full inline-block" />
+                                <h3 className="text-[10px] font-bold text-green-400 uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
+                                    <span className="w-1 h-1 bg-green-400 rounded-full inline-block" />
                                     Upcoming Hackathons
                                 </h3>
                                 <div className="space-y-4">
@@ -153,13 +153,13 @@ export default function Dashboard({ recentPosts, pendingCount, popularTags, rece
                                             const month = date.toLocaleString('default', { month: 'short' });
                                             const day = date.getDate();
                                             return (
-                                                <Link key={hack.id} href={`/posts/${hack.id}`} className="flex gap-4 group cursor-pointer">
+                                                <Link key={hack.id} href={`/posts/${hack.slug}`} className="flex gap-4 group cursor-pointer">
                                                     <div className="w-12 h-12 flex-shrink-0 rounded bg-background flex flex-col items-center justify-center border border-border">
                                                         <span className="text-[9px] uppercase font-bold text-muted-foreground">{month}</span>
                                                         <span className="text-lg font-bold text-foreground leading-none">{day}</span>
                                                     </div>
                                                     <div className="overflow-hidden min-w-0">
-                                                        <h4 className="text-xs font-bold text-foreground group-hover:text-primary transition-colors line-clamp-1">{hack.title}</h4>
+                                                        <h4 className="text-xs font-bold text-foreground group-hover:text-green-400 transition-colors line-clamp-1">{hack.title}</h4>
                                                         <p className="text-[11px] text-muted-foreground mt-0.5 line-clamp-1">{hack.content}</p>
                                                     </div>
                                                 </Link>
