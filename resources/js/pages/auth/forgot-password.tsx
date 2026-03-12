@@ -25,7 +25,7 @@ export default function ForgotPassword({ status }: { status?: string }) {
                     <Frown className="w-6 h-6 text-red-600" />
                 </div>
                 <p className="text-[11px] text-gray-800 leading-relaxed">
-                    Please enter your email address to receive a password reset link. Ensure you have access to this inbox to complete the process.
+                    Please enter your email you are currently using for your account and we will send you a password reset link. If you don't receive the email, please check your spam folder or try again.
                 </p>
             </div>
 

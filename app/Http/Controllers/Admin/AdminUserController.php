@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\ResetUserPasswordRequest;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -46,5 +47,23 @@ class AdminUserController extends Controller
         $user->update(['role' => UserRole::User]);
 
         return back()->with('success', "{$user->name} demoted to user.");
+    }
+
+    public function show(User $user): Response
+    {
+        return Inertia::render('admin/users/show', [
+            'user' => $user,
+            'newPassword' => session('new_password'),
+        ]);
+    }
+
+    public function resetPassword(ResetUserPasswordRequest $request, User $user): RedirectResponse
+    {
+        $plainPassword = $request->password;
+
+        $user->update(['password' => $plainPassword]);
+
+        return redirect()->route('admin.users.show', $user)
+            ->with('new_password', $plainPassword);
     }
 }
