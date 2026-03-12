@@ -3,6 +3,7 @@ import { useState } from 'react';
 import ConfirmDialog from '@/components/confirm-dialog';
 import AdminLayout from '@/layouts/admin-layout';
 import type { BreadcrumbItem, PaginatedData, User } from '@/types';
+import { show as adminUsersShow } from '@/routes/admin/users/index';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Admin Dashboard', href: '/admin' },
@@ -107,7 +108,11 @@ export default function AdminUsersIndex({ users }: Props) {
                         <tbody>
                             {users.data.map((user) => (
                                 <tr key={user.id} className="border-b border-border last:border-0 hover:bg-secondary/10 transition-colors">
-                                    <td className="px-5 py-3 font-medium text-foreground">{user.name}</td>
+                                    <td className="px-5 py-3 font-medium text-foreground">
+                                        <Link href={adminUsersShow(user).url} className="hover:text-primary transition-colors">
+                                            {user.name}
+                                        </Link>
+                                    </td>
                                     <td className="px-5 py-3 text-muted-foreground">{user.email}</td>
                                     <td className="px-5 py-3">
                                         <span className={`px-2 py-0.5 text-[10px] font-medium uppercase rounded ${

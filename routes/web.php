@@ -67,6 +67,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/', AdminDashboardController::class)->name('dashboard');
 
     Route::get('users', [AdminUserController::class, 'index'])->name('users.index');
+    Route::get('users/{user}', [AdminUserController::class, 'show'])->name('users.show');
+    Route::post('users/{user}/reset-password', [AdminUserController::class, 'resetPassword'])->name('users.resetPassword');
     Route::delete('users/{user}', [AdminUserController::class, 'destroy'])->name('users.destroy');
     Route::post('users/{user}/promote', [AdminUserController::class, 'promote'])->name('users.promote');
     Route::post('users/{user}/demote', [AdminUserController::class, 'demote'])->name('users.demote');
