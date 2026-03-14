@@ -14,7 +14,7 @@ export default function AuthSimpleLayout({
             <div className="w-full max-w-[380px] bg-card border border-border shadow-lg dark:border-cyan-400/40 dark:bg-[#0c121d]/90 p-6 sm:p-8 rounded-[14px] dark:shadow-[0_0_20px_1px_rgba(34,211,238,0.15)] relative backdrop-blur-md transition-colors">
                 {/* Logo / Brand */}
                 <div className="flex justify-center mb-4">
-                    <Link href={home()} className="inline-flex items-center gap-3 group">
+                    <Link href={home()} className="inline-flex items-center gap-3 group -translate-x-[26px]">
                         <img
                             src="/newIcons/navbarIcon.png"
                             alt="DEV-CRAFT"
