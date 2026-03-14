@@ -8,11 +8,10 @@ export default function AuthSimpleLayout({
 }: AuthLayoutProps) {
     return (
         <div className="flex min-h-svh flex-col items-center justify-center px-4 py-2 relative z-10 w-full overflow-hidden bg-background transition-colors">
-            {/* Background elements (optional, if you want extra atmosphere) */}
             <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] border hidden dark:block bg-cyan-900/10 rounded-full blur-[100px] -z-10 mix-blend-screen pointer-events-none"></div>
 
             <div className="w-full max-w-[380px] bg-card border border-border shadow-lg dark:border-cyan-400/40 dark:bg-[#0c121d]/90 p-6 sm:p-8 rounded-[14px] dark:shadow-[0_0_20px_1px_rgba(34,211,238,0.15)] relative backdrop-blur-md transition-colors">
-                {/* Logo / Brand */}
+               
                 <div className="flex justify-center mb-4">
                     <Link href={home()} className="inline-flex items-center gap-3 group -translate-x-[26px]">
                         <img
@@ -27,7 +26,6 @@ export default function AuthSimpleLayout({
                     </Link>
                 </div>
 
-                {/* Title */}
                 <div className="mb-5 text-center">
                     <h1 className="text-xl font-bold text-foreground dark:text-white tracking-wide transition-colors">{title}</h1>
                 </div>
