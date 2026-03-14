@@ -1,6 +1,6 @@
 import { Transition } from '@headlessui/react';
 import { Form, Head } from '@inertiajs/react';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import PasswordController from '@/actions/App/Http/Controllers/Settings/PasswordController';
 import Heading from '@/components/heading';
 import InputError from '@/components/input-error';
@@ -19,6 +19,8 @@ const breadcrumbs: BreadcrumbItem[] = [
 export default function Password() {
     const passwordInput = useRef<HTMLInputElement>(null);
     const currentPasswordInput = useRef<HTMLInputElement>(null);
+    const [newPassword, setNewPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -83,6 +85,8 @@ export default function Password() {
                                         ref={passwordInput}
                                         name="password"
                                         type="password"
+                                        value={newPassword}
+                                        onChange={(e) => setNewPassword(e.target.value)}
                                         className="w-full bg-transparent border-0 border-b border-border/60 rounded-none px-0 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary focus:ring-0 transition-colors"
                                         autoComplete="new-password"
                                         placeholder="New password"
@@ -98,10 +102,17 @@ export default function Password() {
                                         id="password_confirmation"
                                         name="password_confirmation"
                                         type="password"
+                                        value={confirmPassword}
+                                        onChange={(e) => setConfirmPassword(e.target.value)}
                                         className="w-full bg-transparent border-0 border-b border-border/60 rounded-none px-0 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary focus:ring-0 transition-colors"
                                         autoComplete="new-password"
                                         placeholder="Confirm password"
                                     />
+                                    {confirmPassword && (
+                                        <p className={`text-[11px] mt-0.5 font-medium transition-colors ${newPassword === confirmPassword ? 'text-emerald-500' : 'text-red-500'}`}>
+                                            {newPassword === confirmPassword ? '✓ Passwords match' : '✗ Passwords do not match'}
+                                        </p>
+                                    )}
                                     <InputError message={errors.password_confirmation} />
                                 </div>
 
