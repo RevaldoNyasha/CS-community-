@@ -87,7 +87,7 @@ export default function Login({ status, canRegister }: Props) {
                                 {canRegister && (
                                     <p>
                                         Don&apos;t have an account?{' '}
-                                        <TextLink href={register()} tabIndex={4} className="text-[12px]! text-foreground hover:text-primary dark:text-white dark:hover:text-cyan-400 font-medium transition-colors">
+                                        <TextLink href={register()} tabIndex={4} className="text-[12px]! text-foreground hover:text-primary dark:text-white dark:hover:text-cyan-400 font-medium transition-colors ml-2">
                                             Sign up
                                         </TextLink>
                                     </p>
