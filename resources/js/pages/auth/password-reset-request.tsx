@@ -9,19 +9,18 @@ const EMAILJS_SERVICE_ID = 'service_7n2dl0m';
 const EMAILJS_TEMPLATE_ID = 'template_jpp2odd';
 const EMAILJS_PUBLIC_KEY = '74UTwMFilKvu2q1wj';
 
-const underlineInput = "w-full bg-transparent border-0 border-b-2 border-input dark:border-cyan-800/80 rounded-none px-0 py-2.5 text-[15px] font-medium text-foreground dark:text-gray-200 placeholder:text-muted-foreground dark:placeholder:text-gray-500 placeholder:font-normal focus:outline-none focus:border-primary dark:focus:border-cyan-400 focus:ring-0 transition-colors";
-
-const DEFAULT_MESSAGE = 'Hi Admin,\n\nI am unable to access my account and need a password reset.\n\nYou can reach me via WhatsApp or phone at: [your number here]\n\nPlease send my new password to that number.\n\nThank you.';
+const underlineInput = "w-full bg-transparent border-0 border-b-2 border-input dark:border-cyan-800/80 rounded-none px-0 py-2.5 text-[15px] font-medium text-foreground dark:text-gray-200 placeholder:text-muted-foreground dark:placeholder:text-gray-500 placeholder:text-[13px] placeholder:font-normal focus:outline-none focus:border-primary dark:focus:border-cyan-400 focus:ring-0 transition-colors";
 
 export default function PasswordResetRequest() {
     const [email, setEmail] = useState('');
     const [whatsapp, setWhatsapp] = useState('');
-    const [message, setMessage] = useState(DEFAULT_MESSAGE);
     const [whatsappError, setWhatsappError] = useState('');
     const [submitAttempted, setSubmitAttempted] = useState(false);
     const [sending, setSending] = useState(false);
     const [sent, setSent] = useState(false);
     const [error, setError] = useState('');
+
+    const message = `Hi Admin,\nI am unable to access my account and need a password reset. You can reach me via WhatsApp or phone at: ${whatsapp || '[your number here]'}\nPlease send my new password to that number.\nThank you.`;
 
     function sanitizePhone(raw: string): string {
         return raw.replace(/\D/g, '');
@@ -33,12 +32,6 @@ export default function PasswordResetRequest() {
         if (submitAttempted) {
             setWhatsappError(validatePhone(sanitized));
         }
-        setMessage((prev) =>
-            prev.replace(
-                /You can reach me via WhatsApp or phone at: .+/,
-                `You can reach me via WhatsApp or phone at: ${sanitized || '[your number here]'}`,
-            ),
-        );
     }
 
     function validatePhone(value: string): string {
@@ -128,7 +121,7 @@ export default function PasswordResetRequest() {
                             readOnly
                             value={message}
                             rows={6}
-                            className={`${underlineInput} resize-none overflow-hidden cursor-default select-none`}
+                            className={`${underlineInput} !text-[12px] !font-normal  !text-muted-foreground dark:!text-gray-400 resize-none overflow-hidden cursor-default select-none`}
                         />
                     </div>
 
