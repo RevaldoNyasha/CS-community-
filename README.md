@@ -3,7 +3,7 @@ DEV-CRAFT
 
 A Professional Computer Science Community Platform
 
-📌 Overview
+Overview
 
 DEV-CRAFT is a professional Computer Science community platform built to help students collaborate, access academic resources, and stay updated with hackathons and technical events.
 
@@ -25,7 +25,7 @@ Interact in a clean, professional environment
 
 The system also includes an Admin panel for content moderation and platform management.
 
-🎯 Problem Statement
+Problem Statement
 
 In many universities:
 
@@ -41,8 +41,8 @@ Content is unmoderated and disorganized
 
 DEV-CRAFT solves this by providing a centralized, structured, and moderated academic hub.
 
-🚀 Key Features
-👤 Student Features
+Key Features
+Student Features
 
 Secure login system
 
@@ -76,7 +76,7 @@ Moderate content
 
 Configure platform settings
 
-🧱 System Structure
+System Structure
 
 The platform is divided into:
 
@@ -100,7 +100,7 @@ Professional tone
 
 Quality control
 
-🎨 Design Philosophy
+Design Philosophy
 
 DEV-CRAFT is built with a focus on:
 
@@ -136,7 +136,7 @@ Reliable
 
 University-ready
 
-🏆 Hackathon Module
+Hackathon Module
 
 The Hackathon section includes:
 
