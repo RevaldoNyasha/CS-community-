@@ -8,6 +8,7 @@ use App\Http\Requests\Admin\ResetUserPasswordRequest;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -61,7 +62,7 @@ class AdminUserController extends Controller
     {
         $plainPassword = $request->password;
 
-        $user->update(['password' => $plainPassword]);
+        $user->update(['password' => Hash::make($plainPassword)]);
 
         return redirect()->route('admin.users.show', $user)
             ->with('new_password', $plainPassword);
