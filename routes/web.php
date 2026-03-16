@@ -7,6 +7,8 @@ use App\Http\Controllers\Admin\AdminPostController;
 use App\Http\Controllers\Admin\AdminSettingsController;
 use App\Http\Controllers\Admin\AdminSuggestionController;
 use App\Http\Controllers\Admin\AdminUserController;
+use App\Http\Controllers\Auth\GithubAuthController;
+use App\Http\Controllers\Auth\GoogleAuthController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LikeController;
@@ -87,6 +89,11 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     Route::get('settings', AdminSettingsController::class)->name('settings');
 });
+
+Route::get('auth/github', [GithubAuthController::class, 'redirect'])->name('auth.github');
+Route::get('auth/github/callback', [GithubAuthController::class, 'callback'])->name('auth.github.callback');
+Route::get('auth/google', [GoogleAuthController::class, 'redirect'])->name('auth.google');
+Route::get('auth/google/callback', [GoogleAuthController::class, 'callback'])->name('auth.google.callback');
 
 Route::get('password-reset-request', function () {
     return Inertia::render('auth/password-reset-request');
