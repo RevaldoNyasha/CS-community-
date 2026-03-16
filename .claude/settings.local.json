@@ -23,7 +23,17 @@
       "Read(//c/Users/Revaldo/Documents/**)",
       "Bash(php vendor/bin/pest tests/Feature/Auth/AuthenticationTest.php --compact)",
       "Bash(\"/c/Users/Revaldo/AppData/Local/Programs/Herd/resources/bin/php/php8.4/php.exe\" vendor/bin/pest tests/Feature/Auth/AuthenticationTest.php --compact)",
-      "Bash(/c/Users/Revaldo/.config/herd/bin/php84/php.exe artisan test --compact --filter=Post)"
+      "Bash(/c/Users/Revaldo/.config/herd/bin/php84/php.exe artisan test --compact --filter=Post)",
+      "Bash(\"/c/Users/Revaldo/.config/herd/bin/php84.bat\" \"/c/ProgramData/ComposerSetup/bin/composer\" require laravel/socialite --no-interaction)",
+      "Bash(cmd.exe /c \"cd /d \"\"c:\\\\Users\\\\Revaldo\\\\Documents\\\\laravel projects\\\\nust\"\" && composer require laravel/socialite --no-interaction\")",
+      "Bash(powershell.exe -Command \"Set-Location ''c:\\\\Users\\\\Revaldo\\\\Documents\\\\laravel projects\\\\nust''; composer require laravel/socialite --no-interaction\")",
+      "Bash(powershell.exe -Command \"Set-Location ''c:\\\\Users\\\\Revaldo\\\\Documents\\\\laravel projects\\\\nust''; php artisan wayfinder:generate --no-interaction\")",
+      "Bash(powershell.exe -Command \"Set-Location ''c:\\\\Users\\\\Revaldo\\\\Documents\\\\laravel projects\\\\nust''; vendor/bin/pint --dirty --format agent\")",
+      "Bash(powershell.exe -Command \"Set-Location ''c:\\\\Users\\\\Revaldo\\\\Documents\\\\laravel projects\\\\nust''; php artisan test --compact --filter=Login\")",
+      "Bash(powershell.exe -Command \"Set-Location ''c:\\\\Users\\\\Revaldo\\\\Documents\\\\laravel projects\\\\nust''; php artisan make:controller Auth/GoogleAuthController --no-interaction\")",
+      "Bash(powershell.exe -Command \"Set-Location ''c:\\\\Users\\\\Revaldo\\\\Documents\\\\laravel projects\\\\nust''; vendor/bin/pint --dirty --format agent; php artisan test --compact --filter=Login\")",
+      "Bash(Select-String -Pattern \"wayfinder|routes|actions\")",
+      "Bash(powershell.exe -Command \"Set-Location ''c:\\\\Users\\\\Revaldo\\\\Documents\\\\laravel projects\\\\nust''; php artisan wayfinder:generate --with-form --no-interaction\")"
     ]
   },
   "enableAllProjectMcpServers": true,
