@@ -1,17 +1,13 @@
 import { Head, Link, usePage } from '@inertiajs/react';
 import { BookOpen, FolderGit2, Menu, Moon, Sun, Trophy, X } from 'lucide-react';
 import { useState } from 'react';
-import { dashboard, login, register } from '@/routes';
+import { dashboard, login } from '@/routes';
 import { useAppearance } from '@/hooks/use-appearance';
 import type { SharedData } from '@/types';
 
 
 
-export default function Welcome({
-    canRegister = true,
-}: {
-    canRegister?: boolean;
-}) {
+export default function Welcome() {
     const { auth } = usePage<SharedData>().props;
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const { resolvedAppearance, updateAppearance } = useAppearance();
@@ -55,16 +51,9 @@ export default function Welcome({
                                     Dashboard <span aria-hidden="true">&rarr;</span>
                                 </Link>
                             ) : (
-                                <>
-                                    <Link href={login().url} className="text-sm font-semibold text-foreground hover:text-muted-foreground transition-colors">
+                                <Link href={login().url} className="text-sm font-semibold text-foreground hover:text-muted-foreground transition-colors">
                                         Log in <span aria-hidden="true">&rarr;</span>
                                     </Link>
-                                    {canRegister && (
-                                        <Link href={register().url} className="text-sm font-semibold text-foreground hover:text-muted-foreground transition-colors">
-                                            Register <span aria-hidden="true">&rarr;</span>
-                                        </Link>
-                                    )}
-                                </>
                             )}
                             <button
                                 type="button"
@@ -116,22 +105,12 @@ export default function Welcome({
                                                     Dashboard
                                                 </Link>
                                             ) : (
-                                                <>
-                                                    <Link
-                                                        href={login().url}
-                                                        className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold text-foreground hover:bg-secondary/40"
-                                                    >
-                                                        Log in
-                                                    </Link>
-                                                    {canRegister && (
-                                                        <Link
-                                                            href={register().url}
-                                                            className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold text-foreground hover:bg-secondary/40"
-                                                        >
-                                                            Register
-                                                        </Link>
-                                                    )}
-                                                </>
+                                                <Link
+                                                    href={login().url}
+                                                    className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold text-foreground hover:bg-secondary/40"
+                                                >
+                                                    Log in
+                                                </Link>
                                             )}
                                         </div>
                                     </div>
@@ -162,7 +141,7 @@ export default function Welcome({
                             <div className="relative rounded-full px-3 py-1 text-sm text-muted-foreground ring-1 ring-border hover:ring-primary/30">
                                 The CS community for CS students.{' '}
                                 <Link
-                                    href={canRegister ? register().url : login().url}
+                                    href={login().url}
                                     className="font-semibold text-primary hover:text-primary/80"
                                 >
                                     <span aria-hidden="true" className="absolute inset-0" />
