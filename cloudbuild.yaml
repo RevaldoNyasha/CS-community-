@@ -1,0 +1,44 @@
+substitutions:
+  _REGION: us-central1
+  _SERVICE: cs-community
+
+steps:
+  # Build Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/$_SERVICE:$COMMIT_SHA'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/$_SERVICE:latest'
+      - '.'
+
+  # Push to Artifact Registry / Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - '--all-tags'
+      - 'gcr.io/$PROJECT_ID/$_SERVICE'
+
+  # Deploy to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - '$_SERVICE'
+      - '--image=gcr.io/$PROJECT_ID/$_SERVICE:$COMMIT_SHA'
+      - '--region=$_REGION'
+      - '--platform=managed'
+      - '--allow-unauthenticated'
+      - '--port=8080'
+      - '--memory=1Gi'
+      - '--cpu=1'
+      - '--min-instances=0'
+      - '--max-instances=10'
+      - '--set-secrets=APP_KEY=APP_KEY:latest,DB_URL=DB_URL:latest,FIREBASE_CREDENTIALS=FIREBASE_CREDENTIALS:latest'
+      - '--set-env-vars=APP_ENV=production,APP_DEBUG=false,FILESYSTEM_DISK=firebase,LOG_CHANNEL=stderr'
+
+images:
+  - 'gcr.io/$PROJECT_ID/$_SERVICE:$COMMIT_SHA'
+  - 'gcr.io/$PROJECT_ID/$_SERVICE:latest'
