@@ -13,7 +13,9 @@ class GoogleAuthController extends Controller
 {
     public function redirect(): \Symfony\Component\HttpFoundation\RedirectResponse|RedirectResponse
     {
-        return Socialite::driver('google')->redirect();
+        $response = Socialite::driver('google')->redirect();
+        \Illuminate\Support\Facades\Log::info('Google OAuth URL: ' . $response->getTargetUrl());
+        return $response;
     }
 
     public function callback(): RedirectResponse
