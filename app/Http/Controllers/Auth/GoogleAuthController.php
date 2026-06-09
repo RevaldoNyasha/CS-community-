@@ -5,16 +5,22 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
 
 class GoogleAuthController extends Controller
 {
-    public function redirect(): \Symfony\Component\HttpFoundation\RedirectResponse|RedirectResponse
+    public function redirect(Request $request): \Symfony\Component\HttpFoundation\RedirectResponse|RedirectResponse|\Illuminate\Http\JsonResponse
     {
         $response = Socialite::driver('google')->redirect();
-        \Illuminate\Support\Facades\Log::info('Google OAuth URL: ' . $response->getTargetUrl());
+
+        if ($request->boolean('_debug')) {
+            parse_str(parse_url($response->getTargetUrl(), PHP_URL_QUERY), $params);
+            return response()->json($params);
+        }
+
         return $response;
     }
 

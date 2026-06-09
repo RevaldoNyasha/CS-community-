@@ -35,6 +35,7 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
         intl
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+COPY --from=frontend /usr/local/bin/node /usr/local/bin/node
 
 WORKDIR /var/www/html
 
