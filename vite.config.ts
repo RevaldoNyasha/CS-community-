@@ -17,7 +17,9 @@ export default defineConfig({
             },
         }),
         tailwindcss(),
-        ...(process.env.DOCKER_BUILD ? [] : [wayfinder({ formVariants: true })]),
+        wayfinder({
+            formVariants: true,
+        }),
     ],
     esbuild: {
         jsx: 'automatic',
