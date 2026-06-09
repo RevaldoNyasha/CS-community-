@@ -26,9 +26,7 @@ Route::get('/', function () {
         return redirect()->route('dashboard');
     }
 
-    return Inertia::render('welcome', [
-        'canRegister' => Features::enabled(Features::registration()),
-    ]);
+    return view('home');
 })->name('home');
 
 // Public routes (no authentication required)
