@@ -5,7 +5,7 @@ COPY package*.json ./
 RUN npm ci
 COPY . .
 ENV DOCKER_BUILD=true
-RUN npm run build
+RUN npm run build && npx vite build --ssr
 
 # Stage 2: PHP runtime
 FROM php:8.4-fpm-alpine
