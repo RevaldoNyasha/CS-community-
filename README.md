@@ -1,6 +1,8 @@
 # CS Community
 DEV-CRAFT
 
+**Live:** [https://www.cs-community.space](https://www.cs-community.space)
+
 A Professional Computer Science Community Platform
 
 Overview
