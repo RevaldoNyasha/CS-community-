@@ -1,42 +1,10 @@
-# Stage 1: Build frontend assets (needs PHP for Wayfinder type generation)
+# Stage 1: Build frontend assets
 FROM node:22-alpine AS frontend
 WORKDIR /app
-
-# Install PHP CLI so Wayfinder can call `php artisan wayfinder:generate`
-RUN apk add --no-cache \
-    php84 \
-    php84-phar \
-    php84-json \
-    php84-mbstring \
-    php84-tokenizer \
-    php84-xml \
-    php84-xmlwriter \
-    php84-dom \
-    php84-fileinfo \
-    php84-ctype \
-    php84-openssl \
-    php84-bcmath \
-    php84-iconv \
-    php84-session \
-    && ln -sf /usr/bin/php84 /usr/bin/php
-
-# Install Composer
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
-
-# Install PHP dependencies (needed for php artisan to boot)
-COPY composer.json composer.lock ./
-RUN composer install --no-dev --optimize-autoloader --no-scripts --no-interaction
-
 COPY package*.json ./
 RUN npm ci
 COPY . .
-
-# Minimal env so Laravel can boot for Wayfinder generation (no real DB needed)
-ENV APP_KEY=base64:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa=
-ENV APP_ENV=production
-ENV DB_CONNECTION=sqlite
-ENV DB_DATABASE=:memory:
-
+ENV DOCKER_BUILD=true
 RUN npm run build
 
 # Stage 2: PHP runtime
