@@ -125,7 +125,7 @@ export default function Welcome() {
                     {/* Top gradient blob */}
                     <div
                         aria-hidden="true"
-                        className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
+                        className="pointer-events-none absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
                     >
                         <div
                             style={{
@@ -203,7 +203,7 @@ export default function Welcome() {
                     {/* Bottom gradient blob */}
                     <div
                         aria-hidden="true"
-                        className="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]"
+                        className="pointer-events-none absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]"
                     >
                         <div
                             style={{
@@ -215,7 +215,7 @@ export default function Welcome() {
                 </div>
 
                 {/* ── Footer ── */}
-                <footer className="border-t border-border px-6 py-6 flex items-center justify-center gap-6">
+                <footer className="relative z-10 border-t border-border px-6 py-6 flex items-center justify-center gap-6">
                     <span className="text-xs text-muted-foreground">© {new Date().getFullYear()} DEV-CRAFT</span>
                     <Link href="/privacy" className="text-xs text-primary underline underline-offset-2 hover:text-primary/80 transition-colors">Privacy Policy</Link>
                     <Link href="/terms" className="text-xs text-primary underline underline-offset-2 hover:text-primary/80 transition-colors">Terms of Service</Link>
