@@ -18,6 +18,7 @@ RUN apk add --no-cache \
     libjpeg-turbo-dev \
     freetype-dev \
     libzip-dev \
+    icu-dev \
     zip \
     unzip
 
