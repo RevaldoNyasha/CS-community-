@@ -213,6 +213,23 @@ export default function Welcome() {
                         />
                     </div>
                 </div>
+
+                {/* ── Footer ── */}
+                <footer className="border-t border-border px-6 py-6 flex items-center justify-center gap-6">
+                    <span className="text-xs text-muted-foreground">© {new Date().getFullYear()} DEV-CRAFT</span>
+                    <Link href="/privacy" className="text-xs text-muted-foreground hover:text-foreground transition-colors">Privacy Policy</Link>
+                    <Link href="/terms" className="text-xs text-muted-foreground hover:text-foreground transition-colors">Terms of Service</Link>
+                </footer>
+            </div>
+
+            {/* ── Bottom-left toast ── */}
+            <div className="fixed bottom-6 left-6 z-50 flex items-center gap-3 rounded-xl border border-border bg-card/90 px-4 py-3 shadow-lg backdrop-blur-sm">
+                <span className="text-xs text-muted-foreground">By using DEV-CRAFT you agree to our</span>
+                <div className="flex items-center gap-2">
+                    <Link href="/terms" className="text-xs font-semibold text-primary hover:underline">Terms</Link>
+                    <span className="text-xs text-muted-foreground">&</span>
+                    <Link href="/privacy" className="text-xs font-semibold text-primary hover:underline">Privacy</Link>
+                </div>
             </div>
         </>
     );
