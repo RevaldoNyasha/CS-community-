@@ -18,6 +18,9 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
 
+Route::get('privacy', fn () => Inertia::render('privacy'))->name('privacy');
+Route::get('terms', fn () => Inertia::render('terms'))->name('terms');
+
 Route::get('/', function () {
     if (auth()->check()) {
         return redirect()->route('dashboard');
