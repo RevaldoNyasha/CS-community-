@@ -17,6 +17,8 @@ use App\Http\Controllers\SuggestionController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
+Route::get('/ping', fn () => response()->json(['status' => 'ok']))->name('ping');
+
 Route::get('privacy', fn () => Inertia::render('privacy'))->name('privacy');
 Route::get('terms', fn () => Inertia::render('terms'))->name('terms');
 
