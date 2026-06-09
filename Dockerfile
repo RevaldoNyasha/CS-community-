@@ -16,6 +16,8 @@ RUN apk add --no-cache \
     php84-ctype \
     php84-openssl \
     php84-bcmath \
+    php84-iconv \
+    php84-session \
     && ln -sf /usr/bin/php84 /usr/bin/php
 
 # Install Composer
