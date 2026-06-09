@@ -6,6 +6,7 @@
 /public/storage
 /storage/*.key
 /storage/pail
+/context
 /vendor
 .DS_Store
 .env
