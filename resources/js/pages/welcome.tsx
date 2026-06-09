@@ -221,16 +221,6 @@ export default function Welcome() {
                     <Link href="/terms" className="text-xs text-muted-foreground hover:text-foreground transition-colors">Terms of Service</Link>
                 </footer>
             </div>
-
-            {/* ── Bottom-left toast ── */}
-            <div className="fixed bottom-6 left-6 z-50 flex items-center gap-3 rounded-xl border border-border bg-card/90 px-4 py-3 shadow-lg backdrop-blur-sm">
-                <span className="text-xs text-muted-foreground">By using DEV-CRAFT you agree to our</span>
-                <div className="flex items-center gap-2">
-                    <Link href="/terms" className="text-xs font-semibold text-primary hover:underline">Terms</Link>
-                    <span className="text-xs text-muted-foreground">&</span>
-                    <Link href="/privacy" className="text-xs font-semibold text-primary hover:underline">Privacy</Link>
-                </div>
-            </div>
         </>
     );
 }

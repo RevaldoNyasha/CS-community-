@@ -16,7 +16,6 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\SuggestionController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use Laravel\Fortify\Features;
 
 Route::get('privacy', fn () => Inertia::render('privacy'))->name('privacy');
 Route::get('terms', fn () => Inertia::render('terms'))->name('terms');
@@ -26,7 +25,7 @@ Route::get('/', function () {
         return redirect()->route('dashboard');
     }
 
-    return view('home');
+    return Inertia::render('welcome');
 })->name('home');
 
 // Public routes (no authentication required)
