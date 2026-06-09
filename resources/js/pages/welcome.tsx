@@ -217,8 +217,8 @@ export default function Welcome() {
                 {/* ── Footer ── */}
                 <footer className="border-t border-border px-6 py-6 flex items-center justify-center gap-6">
                     <span className="text-xs text-muted-foreground">© {new Date().getFullYear()} DEV-CRAFT</span>
-                    <Link href="/privacy" className="text-xs text-muted-foreground hover:text-foreground transition-colors">Privacy Policy</Link>
-                    <Link href="/terms" className="text-xs text-muted-foreground hover:text-foreground transition-colors">Terms of Service</Link>
+                    <Link href="/privacy" className="text-xs text-primary underline underline-offset-2 hover:text-primary/80 transition-colors">Privacy Policy</Link>
+                    <Link href="/terms" className="text-xs text-primary underline underline-offset-2 hover:text-primary/80 transition-colors">Terms of Service</Link>
                 </footer>
             </div>
         </>
