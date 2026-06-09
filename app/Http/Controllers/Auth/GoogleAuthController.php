@@ -13,12 +13,12 @@ class GoogleAuthController extends Controller
 {
     public function redirect(): \Symfony\Component\HttpFoundation\RedirectResponse|RedirectResponse
     {
-        return Socialite::driver('google')->stateless()->redirect();
+        return Socialite::driver('google')->redirect();
     }
 
     public function callback(): RedirectResponse
     {
-        $googleUser = Socialite::driver('google')->stateless()->user();
+        $googleUser = Socialite::driver('google')->user();
 
         $user = User::query()->firstOrCreate(
             ['email' => $googleUser->getEmail()],
