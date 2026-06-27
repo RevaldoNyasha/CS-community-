@@ -1,12 +1,15 @@
 <?php
 
-use App\Models\FeedItem;
+use App\Enums\PostStatus;
+use App\Enums\PostType;
+use App\Models\Post;
 
 beforeEach(function () {
     config(['services.automation.token' => 'test-automation-token']);
+    // The `auto-post` bot user is created by migration (runs via RefreshDatabase).
 });
 
-function validFeedPayload(array $overrides = []): array
+function validAutomationPayload(array $overrides = []): array
 {
     return array_merge([
         'title' => 'Rust 2.0 Released',
@@ -29,73 +32,75 @@ function automationHeaders(string $token = 'test-automation-token'): array
 }
 
 test('rejects requests with no token', function () {
-    $this->postJson('/api/automation/posts', validFeedPayload())
-        ->assertStatus(401);
-
-    expect(FeedItem::count())->toBe(0);
+    $this->postJson('/api/automation/posts', validAutomationPayload())->assertStatus(401);
+    expect(Post::count())->toBe(0);
 });
 
 test('rejects requests with an invalid token', function () {
     $this->withHeaders(automationHeaders('wrong-token'))
-        ->postJson('/api/automation/posts', validFeedPayload())
+        ->postJson('/api/automation/posts', validAutomationPayload())
         ->assertStatus(401);
-
-    expect(FeedItem::count())->toBe(0);
+    expect(Post::count())->toBe(0);
 });
 
 test('rejects invalid payloads', function () {
     $this->withHeaders(automationHeaders())
-        ->postJson('/api/automation/posts', validFeedPayload([
+        ->postJson('/api/automation/posts', validAutomationPayload([
             'category' => 'Not A Real Category',
             'source_url' => 'not-a-url',
         ]))
         ->assertStatus(422)
         ->assertJsonValidationErrors(['category', 'source_url']);
-
-    expect(FeedItem::count())->toBe(0);
+    expect(Post::count())->toBe(0);
 });
 
-test('creates a published feed item on a valid payload', function () {
-    $response = $this->withHeaders(automationHeaders())
-        ->postJson('/api/automation/posts', validFeedPayload());
+test('creates an approved resource post authored by the bot user', function () {
+    $this->withHeaders(automationHeaders())
+        ->postJson('/api/automation/posts', validAutomationPayload())
+        ->assertStatus(201)
+        ->assertJson(['status' => 'created']);
 
-    $response->assertStatus(201)->assertJson(['status' => 'created']);
+    $post = Post::with('tags', 'user')->sole();
+    expect($post->type)->toBe(PostType::Resource);
+    expect($post->status)->toBe(PostStatus::Approved);
+    expect($post->user->email)->toBe('auto-post@cs-community.space');
+    expect($post->github_url)->toBe('https://example.com/rust-2-0');
+    expect($post->content)->toContain('via Hacker News');
+    expect($post->tags->pluck('name')->all())->toBe(['rust', 'systems']);
+    expect($post->slug)->not->toBeEmpty();
+});
 
-    $item = FeedItem::sole();
-    expect($item->status->value)->toBe('published');
-    expect($item->published_at)->not->toBeNull();
-    expect($item->slug)->not->toBeEmpty();
-    expect($item->content_hash)->not->toBeEmpty();
-    expect($item->tags)->toBe(['rust', 'systems']);
-    expect($item->author)->toBe('Jane Dev');
-    expect($item->reading_time_minutes)->toBe(4);
-    expect($item->source_published_at)->not->toBeNull();
+test('appears on the public resources page', function () {
+    $this->withHeaders(automationHeaders())
+        ->postJson('/api/automation/posts', validAutomationPayload());
+
+    $this->get('/resources')->assertSuccessful()->assertSee('Rust 2.0 Released');
 });
 
 test('skips duplicate source urls', function () {
     $this->withHeaders(automationHeaders())
-        ->postJson('/api/automation/posts', validFeedPayload())
+        ->postJson('/api/automation/posts', validAutomationPayload())
         ->assertStatus(201);
 
     $this->withHeaders(automationHeaders())
-        ->postJson('/api/automation/posts', validFeedPayload([
+        ->postJson('/api/automation/posts', validAutomationPayload([
             'title' => 'A different title, same url',
         ]))
         ->assertStatus(200)
         ->assertJson(['status' => 'skipped', 'reason' => 'duplicate']);
 
-    expect(FeedItem::count())->toBe(1);
+    expect(Post::count())->toBe(1);
 });
 
 test('sanitizes html from title and summary', function () {
     $this->withHeaders(automationHeaders())
-        ->postJson('/api/automation/posts', validFeedPayload([
+        ->postJson('/api/automation/posts', validAutomationPayload([
             'title' => '<script>alert(1)</script>Clean Title',
             'summary' => '<b>Bold</b> summary text',
         ]))
         ->assertStatus(201);
 
-    $item = FeedItem::sole();
-    expect($item->title)->toBe('alert(1)Clean Title');
-    expect($item->summary)->toBe('Bold summary text');
+    $post = Post::sole();
+    expect($post->title)->toBe('alert(1)Clean Title');
+    expect($post->content)->toContain('Bold summary text');
 });

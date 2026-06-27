@@ -442,7 +442,7 @@ confirmation.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     
     confirmation.form = confirmationForm
 /**
- * @see routes/web.php:104
+ * @see routes/web.php:100
  * @route '/password-reset-request'
  */
 export const contact = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -456,7 +456,7 @@ contact.definition = {
 } satisfies RouteDefinition<["get","head"]>
 
 /**
- * @see routes/web.php:104
+ * @see routes/web.php:100
  * @route '/password-reset-request'
  */
 contact.url = (options?: RouteQueryOptions) => {
@@ -464,7 +464,7 @@ contact.url = (options?: RouteQueryOptions) => {
 }
 
 /**
- * @see routes/web.php:104
+ * @see routes/web.php:100
  * @route '/password-reset-request'
  */
 contact.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -472,7 +472,7 @@ contact.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     method: 'get',
 })
 /**
- * @see routes/web.php:104
+ * @see routes/web.php:100
  * @route '/password-reset-request'
  */
 contact.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -481,7 +481,7 @@ contact.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 })
 
     /**
- * @see routes/web.php:104
+ * @see routes/web.php:100
  * @route '/password-reset-request'
  */
     const contactForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -490,7 +490,7 @@ contact.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     })
 
             /**
- * @see routes/web.php:104
+ * @see routes/web.php:100
  * @route '/password-reset-request'
  */
         contactForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -498,7 +498,7 @@ contact.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
             method: 'get',
         })
             /**
- * @see routes/web.php:104
+ * @see routes/web.php:100
  * @route '/password-reset-request'
  */
         contactForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({

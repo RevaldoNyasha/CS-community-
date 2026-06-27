@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\Admin\AdminAnnouncementController;
 use App\Http\Controllers\Admin\AdminDashboardController;
-use App\Http\Controllers\Admin\AdminFeedController;
 use App\Http\Controllers\Admin\AdminPendingController;
 use App\Http\Controllers\Admin\AdminPostController;
 use App\Http\Controllers\Admin\AdminSettingsController;
@@ -83,9 +82,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::delete('posts/{post}', [AdminPostController::class, 'destroy'])->name('posts.destroy');
 
     Route::get('pending', [AdminPendingController::class, 'index'])->name('pending.index');
-
-    Route::get('feed', [AdminFeedController::class, 'index'])->name('feed.index');
-    Route::delete('feed/{feedItem}', [AdminFeedController::class, 'destroy'])->name('feed.destroy');
 
     Route::get('suggestions', [AdminSuggestionController::class, 'index'])->name('suggestions.index');
 
