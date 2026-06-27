@@ -1,0 +1,23 @@
+{
+  "name": "cs-community-automation",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Daily content engine for the CS Community site: collect → enrich (Gemini) → publish (Laravel).",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --env-file=.env src/index.js",
+    "dry-run": "node --env-file=.env src/index.js --dry-run",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "fast-xml-parser": "^4.5.0"
+  },
+  "devDependencies": {
+    "vitest": "^2.1.8"
+  }
+}

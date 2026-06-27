@@ -70,6 +70,10 @@ const mainNavItems: (NavItem | NavGroup)[] = [
                 href: '/admin/pending',
             },
             {
+                title: 'Content Feed',
+                href: '/admin/feed',
+            },
+            {
                 title: 'Suggestions',
                 href: '/admin/suggestions',
             },
