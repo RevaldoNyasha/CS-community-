@@ -8,7 +8,7 @@ describe('loadConfig', () => {
             { GEMINI_API_KEY: 'k', GEMINI_MODEL: '', MAX_ITEMS: '', GEMINI_DELAY_MS: '', MIN_RELEVANCE: '', DRY_RUN: '1' },
             [],
         );
-        expect(cfg.geminiModel).toBe('gemini-flash-latest');
+        expect(cfg.geminiModel).toBe('gemini-2.5-flash');
         expect(cfg.maxItems).toBe(15);
         expect(cfg.geminiDelayMs).toBe(4000);
         expect(cfg.minRelevance).toBe(1);

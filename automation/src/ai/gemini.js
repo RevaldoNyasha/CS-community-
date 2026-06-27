@@ -39,7 +39,9 @@ export async function enrich(item, config) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(body),
         },
-        { retries: 3, baseDelayMs: 1000, timeoutMs: 30000 },
+        // Patient backoff (3s,6s,12s,24s) so free-tier 429/503 (per-minute RPM
+        // limits, transient overloads) get a real chance to clear.
+        { retries: 4, baseDelayMs: 3000, timeoutMs: 30000 },
     );
 
     if (!res.ok) {

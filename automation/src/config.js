@@ -102,7 +102,7 @@ export function loadConfig(env = process.env, argv = process.argv) {
 
     const config = {
         geminiApiKey: env.GEMINI_API_KEY ?? '',
-        geminiModel: env.GEMINI_MODEL || 'gemini-flash-latest',
+        geminiModel: env.GEMINI_MODEL || 'gemini-2.5-flash',
         laravelApiUrl: (env.LARAVEL_API_URL ?? '').replace(/\/+$/, ''),
         laravelApiToken: env.LARAVEL_API_TOKEN ?? '',
         githubToken: env.GITHUB_TOKEN || null,
