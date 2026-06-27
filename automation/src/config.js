@@ -79,6 +79,17 @@ function parseList(csv) {
 }
 
 /**
+ * Parse an integer env var, falling back when it is missing, empty, or invalid.
+ * (CI passes unset `${{ vars.X }}` as an empty string — not undefined — so `??`
+ * is not enough; this guards both empty strings and NaN.)
+ * @param {string|undefined} value @param {number} fallback @returns {number}
+ */
+function intEnv(value, fallback) {
+    const n = Number.parseInt(value ?? '', 10);
+    return Number.isNaN(n) ? fallback : n;
+}
+
+/**
  * Build config from the environment and CLI flags. Throws if required secrets
  * are missing (unless running a dry run, where publishing is skipped).
  *
@@ -91,13 +102,13 @@ export function loadConfig(env = process.env, argv = process.argv) {
 
     const config = {
         geminiApiKey: env.GEMINI_API_KEY ?? '',
-        geminiModel: env.GEMINI_MODEL ?? 'gemini-flash-latest',
+        geminiModel: env.GEMINI_MODEL || 'gemini-flash-latest',
         laravelApiUrl: (env.LARAVEL_API_URL ?? '').replace(/\/+$/, ''),
         laravelApiToken: env.LARAVEL_API_TOKEN ?? '',
         githubToken: env.GITHUB_TOKEN || null,
-        maxItems: Number.parseInt(env.MAX_ITEMS ?? '15', 10),
-        geminiDelayMs: Number.parseInt(env.GEMINI_DELAY_MS ?? '4000', 10),
-        minRelevance: Number.parseInt(env.MIN_RELEVANCE ?? '1', 10),
+        maxItems: intEnv(env.MAX_ITEMS, 15),
+        geminiDelayMs: intEnv(env.GEMINI_DELAY_MS, 4000),
+        minRelevance: intEnv(env.MIN_RELEVANCE, 1),
         focusKeywords: parseList(env.FOCUS_KEYWORDS) ?? DEFAULT_FOCUS_KEYWORDS,
         redditSubreddits: parseList(env.REDDIT_SUBREDDITS) ?? DEFAULT_SUBREDDITS,
         devtoTags: parseList(env.DEVTO_TAGS) ?? DEFAULT_DEVTO_TAGS,
