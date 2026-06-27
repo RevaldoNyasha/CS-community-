@@ -7,22 +7,42 @@ posting, no paid services.
 
 ```
 GitHub Actions (cron, 09:00 SAST)
-   → collectors (Hacker News, Dev.to[tags], Reddit, GitHub Trending, arXiv)
+   → collectors:
+       • Official dev blogs (RSS): GitHub Blog + Changelog, OpenAI, Meta for Developers,
+         Google AI + Research, Hugging Face, n8n
+       • OpenRouter (new models via the models API)
+       • Reddit (r/AiAutomations + AI subs), GitHub Trending
    → de-dupe (intra-run)
-   → rank by editorial focus (AI engineering, WhatsApp Cloud APIs, web frameworks, Python, Laravel, Meta/Google…)
+   → rank by editorial focus (NEW tools / NEW models / releases / updates)
    → Gemini (summary, category, difficulty, tags — JSON schema enforced)
    → POST {LARAVEL_API_URL}/api/automation/posts   (Bearer token)
-   → Laravel validates, de-dupes (unique source_url + content_hash), stores in Neon Postgres
-   → visible in Admin ▸ Content Feed
+   → Laravel validates, de-dupes (by source URL), stores as an approved `resource`
+     post authored by the `auto-post` user → visible on /resources
 ```
 
 ## Editorial focus
 
-The community cares about **AI engineering, WhatsApp Cloud APIs, web-dev frameworks, Python,
-Laravel**, and notable news from **Meta/Google/OpenAI/etc.** Collectors pull broadly, then a
-relevance ranker (`src/services/relevance.js`) scores each item against `FOCUS_KEYWORDS`,
-publishing the most on-topic first. Tune via env: `FOCUS_KEYWORDS`, `REDDIT_SUBREDDITS`,
-`DEVTO_TAGS`, `MIN_RELEVANCE` (defaults live in `src/config.js`).
+Content is aimed at **student development updates — new tools and new models**. A relevance
+ranker (`src/services/relevance.js`) scores each item against `FOCUS_KEYWORDS` (release/launch/
+new-model signal words + orgs like OpenAI, Google, Meta, Hugging Face, n8n, OpenRouter) and
+publishes the most on-topic first.
+
+## Sources (all verified readable)
+
+| Source | How |
+|--------|-----|
+| GitHub | Blog + Changelog RSS, plus Trending repos (Search API) |
+| OpenAI | `openai.com/news/rss.xml` |
+| Meta for Developers | `developers.facebook.com/blog/feed/` |
+| Google | `blog.google/technology/ai/rss/` + `research.google/blog/rss/` |
+| Hugging Face | `huggingface.co/blog/feed.xml` |
+| n8n | `blog.n8n.io/rss/` |
+| OpenRouter | models API (`/api/v1/models`) — new models only (no RSS exists) |
+| Reddit | `r/AiAutomations` (+ AI subs) via RSS |
+
+Add a blog by appending `{ name, url, category }` to `DEFAULT_FEEDS` in `src/config.js`
+(or set the `FEEDS` env var). Tune topics via `FOCUS_KEYWORDS`, `REDDIT_SUBREDDITS`,
+`DEVTO_TAGS`, `OPENROUTER_DAYS`, `MIN_RELEVANCE`.
 
 > The pipeline never touches the database directly — Laravel owns all validation, de-dup, and
 > storage. (The DB is Neon Postgres; the app is hosted on Render. No Supabase/GCloud involved.)
