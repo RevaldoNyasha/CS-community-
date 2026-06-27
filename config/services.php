@@ -47,4 +47,8 @@ return [
         'redirect' => trim((string) env('GOOGLE_REDIRECT_URI', '/auth/google/callback')),
     ],
 
+    'automation' => [
+        'token' => env('AUTOMATION_API_TOKEN'),
+    ],
+
 ];

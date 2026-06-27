@@ -1,3 +1,4 @@
+import Api from './Api'
 import PostController from './PostController'
 import DashboardController from './DashboardController'
 import LikeController from './LikeController'
@@ -7,7 +8,8 @@ import Admin from './Admin'
 import Auth from './Auth'
 import Settings from './Settings'
 const Controllers = {
-    PostController: Object.assign(PostController, PostController),
+    Api: Object.assign(Api, Api),
+PostController: Object.assign(PostController, PostController),
 DashboardController: Object.assign(DashboardController, DashboardController),
 LikeController: Object.assign(LikeController, LikeController),
 CommentController: Object.assign(CommentController, CommentController),

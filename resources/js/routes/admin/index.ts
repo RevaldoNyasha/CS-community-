@@ -2,6 +2,7 @@ import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFo
 import users from './users'
 import posts from './posts'
 import pending from './pending'
+import feed from './feed'
 import suggestions from './suggestions'
 import announcements from './announcements'
 /**
@@ -165,6 +166,7 @@ const admin = {
 users: Object.assign(users, users),
 posts: Object.assign(posts, posts),
 pending: Object.assign(pending, pending),
+feed: Object.assign(feed, feed),
 suggestions: Object.assign(suggestions, suggestions),
 announcements: Object.assign(announcements, announcements),
 settings: Object.assign(settings, settings),
