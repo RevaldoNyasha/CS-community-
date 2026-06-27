@@ -30,7 +30,7 @@ export async function runPipeline(config, logger, deps = {}) {
         const name = collectors[i].name;
         if (r.status === 'fulfilled') {
             logger.recordSource(name, r.value.items.length);
-            for (const item of r.value.items) all.push({ ...item, _category: collectors[i].category });
+            for (const item of r.value.items) all.push({ ...item, _category: item.category ?? collectors[i].category });
         } else {
             logger.error('collector.failed', { source: name, error: String(r.reason?.message ?? r.reason) });
         }

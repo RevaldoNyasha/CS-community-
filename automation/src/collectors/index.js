@@ -1,8 +1,7 @@
-import { arxiv } from './arxiv.js';
-import { devto } from './devto.js';
 import { githubTrending } from './githubTrending.js';
-import { hackernews } from './hackernews.js';
+import { openrouter } from './openrouter.js';
 import { reddit } from './reddit.js';
+import { rss } from './rss.js';
 
 /**
  * A normalized item produced by every collector.
@@ -14,6 +13,7 @@ import { reddit } from './reddit.js';
  * @property {string|null} image
  * @property {string|null} author
  * @property {string|null} publishedAt  ISO date string, if known.
+ * @property {string}      [category]   Optional per-item category hint (Gemini still decides).
  */
 
 /**
@@ -27,6 +27,7 @@ import { reddit } from './reddit.js';
 
 /**
  * The active collectors. Add a new file + one line here to extend coverage.
+ * `rss` fans out to every feed in `config.feeds`.
  * @type {Collector[]}
  */
-export const collectors = [hackernews, devto, reddit, githubTrending, arxiv];
+export const collectors = [rss, openrouter, githubTrending, reddit];
