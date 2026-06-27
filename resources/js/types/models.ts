@@ -29,26 +29,6 @@ export type Post = {
     tags?: Tag[];
 };
 
-export type FeedItem = {
-    id: number;
-    slug: string;
-    title: string;
-    summary: string;
-    category: string;
-    difficulty: string | null;
-    tags: string[] | null;
-    source: string;
-    source_url: string;
-    image_url: string | null;
-    author: string | null;
-    reading_time_minutes: number | null;
-    source_published_at: string | null;
-    status: 'published' | 'removed';
-    published_at: string | null;
-    created_at: string;
-    updated_at: string;
-};
-
 export type Comment = {
     id: number;
     post_id: number;

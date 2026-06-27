@@ -2,7 +2,6 @@ import AdminDashboardController from './AdminDashboardController'
 import AdminUserController from './AdminUserController'
 import AdminPostController from './AdminPostController'
 import AdminPendingController from './AdminPendingController'
-import AdminFeedController from './AdminFeedController'
 import AdminSuggestionController from './AdminSuggestionController'
 import AdminAnnouncementController from './AdminAnnouncementController'
 import AdminSettingsController from './AdminSettingsController'
@@ -11,7 +10,6 @@ const Admin = {
 AdminUserController: Object.assign(AdminUserController, AdminUserController),
 AdminPostController: Object.assign(AdminPostController, AdminPostController),
 AdminPendingController: Object.assign(AdminPendingController, AdminPendingController),
-AdminFeedController: Object.assign(AdminFeedController, AdminFeedController),
 AdminSuggestionController: Object.assign(AdminSuggestionController, AdminSuggestionController),
 AdminAnnouncementController: Object.assign(AdminAnnouncementController, AdminAnnouncementController),
 AdminSettingsController: Object.assign(AdminSettingsController, AdminSettingsController),

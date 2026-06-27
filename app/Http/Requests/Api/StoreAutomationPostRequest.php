@@ -6,7 +6,7 @@ use App\Enums\FeedCategory;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class StoreFeedItemRequest extends FormRequest
+class StoreAutomationPostRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -27,7 +27,8 @@ class StoreFeedItemRequest extends FormRequest
             'tags' => ['nullable', 'array', 'max:5'],
             'tags.*' => ['string', 'max:50'],
             'source' => ['required', 'string', 'max:100'],
-            'source_url' => ['required', 'url', 'max:500'],
+            // github_url column is varchar(255); keep the source URL within that.
+            'source_url' => ['required', 'url', 'max:255'],
             'image_url' => ['nullable', 'url', 'max:500'],
             'author' => ['nullable', 'string', 'max:120'],
             'reading_time_minutes' => ['nullable', 'integer', 'min:1', 'max:120'],
