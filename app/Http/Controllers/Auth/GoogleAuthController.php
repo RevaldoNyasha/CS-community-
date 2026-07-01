@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -13,12 +14,19 @@ class GoogleAuthController extends Controller
 {
     public function redirect(): \Symfony\Component\HttpFoundation\RedirectResponse|RedirectResponse
     {
-        return Socialite::driver('google')->redirect();
+        return Socialite::driver('google')->stateless()->redirect();
     }
 
     public function callback(): RedirectResponse
     {
-        $googleUser = Socialite::driver('google')->user();
+        try {
+            $googleUser = Socialite::driver('google')->stateless()->user();
+        } catch (\Throwable $e) {
+            Log::warning('Google OAuth callback failed', ['message' => $e->getMessage()]);
+
+            return redirect()->route('login')
+                ->with('status', 'Google sign-in failed. Please try again.');
+        }
 
         $user = User::query()->firstOrCreate(
             ['email' => $googleUser->getEmail()],
