@@ -16,7 +16,10 @@ return [
     */
 
     'ssr' => [
-        'enabled' => true,
+        // Disabled by default: no SSR node process runs in production, so leaving this
+        // on only adds a failed SSR call to every request. Set INERTIA_SSR_ENABLED=true
+        // (and run `php artisan inertia:start-ssr`) if you enable real SSR later.
+        'enabled' => env('INERTIA_SSR_ENABLED', false),
         'url' => 'http://127.0.0.1:13714',
         // 'bundle' => base_path('bootstrap/ssr/ssr.mjs'),
 
