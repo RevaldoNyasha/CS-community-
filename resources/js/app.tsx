@@ -22,9 +22,19 @@ createInertiaApp({
                 <App {...props} />
             </StrictMode>,
         );
+
+        // Remove the instant loading splash once the app has committed its first frame.
+        requestAnimationFrame(() => {
+            const splash = document.getElementById('app-splash');
+            if (splash) {
+                splash.classList.add('is-hidden');
+                setTimeout(() => splash.remove(), 300);
+            }
+        });
     },
     progress: {
-        color: '#4B5563',
+        color: '#22d3ee',
+        showSpinner: true,
     },
 });
 
