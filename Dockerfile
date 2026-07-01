@@ -5,7 +5,7 @@ COPY package*.json ./
 RUN npm ci
 COPY . .
 ENV DOCKER_BUILD=true
-RUN npm run build && npx vite build --ssr
+RUN npm run build
 
 # Stage 2: PHP runtime
 FROM php:8.4-fpm-alpine
@@ -35,7 +35,6 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
         intl
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
-COPY --from=frontend /usr/local/bin/node /usr/local/bin/node
 
 WORKDIR /var/www/html
 
@@ -44,7 +43,6 @@ RUN composer install --no-dev --optimize-autoloader --no-scripts --no-interactio
 
 COPY . .
 COPY --from=frontend /app/public/build ./public/build
-COPY --from=frontend /app/bootstrap/ssr ./bootstrap/ssr
 
 RUN mkdir -p \
     storage/app/public \
