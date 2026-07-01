@@ -22,4 +22,15 @@ export default defineConfig({
     esbuild: {
         jsx: 'automatic',
     },
+    build: {
+        rollupOptions: {
+            output: {
+                // Split the large, rarely-changing vendor code into its own chunk so it
+                // is cached independently across deploys (paired with immutable headers).
+                manualChunks: {
+                    vendor: ['react', 'react-dom', '@inertiajs/react'],
+                },
+            },
+        },
+    },
 });
