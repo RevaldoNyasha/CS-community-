@@ -51,7 +51,7 @@ export default function Login({ status, canRegister }: Props) {
                                 required
                                 autoFocus
                                 autoComplete="email"
-                                placeholder="you@example.com"
+                                placeholder="nyasha@gmail.com"
                                 aria-invalid={!!errors.email}
                                 className={authInputClass}
                             />

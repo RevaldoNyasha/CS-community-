@@ -1,16 +1,10 @@
 import { Head, Link, usePage } from '@inertiajs/react';
 import {
     ArrowRight,
-    BookOpen,
     CheckCircle2,
     Compass,
-    FolderGit2,
     Menu,
-    MessageSquare,
-    SearchCheck,
     Share2,
-    ShieldCheck,
-    Trophy,
     UserPlus,
     X,
 } from 'lucide-react';
@@ -26,53 +20,6 @@ const navLinks = [
     { label: 'Resources', href: '/resources' },
     { label: 'Hackathons', href: '/hackathons' },
     { label: 'Projects', href: '/projects' },
-];
-
-const features: {
-    icon: LucideIcon;
-    title: string;
-    description: string;
-    href?: string;
-}[] = [
-    {
-        icon: BookOpen,
-        title: 'Study resources',
-        description:
-            'Past papers, notes and guides, archived by course so nothing gets lost between semesters.',
-        href: '/resources',
-    },
-    {
-        icon: Trophy,
-        title: 'Hackathons',
-        description:
-            'Upcoming events with dates and registration details, plus an archive of past winners and their projects.',
-        href: '/hackathons',
-    },
-    {
-        icon: FolderGit2,
-        title: 'Projects',
-        description:
-            'Browse what fellow students are building and share your own work with the community.',
-        href: '/projects',
-    },
-    {
-        icon: SearchCheck,
-        title: 'Resource requests',
-        description:
-            'Missing a past paper or set of notes? Post a request and let the community help you find it.',
-    },
-    {
-        icon: MessageSquare,
-        title: 'Community feed',
-        description:
-            'Focused, academic discussion in one place instead of scattered messaging groups.',
-    },
-    {
-        icon: ShieldCheck,
-        title: 'Moderated content',
-        description:
-            'Every post is reviewed by an admin before it goes live, so the feed stays relevant and professional.',
-    },
 ];
 
 const steps: {
@@ -477,72 +424,6 @@ export default function Welcome() {
                 </div>
 
                 <main className="relative z-10">
-                    {/* ── Features ── */}
-                    <section className="border-y border-border bg-card/30">
-                        <div className="mx-auto max-w-6xl px-6 py-20 lg:px-8 lg:py-24">
-                            <div className="max-w-2xl">
-                                <p className="text-sm font-semibold text-primary">
-                                    What's inside
-                                </p>
-                                <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
-                                    Everything your class group chat was missing
-                                </h2>
-                                <p className="mt-4 text-base leading-7 text-muted-foreground">
-                                    No more lost notes or forgotten hackathon
-                                    results. One place, organised and kept
-                                    clean.
-                                </p>
-                            </div>
-
-                            <div className="mt-12 grid gap-px overflow-hidden rounded-xl border border-border bg-border sm:grid-cols-2 lg:grid-cols-3">
-                                {features.map((feature, index) => {
-                                    const content = (
-                                        <>
-                                            <div className="flex items-center justify-between">
-                                                <feature.icon className="size-5 text-primary" />
-                                                <span className="text-xs font-medium text-muted-foreground">
-                                                    {String(index + 1).padStart(
-                                                        2,
-                                                        '0',
-                                                    )}
-                                                </span>
-                                            </div>
-                                            <h3 className="mt-5 font-semibold">
-                                                {feature.title}
-                                            </h3>
-                                            <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                                                {feature.description}
-                                            </p>
-                                            {feature.href && (
-                                                <span className="mt-4 inline-flex items-center gap-1 text-xs font-semibold text-primary">
-                                                    Open{' '}
-                                                    <ArrowRight className="size-3 transition-transform group-hover:translate-x-0.5" />
-                                                </span>
-                                            )}
-                                        </>
-                                    );
-
-                                    return feature.href ? (
-                                        <Link
-                                            key={feature.title}
-                                            href={feature.href}
-                                            className="group flex flex-col bg-background p-6 transition-colors hover:bg-card"
-                                        >
-                                            {content}
-                                        </Link>
-                                    ) : (
-                                        <div
-                                            key={feature.title}
-                                            className="flex flex-col bg-background p-6"
-                                        >
-                                            {content}
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                        </div>
-                    </section>
-
                     {/* ── How it works ── */}
                     <section className="mx-auto max-w-6xl px-6 py-20 lg:px-8 lg:py-24">
                         <HowItWorksDeck />

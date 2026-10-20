@@ -41,7 +41,7 @@ export default function Register() {
                                 required
                                 autoFocus
                                 autoComplete="name"
-                                placeholder="Jane Doe"
+                                placeholder="Nyasha"
                                 aria-invalid={!!errors.name}
                                 className={authInputClass}
                             />
@@ -58,7 +58,7 @@ export default function Register() {
                                 name="email"
                                 required
                                 autoComplete="email"
-                                placeholder="you@example.com"
+                                placeholder="nyasha@gmail.com"
                                 aria-invalid={!!errors.email}
                                 className={authInputClass}
                             />
