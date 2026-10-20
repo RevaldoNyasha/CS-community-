@@ -8,8 +8,8 @@ import { initializeTheme } from './hooks/use-appearance';
 const appName = 'DEV-CRAFT';
 
 createInertiaApp({
-    title: (title) =>
-        title && title !== appName ? `${title} · ${appName}` : appName,
+    // Tabs show just the page name; pages without one fall back to the brand.
+    title: (title) => title || appName,
     resolve: (name) =>
         resolvePageComponent(
             `./pages/${name}.tsx`,
