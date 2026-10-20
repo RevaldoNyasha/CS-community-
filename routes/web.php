@@ -12,6 +12,7 @@ use App\Http\Controllers\Auth\GoogleAuthController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LikeController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\SuggestionController;
 use Illuminate\Support\Facades\Route;
@@ -61,6 +62,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::post('posts/{post}/comments', [CommentController::class, 'store'])->name('comments.store');
     Route::delete('comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
+
+    // Private messaging
+    Route::get('messages', [MessageController::class, 'index'])->name('messages.index');
+    Route::get('messages/preview', [MessageController::class, 'preview'])->name('messages.preview');
+    Route::middleware('throttle:30,1')->group(function () {
+        Route::post('messages/requests', [MessageController::class, 'storeRequest'])->name('messages.requests.store');
+        Route::post('conversations/{conversation}/messages', [MessageController::class, 'send'])->name('conversations.messages.store');
+        Route::post('conversations/{conversation}/accept', [MessageController::class, 'accept'])->name('conversations.accept');
+        Route::post('conversations/{conversation}/decline', [MessageController::class, 'decline'])->name('conversations.decline');
+    });
 
     Route::get('suggestions', [SuggestionController::class, 'index'])->name('suggestions.index');
     Route::post('suggestions', [SuggestionController::class, 'store'])->name('suggestions.store');

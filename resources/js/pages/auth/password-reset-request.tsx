@@ -1,6 +1,7 @@
-import { useState } from 'react';
-import { Head, Link } from '@inertiajs/react';
 import emailjs from '@emailjs/browser';
+import { Head, Link } from '@inertiajs/react';
+import { useState } from 'react';
+import { authInputClass, authSubmitClass } from '@/components/auth-form-parts';
 import { Spinner } from '@/components/ui/spinner';
 import AuthLayout from '@/layouts/auth-layout';
 import { login } from '@/routes';
@@ -8,8 +9,6 @@ import { login } from '@/routes';
 const EMAILJS_SERVICE_ID = 'service_7n2dl0m';
 const EMAILJS_TEMPLATE_ID = 'template_jpp2odd';
 const EMAILJS_PUBLIC_KEY = '74UTwMFilKvu2q1wj';
-
-const underlineInput = "w-full bg-transparent border-0 border-b-2 border-input dark:border-cyan-800/80 rounded-none px-0 py-2.5 text-[15px] font-medium text-foreground dark:text-gray-200 placeholder:text-muted-foreground dark:placeholder:text-gray-500 placeholder:text-[13px] placeholder:font-normal focus:outline-none focus:border-primary dark:focus:border-cyan-400 focus:ring-0 transition-colors";
 
 export default function PasswordResetRequest() {
     const [email, setEmail] = useState('');
@@ -73,7 +72,9 @@ export default function PasswordResetRequest() {
             if (result.status === 200) {
                 setSent(true);
             } else {
-                setError(`Unexpected response (${result.status}). Please try again.`);
+                setError(
+                    `Unexpected response (${result.status}). Please try again.`,
+                );
             }
         } catch (err: unknown) {
             const msg = err instanceof Error ? err.message : String(err);
@@ -91,42 +92,46 @@ export default function PasswordResetRequest() {
             <Head title="Reset Password" />
 
             {!sent ? (
-                <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-                    <div className="grid gap-1 relative">
+                <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+                    <div className="relative grid gap-1">
                         <input
                             type="email"
                             required
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             placeholder="Use the same email you are trying to login with"
-                            className={underlineInput}
+                            className={authInputClass}
                         />
                     </div>
 
-                    <div className="grid gap-1 relative">
+                    <div className="relative grid gap-1">
                         <input
                             type="tel"
                             value={whatsapp}
-                            onChange={(e) => handleWhatsappChange(e.target.value)}
+                            onChange={(e) =>
+                                handleWhatsappChange(e.target.value)
+                            }
                             placeholder="WhatsApp / phone number *"
-                            className={`${underlineInput} ${whatsappError ? 'border-b-red-500' : ''}`}
+                            className={`${authInputClass} ${whatsappError ? 'border-red-500' : ''}`}
                         />
                         {submitAttempted && whatsappError && (
-                            <p className="text-[11px] text-red-500 pt-0.5">{whatsappError}</p>
+                            <p className="pt-0.5 text-[11px] text-red-500">
+                                {whatsappError}
+                            </p>
                         )}
                     </div>
 
-                    <div className="grid gap-1 relative">
+                    <div className="relative grid gap-1">
                         <textarea
                             readOnly
                             value={message}
                             rows={6}
-                            className={`${underlineInput} !text-[12px] !font-normal  !text-muted-foreground dark:!text-gray-400 resize-none overflow-hidden cursor-default select-none`}
+                            className={`${authInputClass} cursor-default resize-none overflow-hidden text-xs! text-muted-foreground! select-none`}
                         />
                     </div>
 
                     {error && (
-                        <p className="text-xs text-destructive/80 bg-destructive/10 border border-destructive/20 rounded-(--radius) px-2 py-1.5 wrap-break-word">
+                        <p className="rounded-(--radius) border border-destructive/20 bg-destructive/10 px-2 py-1.5 text-xs wrap-break-word text-destructive/80">
                             {error}
                         </p>
                     )}
@@ -135,7 +140,7 @@ export default function PasswordResetRequest() {
                         <button
                             type="submit"
                             disabled={sending}
-                            className="w-full py-2.5 bg-primary text-primary-foreground hover:bg-primary/90 dark:bg-[#00f0ff] dark:hover:bg-[#00f0ff]/90 dark:text-black text-[15px] font-bold tracking-wide shadow-md dark:shadow-none dark:hover:shadow-[0_0_15px_rgba(0,240,255,0.4)] disabled:opacity-50 transition-all flex items-center justify-center rounded-lg"
+                            className={authSubmitClass}
                         >
                             {sending ? (
                                 <>
@@ -149,7 +154,7 @@ export default function PasswordResetRequest() {
 
                         <Link
                             href={login()}
-                            className="w-full py-2.5 border border-border bg-secondary text-secondary-foreground hover:bg-secondary/80 dark:border-gray-600 dark:bg-[#141b26] text-[15px] font-medium tracking-wide dark:text-gray-300 dark:hover:text-white dark:hover:border-gray-400 dark:hover:bg-[#1f2937] transition-all flex items-center justify-center rounded-lg"
+                            className="flex w-full items-center justify-center rounded-lg border border-border bg-card/50 px-4 py-2.5 text-sm font-medium transition-colors hover:border-primary/40 hover:bg-card"
                         >
                             Back to login
                         </Link>
@@ -157,12 +162,13 @@ export default function PasswordResetRequest() {
                 </form>
             ) : (
                 <div className="flex flex-col gap-4">
-                    <p className="text-xs text-green-400/90 bg-green-400/10 border border-green-400/20 rounded-(--radius) px-3 py-2.5">
-                        Email sent — admin will reset your password shortly and notify you on {whatsapp}.
+                    <p className="rounded-(--radius) border border-green-400/20 bg-green-400/10 px-3 py-2.5 text-xs text-green-400/90">
+                        Email sent — admin will reset your password shortly and
+                        notify you on {whatsapp}.
                     </p>
                     <Link
                         href={login()}
-                        className="w-full py-2.5 border border-border bg-secondary text-secondary-foreground hover:bg-secondary/80 dark:border-gray-600 dark:bg-[#141b26] text-[15px] font-medium tracking-wide dark:text-gray-300 dark:hover:text-white dark:hover:border-gray-400 dark:hover:bg-[#1f2937] transition-all flex items-center justify-center rounded-lg"
+                        className="flex w-full items-center justify-center rounded-lg border border-border bg-card/50 px-4 py-2.5 text-sm font-medium transition-colors hover:border-primary/40 hover:bg-card"
                     >
                         Back to login
                     </Link>

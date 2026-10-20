@@ -1,260 +1,101 @@
-import { Head, Link, router, usePage } from '@inertiajs/react';
-import { ExternalLink, FolderGit2, MessageSquare, Plus } from 'lucide-react';
-import { useState } from 'react';
-import AuthPromptModal from '@/components/auth-prompt-modal';
+import { Head, router, usePage } from '@inertiajs/react';
+import { ExternalLink, FolderGit2 } from 'lucide-react';
+import { useRef, useState } from 'react';
+import {
+    ListingEmpty,
+    ListingFooter,
+    ListingHeader,
+    ListingPagination,
+    tileGridClass,
+} from '@/components/listing';
+import { PostTile } from '@/components/post-tile';
 import AppLayout from '@/layouts/app-layout';
-import type { BreadcrumbItem, PaginatedData, Post, SharedData } from '@/types';
-
-const breadcrumbs: BreadcrumbItem[] = [
-    { title: 'Dashboard', href: '/dashboard' },
-    { title: 'Projects', href: '/projects' },
-];
+import type { PaginatedData, Post, SharedData } from '@/types';
 
 type Filters = { search: string; date_from: string; date_to: string };
 type Props = { posts: PaginatedData<Post>; filters: Filters };
 
-const AVATAR_COLORS = [
-    { bg: '#7c3aed', text: '#ffffff' },
-    { bg: '#00b4d8', text: '#ffffff' },
-    { bg: '#39ff14', text: '#0a0a0a' },
-    { bg: '#f59e0b', text: '#0a0a0a' },
-    { bg: '#ef4444', text: '#ffffff' },
-    { bg: '#10b981', text: '#ffffff' },
-    { bg: '#3b82f6', text: '#ffffff' },
-    { bg: '#ec4899', text: '#ffffff' },
-];
-
-function avatarColor(name: string) {
-    let hash = 0;
-    for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
-    return AVATAR_COLORS[Math.abs(hash) % AVATAR_COLORS.length];
-}
-
-function initials(name: string): string {
-    const parts = name.trim().split(/\s+/);
-    if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
-    return name.slice(0, 2).toUpperCase();
-}
-
-function ProjectCard({ post }: { post: Post }) {
-    const hasImage = post.attachment_is_image && post.attachment_url;
-    const dateLabel = new Date(post.created_at).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' });
-    const authorName = post.user?.name ?? 'Shared';
-    const avatarStyle = avatarColor(authorName);
-
-    return (
-        <div className="relative bg-card border border-border rounded-xl overflow-hidden flex flex-col hover:ring-2 hover:ring-foreground/20 transition-all duration-200">
-            {/* Image preview */}
-            {hasImage && (
-                <div className="h-36 overflow-hidden border-b border-border">
-                    <img src={post.attachment_url!} alt={post.title} className="w-full h-full object-cover" />
-                </div>
-            )}
-
-            <Link href={`/posts/${post.slug}`} className="p-5 md:p-8 flex-1 block">
-                {/* Card top row */}
-                <div className="flex justify-between items-center mb-6">
-                    <div className="flex items-center gap-3">
-                        <div
-                            className="w-10 h-10 rounded-full flex items-center justify-center font-mono font-bold text-sm shrink-0"
-                            style={{ backgroundColor: avatarStyle.bg, color: avatarStyle.text }}
-                        >
-                            {initials(authorName)}
-                        </div>
-                        <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider leading-none">
-                            {authorName}
-                        </span>
-                    </div>
-                    <div className="text-[10px] font-black uppercase tracking-tighter text-muted-foreground shrink-0 leading-none">
-                        {dateLabel}
-                    </div>
-                </div>
-
-                {/* Title */}
-                <h3 className="text-xl font-bold text-foreground mb-4 leading-tight line-clamp-2">
-                    {post.title}
-                </h3>
-
-                {/* Body */}
-                <p className="text-muted-foreground text-sm leading-relaxed line-clamp-3 font-light mb-6">
-                    {post.content}
-                </p>
-
-                {/* Tags */}
-                {post.tags && post.tags.length > 0 && (
-                    <div className="flex flex-wrap gap-2">
-                        {post.tags.map((tag) => (
-                            <span
-                                key={tag.id}
-                                className="px-2 py-1 text-[10px] bg-muted border border-border text-muted-foreground rounded"
-                            >
-                                {tag.name}
-                            </span>
-                        ))}
-                    </div>
-                )}
-            </Link>
-
-            {/* Card footer */}
-            <div className="px-5 md:px-8 py-4 md:py-5 border-t border-border flex items-center justify-between text-[11px] font-bold text-muted-foreground uppercase tracking-widest">
-                <Link href={`/posts/${post.slug}`} className="flex items-center gap-2 hover:text-foreground transition-colors">
-                    View Details
-                </Link>
-                <div className="flex items-center gap-4">
-                    {post.comments_count !== undefined && (
-                        <span className="flex items-center gap-1">
-                            <MessageSquare className="size-3" />
-                            {post.comments_count}
-                        </span>
-                    )}
-                    {post.github_url && (
-                        <a
-                            href={post.github_url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            onClick={(e) => e.stopPropagation()}
-                            className="flex items-center gap-1 text-violet-400 hover:text-violet-300 transition-colors"
-                        >
-                            <ExternalLink className="size-3.5" />
-                            Link
-                        </a>
-                    )}
-                </div>
-            </div>
-        </div>
-    );
-}
-
 export default function ProjectsIndex({ posts, filters }: Props) {
     const { auth } = usePage<SharedData>().props;
     const [search, setSearch] = useState(filters.search ?? '');
-    const [dateFrom, setDateFrom] = useState(filters.date_from ?? '');
-    const [dateTo, setDateTo] = useState(filters.date_to ?? '');
-    const [authModalOpen, setAuthModalOpen] = useState(false);
+    const [now] = useState(() => Date.now());
+    const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-    function applyFilters() {
-        router.get('/projects', {
-            search: search || undefined,
-            date_from: dateFrom || undefined,
-            date_to: dateTo || undefined,
-        }, { preserveState: true, preserveScroll: true });
-    }
-
-    function clearFilters() {
-        setSearch(''); setDateFrom(''); setDateTo('');
-        router.get('/projects', {}, { preserveState: true, preserveScroll: true });
-    }
+    const handleSearch = (value: string) => {
+        setSearch(value);
+        if (debounceRef.current) clearTimeout(debounceRef.current);
+        debounceRef.current = setTimeout(
+            () =>
+                router.get(
+                    '/projects',
+                    { search: value.trim() || undefined },
+                    {
+                        preserveState: true,
+                        preserveScroll: true,
+                        replace: true,
+                    },
+                ),
+            350,
+        );
+    };
 
     return (
-        <AppLayout breadcrumbs={breadcrumbs}>
+        <AppLayout>
             <Head title="Projects" />
 
-            <div className="flex-1 overflow-y-auto [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-border [&::-webkit-scrollbar-track]:bg-transparent">
-                <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 py-8 md:py-12">
+            <div className="mx-auto max-w-7xl">
+                <ListingHeader
+                    title="Projects"
+                    search={search}
+                    onSearchChange={handleSearch}
+                    searchPlaceholder="Search projects"
+                    addLabel="Add project"
+                    guestMessage="Please login to share a project."
+                />
 
-                    {/* ── Compact Header ── */}
-                    <div className="flex items-center justify-between mb-3">
-                        <h1 className="text-xl font-bold text-foreground">Projects</h1>
-                        {auth.user ? (
-                            <Link href="/posts/create" className="bg-primary text-primary-foreground size-8 flex items-center justify-center rounded-md shrink-0 hover:opacity-90 transition-opacity">
-                                <Plus className="size-4" />
-                            </Link>
-                        ) : (
-                            <button type="button" onClick={() => setAuthModalOpen(true)} className="bg-primary text-primary-foreground size-8 flex items-center justify-center rounded-md shrink-0 hover:opacity-90 transition-opacity">
-                                <Plus className="size-4" />
-                            </button>
-                        )}
-                    </div>
-
-                    {/* ── Compact Search + Filters ── */}
-                    <div className="flex flex-wrap gap-2 mb-8">
-                        <div className="relative flex-1 min-w-45">
-                            <span className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
-                                <span className="material-symbols-outlined text-[18px] text-muted-foreground/50">search</span>
-                            </span>
-                            <input
-                                type="text"
-                                value={search}
-                                onChange={(e) => setSearch(e.target.value)}
-                                onKeyDown={(e) => e.key === 'Enter' && applyFilters()}
-                                placeholder="Search projects..."
-                                className="w-full pl-9 pr-3 py-2 bg-card border border-border rounded-lg text-sm text-foreground placeholder:text-muted-foreground/50 outline-none focus:ring-1 focus:ring-ring"
+                {posts.data.length === 0 ? (
+                    <ListingEmpty
+                        icon={FolderGit2}
+                        title={
+                            search.trim()
+                                ? 'No matching projects'
+                                : 'No projects yet'
+                        }
+                        message={
+                            search.trim()
+                                ? 'Try a different search.'
+                                : 'Be the first to share something you built.'
+                        }
+                    />
+                ) : (
+                    <div className={tileGridClass}>
+                        {posts.data.map((post) => (
+                            <PostTile
+                                key={post.id}
+                                post={post}
+                                viewerId={auth.user?.id}
+                                now={now}
+                                footer={
+                                    post.github_url && (
+                                        <a
+                                            href={post.github_url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="mt-1 inline-flex items-center gap-1 text-[13px] font-medium text-primary hover:underline"
+                                        >
+                                            <ExternalLink className="size-3.5" />
+                                            View code
+                                        </a>
+                                    )
+                                }
                             />
-                        </div>
-                        {search && (
-                            <button type="button" onClick={clearFilters} className="px-4 py-2 bg-card border border-border rounded-lg text-sm text-muted-foreground">Clear</button>
-                        )}
+                        ))}
                     </div>
+                )}
 
-                    {/* ── Projects Grid ── */}
-                    <div className="mb-20">
-                        <div className="flex items-center justify-between mb-10">
-                            <div className="flex items-center gap-4">
-                                <span className="px-3 py-1 bg-violet-500/10 text-violet-400 text-xs font-bold tracking-[0.2em] rounded-full border border-violet-500/20">
-                                    PROJECTS
-                                </span>
-                                <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-widest">
-                                    Community Builds ({posts.total ?? posts.data.length})
-                                </h2>
-                            </div>
-                            <div className="h-px grow mx-8 bg-border" />
-                        </div>
-
-                        {posts.data.length === 0 ? (
-                            <div className="flex flex-col items-center justify-center py-24 rounded-3xl border border-dashed border-border/60 bg-background">
-                                <div className="w-16 h-16 rounded-full bg-muted/50 flex items-center justify-center mb-4">
-                                    <FolderGit2 className="size-7 text-muted-foreground/40" />
-                                </div>
-                                <p className="text-muted-foreground font-light tracking-wide">No projects yet. Be the first to share one.</p>
-                            </div>
-                        ) : (
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                                {posts.data.map((post) => (
-                                    <ProjectCard key={post.id} post={post} />
-                                ))}
-                            </div>
-                        )}
-                    </div>
-
-                    {/* ── Pagination ── */}
-                    {posts.last_page > 1 && (
-                        <div className="flex justify-center gap-2 mt-12">
-                            {posts.links.map((link, i) => (
-                                <Link
-                                    key={i}
-                                    href={link.url ?? '#'}
-                                    className={`px-4 py-2 rounded-lg text-xs font-bold border transition-all
-                                        ${link.active
-                                            ? 'bg-primary text-primary-foreground border-primary'
-                                            : 'bg-card border-border text-muted-foreground hover:text-foreground hover:border-primary/20'}
-                                        ${!link.url ? 'pointer-events-none opacity-30' : ''}`}
-                                    dangerouslySetInnerHTML={{ __html: link.label }}
-                                />
-                            ))}
-                        </div>
-                    )}
-
-                    {/* ── Footer ── */}
-                    <footer className="mt-16 border-t border-border/40 pt-12">
-                        <div className="flex flex-col md:flex-row justify-between items-center gap-8">
-                            <p className="text-muted-foreground/40 text-xs font-medium uppercase tracking-[0.3em]">
-                                © {new Date().getFullYear()} DEV-CRAFT Community
-                            </p>
-                            <div className="flex gap-8">
-                                {[ 'Developed by Cyber Squad (NUST)'].map((item) => (
-                                    <a key={item} href="#" className="text-muted-foreground hover:text-foreground transition-colors text-xs font-bold uppercase tracking-widest">{item}</a>
-                                ))}
-                            </div>
-                        </div>
-                    </footer>
-                </div>
+                <ListingPagination data={posts} />
+                <ListingFooter />
             </div>
-
-            <AuthPromptModal
-                open={authModalOpen}
-                message="Please login to share a project."
-                onCancel={() => setAuthModalOpen(false)}
-            />
         </AppLayout>
     );
 }

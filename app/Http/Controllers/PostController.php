@@ -7,6 +7,7 @@ use App\Enums\PostType;
 use App\Http\Requests\Post\StorePostRequest;
 use App\Models\Post;
 use App\Models\Tag;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -43,7 +44,7 @@ class PostController extends Controller
             ->with(['user:id,name', 'tags'])
             ->withCount(['comments', 'likes']);
 
-        /** @var \App\Models\User|null $user */
+        /** @var User|null $user */
         $user = $request->user();
 
         $pageMap = [
@@ -92,8 +93,8 @@ class PostController extends Controller
             ]);
         }
 
-        // Default paginated view for resources
-        $posts = $baseQuery->latest()->paginate(15)->withQueryString();
+        // Default paginated view for resources and projects (16 = four full rows of tiles)
+        $posts = $baseQuery->latest()->paginate(16)->withQueryString();
         $posts->getCollection()->each(function (Post $post) use ($user): void {
             $post->setAttribute('is_liked', $post->isLikedBy($user));
         });
@@ -156,7 +157,7 @@ class PostController extends Controller
 
         $post->load(['user:id,name', 'comments.user:id,name', 'tags'])
             ->loadCount(['likes']);
-        /** @var \App\Models\User|null $user */
+        /** @var User|null $user */
         $user = auth()->user();
         $post->setAttribute('is_liked', $user ? $post->isLikedBy($user) : false);
 

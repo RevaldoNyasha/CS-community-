@@ -15,12 +15,16 @@ class DashboardController extends Controller
     public function __invoke(Request $request): Response
     {
         $user = $request->user();
-        $search = trim((string)$request->input('search', ''));
+        $search = trim((string) $request->input('search', ''));
+        $type = PostType::tryFrom((string) $request->input('type', ''));
+        $tagId = $request->integer('tag') ?: null;
 
         $recentPosts = Post::query()
             ->approved()
+            ->when($type, fn ($q) => $q->ofType($type))
+            ->when($tagId, fn ($q) => $q->whereHas('tags', fn ($q) => $q->whereKey($tagId)))
             ->when($search, function ($q) use ($search): void {
-            $q->where(function ($q) use ($search): void {
+                $q->where(function ($q) use ($search): void {
                     $q->where('title', 'like', "%{$search}%")
                         ->orWhere('content', 'like', "%{$search}%");
                 }
@@ -32,8 +36,8 @@ class DashboardController extends Controller
             ->limit(20)
             ->get()
             ->each(function (Post $post) use ($user): void {
-            $post->setAttribute('is_liked', $post->isLikedBy($user));
-        });
+                $post->setAttribute('is_liked', $post->isLikedBy($user));
+            });
 
         $announcements = Post::query()
             ->approved()
@@ -68,6 +72,10 @@ class DashboardController extends Controller
             'popularTags' => $popularTags,
             'recentHackathons' => $recentHackathons,
             'search' => $search,
+            'filters' => [
+                'type' => $type?->value,
+                'tag' => $tagId,
+            ],
         ]);
     }
 }

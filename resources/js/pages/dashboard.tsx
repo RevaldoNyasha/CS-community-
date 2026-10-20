@@ -1,14 +1,37 @@
-import { Head, Link, router } from '@inertiajs/react';
-import { Clock, Plus, X } from 'lucide-react';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import PostCard from '@/components/post-card';
+import { Head, Link, router, usePage } from '@inertiajs/react';
+import {
+    BookOpen,
+    Clock,
+    FolderGit2,
+    Inbox,
+    Megaphone,
+    Plus,
+    Search,
+    Trophy,
+    X,
+} from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
+import { useRef, useState } from 'react';
+import { tileGridClass } from '@/components/listing';
+import { PostTile } from '@/components/post-tile';
+import { SidebarRow } from '@/components/sidebar-row';
 import AppLayout from '@/layouts/app-layout';
+import { cn } from '@/lib/utils';
 import { dashboard } from '@/routes';
-import type { BreadcrumbItem, Post, Tag } from '@/types';
+import type { Post, SharedData, Tag } from '@/types';
 
-const breadcrumbs: BreadcrumbItem[] = [
-    { title: 'Dashboard', href: dashboard().url },
+const categories: { value: Post['type']; label: string; icon: LucideIcon }[] = [
+    { value: 'resource', label: 'Resources', icon: BookOpen },
+    { value: 'hackathon', label: 'Hackathons', icon: Trophy },
+    { value: 'project', label: 'Projects', icon: FolderGit2 },
+    { value: 'announcement', label: 'Announcements', icon: Megaphone },
 ];
+
+type Filters = {
+    search: string;
+    type: Post['type'] | null;
+    tag: number | null;
+};
 
 type Props = {
     recentPosts: Post[];
@@ -17,197 +40,250 @@ type Props = {
     popularTags: Tag[];
     recentHackathons: Post[];
     search?: string;
+    filters?: { type: Post['type'] | null; tag: number | null };
 };
 
-export default function Dashboard({ recentPosts, pendingCount, popularTags, recentHackathons, search: initialSearch = '' }: Props) {
+export default function Dashboard({
+    recentPosts,
+    pendingCount,
+    popularTags,
+    search: initialSearch = '',
+    filters: initialFilters = { type: null, tag: null },
+}: Props) {
+    const { auth } = usePage<SharedData>().props;
+
     const [showPending, setShowPending] = useState(pendingCount > 0);
-    const [searchValue, setSearchValue] = useState(initialSearch);
+    // Reference time for the "Just listed" badge, read once so renders stay pure
+    const [now] = useState(() => Date.now());
+    const [filters, setFilters] = useState<Filters>({
+        search: initialSearch,
+        ...initialFilters,
+    });
     const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-    // Keep local state in sync if Inertia navigates back with a different search prop
-    useEffect(() => {
-        setSearchValue(initialSearch);
-    }, [initialSearch]);
+    // Keep local state in sync if Inertia navigates back with different filter props
+    const serverKey = `${initialSearch}|${initialFilters.type}|${initialFilters.tag}`;
+    const [syncedKey, setSyncedKey] = useState(serverKey);
+    if (serverKey !== syncedKey) {
+        setSyncedKey(serverKey);
+        setFilters({ search: initialSearch, ...initialFilters });
+    }
 
-    const handleSearch = useCallback((value: string) => {
-        setSearchValue(value);
+    const visit = (next: Filters) => {
+        const query: Record<string, string | number> = {};
+        if (next.search.trim()) query.search = next.search.trim();
+        if (next.type) query.type = next.type;
+        if (next.tag) query.tag = next.tag;
+
+        router.get(
+            dashboard.url({ query }),
+            {},
+            {
+                preserveState: true,
+                preserveScroll: true,
+                replace: true,
+                only: ['recentPosts', 'search', 'filters'],
+            },
+        );
+    };
+
+    const updateFilters = (patch: Partial<Filters>, debounce = false) => {
+        const next = { ...filters, ...patch };
+        setFilters(next);
         if (debounceRef.current) clearTimeout(debounceRef.current);
-        debounceRef.current = setTimeout(() => {
-            router.get(
-                dashboard.url(value.trim() ? { query: { search: value.trim() } } : undefined),
-                {},
-                { preserveState: true, preserveScroll: true, replace: true, only: ['recentPosts', 'search'] },
-            );
-        }, 300);
-    }, []);
+        if (debounce) {
+            debounceRef.current = setTimeout(() => visit(next), 300);
+        } else {
+            visit(next);
+        }
+    };
+
+    const searchTerm = filters.search.trim();
+    const isFiltered = !!(searchTerm || filters.type || filters.tag);
+    const activeCategory = categories.find((c) => c.value === filters.type);
+
+    const sidebar = (
+        <div>
+            <h1 className="px-2 pt-1 pb-3 text-2xl font-bold">Dashboard</h1>
+
+            {/* Search */}
+            <div className="relative mx-2 mb-3">
+                <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
+                <input
+                    type="text"
+                    value={filters.search}
+                    onChange={(e) =>
+                        updateFilters({ search: e.target.value }, true)
+                    }
+                    placeholder="Search posts"
+                    className="w-full rounded-full border-0 bg-secondary py-2.5 pr-9 pl-10 text-[15px] text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-primary/40 focus:outline-none"
+                />
+                {filters.search && (
+                    <button
+                        type="button"
+                        onClick={() => updateFilters({ search: '' })}
+                        aria-label="Clear search"
+                        className="absolute top-1/2 right-3 -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground"
+                    >
+                        <X className="size-3.5" />
+                    </button>
+                )}
+            </div>
+
+            {pendingCount > 0 && (
+                <SidebarRow
+                    icon={Clock}
+                    label="Pending review"
+                    onClick={() => setShowPending(true)}
+                    trailing={
+                        <span className="text-sm text-muted-foreground">
+                            {pendingCount}
+                        </span>
+                    }
+                />
+            )}
+
+            <Link
+                href="/posts/create"
+                className="mx-2 mt-3 flex items-center justify-center gap-2 rounded-lg bg-primary/15 py-2 text-[15px] font-semibold text-primary transition-colors hover:bg-primary/25"
+            >
+                <Plus className="size-4" />
+                Create new post
+            </Link>
+
+            {popularTags.length > 0 && (
+                <>
+                    <hr className="mx-2 my-4 border-border" />
+                    <div className="flex items-center justify-between px-2 pb-3">
+                        <h2 className="text-[17px] font-semibold">
+                            Popular tags
+                        </h2>
+                        {filters.tag && (
+                            <button
+                                type="button"
+                                onClick={() => updateFilters({ tag: null })}
+                                className="text-sm font-medium text-primary hover:text-primary/80"
+                            >
+                                Clear
+                            </button>
+                        )}
+                    </div>
+                    <div className="flex flex-wrap gap-2 px-2 pb-4">
+                        {popularTags.map((tag) => {
+                            const selected = filters.tag === tag.id;
+
+                            return (
+                                <button
+                                    key={tag.id}
+                                    type="button"
+                                    aria-pressed={selected}
+                                    onClick={() =>
+                                        updateFilters({
+                                            tag: selected ? null : tag.id,
+                                        })
+                                    }
+                                    className={cn(
+                                        'rounded-full px-3 py-1.5 text-sm font-medium transition-colors',
+                                        selected
+                                            ? 'bg-primary text-primary-foreground'
+                                            : 'bg-secondary text-foreground hover:bg-secondary/70',
+                                    )}
+                                >
+                                    #{tag.name}
+                                </button>
+                            );
+                        })}
+                    </div>
+                </>
+            )}
+        </div>
+    );
+
+    const heading = searchTerm
+        ? `Results for "${searchTerm}"`
+        : activeCategory
+          ? activeCategory.label
+          : "Today's picks";
 
     return (
-        <AppLayout breadcrumbs={breadcrumbs}>
+        <AppLayout sidebar={sidebar}>
             <Head title="Dashboard" />
 
-            <div className="flex h-full flex-1 flex-col overflow-x-hidden bg-background">
-
-                {/* ── Top Header ── */}
-                <header className="h-14 flex items-center justify-between px-6 lg:px-8 border-b border-border bg-background/80 backdrop-blur-xl sticky top-0 z-40">
-                    <div className="flex items-center gap-4 flex-1 max-w-xl">
-                        <div className="relative w-full">
-                            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-[20px]">search</span>
-                            <input
-                                type="text"
-                                value={searchValue}
-                                onChange={(e) => handleSearch(e.target.value)}
-                                placeholder="Search posts, topics, tags..."
-                                className="w-full bg-card border border-border rounded-md pl-10 pr-9 py-2 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-primary/60 focus:ring-0 transition-colors"
-                            />
-                            {searchValue && (
-                                <button
-                                    type="button"
-                                    onClick={() => handleSearch('')}
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-                                >
-                                    <X className="size-3.5" />
-                                </button>
-                            )}
+            <div className="mx-auto max-w-7xl">
+                {showPending && pendingCount > 0 && (
+                    <div className="mb-5 flex items-start gap-3 rounded-lg border border-primary/30 bg-primary/10 p-4">
+                        <Clock className="mt-0.5 size-4 shrink-0 text-primary" />
+                        <div className="flex-1">
+                            <p className="text-sm font-semibold">
+                                Post pending review
+                            </p>
+                            <p className="mt-1 text-sm text-muted-foreground">
+                                Your post{pendingCount > 1 ? 's are' : ' is'}{' '}
+                                under moderation. Hang tight!
+                            </p>
                         </div>
-                    </div>
-                    <div className="flex items-center ml-2">
-                        <Link
-                            href="/posts/create"
-                            className="flex items-center gap-2 border border-border bg-secondary/40 text-muted-foreground hover:text-foreground hover:bg-secondary/70 px-4 py-2 rounded-md text-xs font-semibold uppercase tracking-wider transition-all active:scale-95"
+                        <button
+                            type="button"
+                            onClick={() => setShowPending(false)}
+                            aria-label="Dismiss"
+                            className="text-muted-foreground transition-colors hover:text-foreground"
                         >
-                            <Plus className="size-3.5" />
-                            New Post
-                        </Link>
+                            <X className="size-4" />
+                        </button>
                     </div>
-                </header>
+                )}
 
-                {/* ── Body ── */}
-                <div className="flex-1 overflow-y-auto p-6 lg:p-8 [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-border [&::-webkit-scrollbar-track]:bg-transparent">
-                    <div className="max-w-7xl">
-                        {/* Feed header */}
-                        <h2 className="text-xs font-bold uppercase tracking-[0.3em] text-muted-foreground mb-4">
-                            {searchValue.trim() ? `Results for "${searchValue.trim()}"` : 'Community Feed'}
-                        </h2>
+                <h2 className="mb-4 text-xl font-semibold">{heading}</h2>
 
-                    <div className="flex gap-10 items-start">
-
-                        {/* ── Feed ── */}
-                        <div className="flex-1 min-w-0 space-y-6">
-                            {/* Pending banner */}
-                            {showPending && pendingCount > 0 && (
-                                <div className="flex items-start gap-3 p-4 bg-card border border-border rounded-lg">
-                                    <Clock className="size-4 shrink-0 text-primary mt-0.5" />
-                                    <div className="flex-1">
-                                        <p className="text-sm font-semibold text-foreground">Post Pending Review</p>
-                                        <p className="text-xs text-muted-foreground mt-1">
-                                            Your post{pendingCount > 1 ? 's are' : ' is'} under moderation. Hang tight!
-                                        </p>
-                                    </div>
-                                    <button type="button" onClick={() => setShowPending(false)} className="text-muted-foreground hover:text-destructive transition-colors">
-                                        <X className="size-4" />
-                                    </button>
-                                </div>
-                            )}
-
-                            {/* Posts */}
-                            {recentPosts.length === 0 ? (
-                                <div className="bg-card border border-border rounded-lg p-12 text-center space-y-2">
-                                    <span className="material-symbols-outlined text-muted-foreground/40 text-4xl">search_off</span>
-                                    <p className="text-sm text-muted-foreground">
-                                        {searchValue.trim()
-                                            ? `No posts matching "${searchValue.trim()}"`
-                                            : 'No posts yet. Be the first to share one.'}
-                                    </p>
-                                    {searchValue.trim() && (
-                                        <button
-                                            type="button"
-                                            onClick={() => handleSearch('')}
-                                            className="text-xs text-primary hover:text-primary/80 font-bold uppercase tracking-wider transition-colors"
-                                        >
-                                            Clear search
-                                        </button>
-                                    )}
-                                </div>
-                            ) : (
-                                recentPosts.map((post) => (
-                                    <PostCard key={post.id} post={post} />
-                                ))
-                            )}
-                        </div>
-
-                        {/* ── Right Sidebar ── */}
-                        <div className="w-80 space-y-5 flex-shrink-0 hidden lg:block">
-
-                            {/* ── Hackathons ── */}
-                            <section className="bg-card border border-border rounded-lg p-5">
-                                <h3 className="text-[10px] font-bold text-green-400 uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
-                                    <span className="w-1 h-1 bg-green-400 rounded-full inline-block" />
-                                    Upcoming Hackathons
-                                </h3>
-                                <div className="space-y-4">
-                                    {recentHackathons.length === 0 ? (
-                                        <p className="text-xs text-muted-foreground text-center py-2">No hackathons posted yet.</p>
-                                    ) : (
-                                        recentHackathons.map((hack) => {
-                                            const date = hack.event_date ? new Date(hack.event_date) : new Date(hack.created_at);
-                                            const month = date.toLocaleString('default', { month: 'short' });
-                                            const day = date.getDate();
-                                            return (
-                                                <Link key={hack.id} href={`/posts/${hack.slug}`} className="flex gap-4 group cursor-pointer">
-                                                    <div className="w-12 h-12 flex-shrink-0 rounded bg-background flex flex-col items-center justify-center border border-border">
-                                                        <span className="text-[9px] uppercase font-bold text-muted-foreground">{month}</span>
-                                                        <span className="text-lg font-bold text-foreground leading-none">{day}</span>
-                                                    </div>
-                                                    <div className="overflow-hidden min-w-0">
-                                                        <h4 className="text-xs font-bold text-foreground group-hover:text-green-400 transition-colors line-clamp-1">{hack.title}</h4>
-                                                        <p className="text-[11px] text-muted-foreground mt-0.5 line-clamp-1">{hack.content}</p>
-                                                    </div>
-                                                </Link>
-                                            );
-                                        })
-                                    )}
-                                </div>
-                                <Link
-                                    href="/hackathons"
-                                    className="w-full mt-5 py-2 flex items-center justify-center border border-border hover:bg-muted text-[10px] font-bold text-foreground rounded transition-colors uppercase tracking-widest"
-                                >
-                                    All Events
-                                </Link>
-                            </section>
-
-                            {/* Guidelines */}
-                            <section className="bg-card border border-border rounded-lg p-5">
-                                <h3 className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] mb-4">Guidelines</h3>
-                                <div className="space-y-3">
-                                    {['Post clean, formatted code blocks.', 'Be professional and constructive.', 'No spam or self-promotion.'].map((rule) => (
-                                        <div key={rule} className="flex items-center gap-3">
-                                            <span className="material-symbols-outlined text-[14px] text-muted-foreground/60">check_circle_outline</span>
-                                            <p className="text-[11px] text-secondary-foreground leading-tight">{rule}</p>
-                                        </div>
-                                    ))}
-                                </div>
-                            </section>
-
-                            {/* Popular Tags */}
-                            {popularTags.length > 0 && (
-                                <section className="bg-card border border-border rounded-lg p-5">
-                                    <h3 className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] mb-4">Popular Tags</h3>
-                                    <div className="flex flex-wrap gap-2">
-                                        {popularTags.map((tag) => (
-                                            <span
-                                                key={tag.id}
-                                                className="px-2.5 py-1 bg-background border border-border hover:border-primary text-[10px] font-mono font-medium text-muted-foreground hover:text-primary rounded transition-all cursor-pointer"
-                                            >
-                                                #{tag.name}
-                                            </span>
-                                        ))}
-                                    </div>
-                                </section>
-                            )}
-                        </div>
+                {recentPosts.length === 0 ? (
+                    <div className="flex min-h-112 flex-col items-center justify-center rounded-lg border border-border bg-card text-center">
+                        <Inbox
+                            className="size-20 text-muted-foreground/40"
+                            strokeWidth={1}
+                        />
+                        <h3 className="mt-6 text-lg font-semibold">
+                            {isFiltered ? 'No matching posts' : 'No posts yet'}
+                        </h3>
+                        <p className="mt-1 text-sm text-muted-foreground">
+                            {isFiltered
+                                ? 'Try a different search, category or tag.'
+                                : 'To get started, share your first post with the community.'}
+                        </p>
+                        {isFiltered ? (
+                            <button
+                                type="button"
+                                onClick={() =>
+                                    updateFilters({
+                                        search: '',
+                                        type: null,
+                                        tag: null,
+                                    })
+                                }
+                                className="mt-6 rounded-lg bg-secondary px-4 py-2 text-sm font-semibold transition-colors hover:bg-secondary/70"
+                            >
+                                Clear filters
+                            </button>
+                        ) : (
+                            <Link
+                                href="/posts/create"
+                                className="mt-6 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+                            >
+                                Create new post
+                            </Link>
+                        )}
                     </div>
+                ) : (
+                    <div className={tileGridClass}>
+                        {recentPosts.map((post) => (
+                            <PostTile
+                                key={post.id}
+                                post={post}
+                                viewerId={auth.user?.id}
+                                now={now}
+                            />
+                        ))}
                     </div>
-                </div>
+                )}
             </div>
         </AppLayout>
     );

@@ -1,4 +1,5 @@
 export type * from './auth';
+export type * from './messages';
 export type * from './models';
 export type * from './navigation';
 export type * from './ui';
@@ -12,5 +13,7 @@ export type SharedData = {
     flash: {
         success?: string;
     };
+    /** Chats with unread messages, for the navbar badge. */
+    unreadMessages?: number;
     [key: string]: unknown;
 };

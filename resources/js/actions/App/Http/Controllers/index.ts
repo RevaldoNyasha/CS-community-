@@ -3,6 +3,7 @@ import PostController from './PostController'
 import DashboardController from './DashboardController'
 import LikeController from './LikeController'
 import CommentController from './CommentController'
+import MessageController from './MessageController'
 import SuggestionController from './SuggestionController'
 import Admin from './Admin'
 import Auth from './Auth'
@@ -13,6 +14,7 @@ PostController: Object.assign(PostController, PostController),
 DashboardController: Object.assign(DashboardController, DashboardController),
 LikeController: Object.assign(LikeController, LikeController),
 CommentController: Object.assign(CommentController, CommentController),
+MessageController: Object.assign(MessageController, MessageController),
 SuggestionController: Object.assign(SuggestionController, SuggestionController),
 Admin: Object.assign(Admin, Admin),
 Auth: Object.assign(Auth, Auth),
