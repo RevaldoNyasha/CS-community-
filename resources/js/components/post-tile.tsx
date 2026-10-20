@@ -77,7 +77,7 @@ export function PostTile({
 
     return (
         <div className="group relative">
-            <Link href={`/posts/${post.slug}`} className="block">
+            <Link href={`/posts/${post.slug}`} prefetch className="block">
                 <div
                     className={cn(
                         'relative aspect-square overflow-hidden rounded-lg border border-border bg-secondary',

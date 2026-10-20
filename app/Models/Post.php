@@ -123,6 +123,17 @@ class Post extends Model
         return $this->hasMany(Like::class);
     }
 
+    /**
+     * Adds an `is_liked` flag for the given user in the same query, instead of one extra
+     * query per post via isLikedBy(). Guests get no flag (the front end treats it as false).
+     */
+    public function scopeWithLikedBy(Builder $query, ?User $user): Builder
+    {
+        return $user
+            ? $query->withExists(['likes as is_liked' => fn (Builder $q) => $q->where('user_id', $user->id)])
+            : $query;
+    }
+
     public function isLikedBy(?User $user): bool
     {
         if ($user === null) {

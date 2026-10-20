@@ -35,10 +35,8 @@ type Filters = {
 
 type Props = {
     recentPosts: Post[];
-    announcements: Post[];
     pendingCount: number;
     popularTags: Tag[];
-    recentHackathons: Post[];
     search?: string;
     filters?: { type: Post['type'] | null; tag: number | null };
 };

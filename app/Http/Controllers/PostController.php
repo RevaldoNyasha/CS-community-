@@ -21,6 +21,9 @@ class PostController extends Controller
         $type = $request->route()->defaults['type'] ?? $request->input('type');
         $postType = PostType::tryFrom($type);
 
+        /** @var User|null $user */
+        $user = $request->user();
+
         $baseQuery = Post::query()
             ->approved()
             ->when($postType, fn ($query) => $query->ofType($postType))
@@ -42,10 +45,8 @@ class PostController extends Controller
                 $query->whereNotNull('file_path')->where('file_path', 'like', '%.pdf');
             })
             ->with(['user:id,name', 'tags'])
-            ->withCount(['comments', 'likes']);
-
-        /** @var User|null $user */
-        $user = $request->user();
+            ->withCount(['comments', 'likes'])
+            ->withLikedBy($user);
 
         $pageMap = [
             'resource' => 'resources/index',
@@ -80,11 +81,6 @@ class PostController extends Controller
                 ->orderBy('event_date', 'desc')
                 ->get();
 
-            $allPosts = $upcoming->merge($finished);
-            $allPosts->each(function (Post $post) use ($user): void {
-                $post->setAttribute('is_liked', $post->isLikedBy($user));
-            });
-
             return Inertia::render($page, [
                 'upcoming' => $upcoming,
                 'finished' => $finished,
@@ -95,9 +91,6 @@ class PostController extends Controller
 
         // Default paginated view for resources and projects (16 = four full rows of tiles)
         $posts = $baseQuery->latest()->paginate(16)->withQueryString();
-        $posts->getCollection()->each(function (Post $post) use ($user): void {
-            $post->setAttribute('is_liked', $post->isLikedBy($user));
-        });
 
         return Inertia::render($page, [
             'posts' => $posts,

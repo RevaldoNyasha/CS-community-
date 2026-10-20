@@ -5,7 +5,7 @@ import messages from './messages'
  * @see app/Http/Controllers/MessageController.php:140
  * @route '/conversations/{conversation}/accept'
  */
-export const accept = (args: { conversation: string | number | { id: string | number } } | [conversation: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+export const accept = (args: { conversation: number | { id: number } } | [conversation: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: accept.url(args, options),
     method: 'post',
 })
@@ -20,7 +20,7 @@ accept.definition = {
  * @see app/Http/Controllers/MessageController.php:140
  * @route '/conversations/{conversation}/accept'
  */
-accept.url = (args: { conversation: string | number | { id: string | number } } | [conversation: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions) => {
+accept.url = (args: { conversation: number | { id: number } } | [conversation: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
         args = { conversation: args }
     }
@@ -53,7 +53,7 @@ accept.url = (args: { conversation: string | number | { id: string | number } } 
  * @see app/Http/Controllers/MessageController.php:140
  * @route '/conversations/{conversation}/accept'
  */
-accept.post = (args: { conversation: string | number | { id: string | number } } | [conversation: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+accept.post = (args: { conversation: number | { id: number } } | [conversation: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: accept.url(args, options),
     method: 'post',
 })
@@ -63,7 +63,7 @@ accept.post = (args: { conversation: string | number | { id: string | number } }
  * @see app/Http/Controllers/MessageController.php:140
  * @route '/conversations/{conversation}/accept'
  */
-    const acceptForm = (args: { conversation: string | number | { id: string | number } } | [conversation: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    const acceptForm = (args: { conversation: number | { id: number } } | [conversation: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
         action: accept.url(args, options),
         method: 'post',
     })
@@ -73,7 +73,7 @@ accept.post = (args: { conversation: string | number | { id: string | number } }
  * @see app/Http/Controllers/MessageController.php:140
  * @route '/conversations/{conversation}/accept'
  */
-        acceptForm.post = (args: { conversation: string | number | { id: string | number } } | [conversation: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        acceptForm.post = (args: { conversation: number | { id: number } } | [conversation: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
             action: accept.url(args, options),
             method: 'post',
         })
@@ -84,7 +84,7 @@ accept.post = (args: { conversation: string | number | { id: string | number } }
  * @see app/Http/Controllers/MessageController.php:149
  * @route '/conversations/{conversation}/decline'
  */
-export const decline = (args: { conversation: string | number | { id: string | number } } | [conversation: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+export const decline = (args: { conversation: number | { id: number } } | [conversation: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: decline.url(args, options),
     method: 'post',
 })
@@ -99,7 +99,7 @@ decline.definition = {
  * @see app/Http/Controllers/MessageController.php:149
  * @route '/conversations/{conversation}/decline'
  */
-decline.url = (args: { conversation: string | number | { id: string | number } } | [conversation: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions) => {
+decline.url = (args: { conversation: number | { id: number } } | [conversation: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
         args = { conversation: args }
     }
@@ -132,7 +132,7 @@ decline.url = (args: { conversation: string | number | { id: string | number } }
  * @see app/Http/Controllers/MessageController.php:149
  * @route '/conversations/{conversation}/decline'
  */
-decline.post = (args: { conversation: string | number | { id: string | number } } | [conversation: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+decline.post = (args: { conversation: number | { id: number } } | [conversation: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: decline.url(args, options),
     method: 'post',
 })
@@ -142,7 +142,7 @@ decline.post = (args: { conversation: string | number | { id: string | number } 
  * @see app/Http/Controllers/MessageController.php:149
  * @route '/conversations/{conversation}/decline'
  */
-    const declineForm = (args: { conversation: string | number | { id: string | number } } | [conversation: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    const declineForm = (args: { conversation: number | { id: number } } | [conversation: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
         action: decline.url(args, options),
         method: 'post',
     })
@@ -152,7 +152,7 @@ decline.post = (args: { conversation: string | number | { id: string | number } 
  * @see app/Http/Controllers/MessageController.php:149
  * @route '/conversations/{conversation}/decline'
  */
-        declineForm.post = (args: { conversation: string | number | { id: string | number } } | [conversation: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        declineForm.post = (args: { conversation: number | { id: number } } | [conversation: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
             action: decline.url(args, options),
             method: 'post',
         })
