@@ -1,37 +1,110 @@
 import { Link } from '@inertiajs/react';
+import { ArrowLeft, CheckCircle2 } from 'lucide-react';
+import BrandVideoBackground from '@/components/brand-video-background';
+import { useForceDarkTheme } from '@/hooks/use-force-dark-theme';
+import { brandStyle } from '@/lib/brand';
 import { home } from '@/routes';
 import type { AuthLayoutProps } from '@/types';
 
+const highlights = [
+    'Past papers, notes and study guides',
+    'Hackathons, from upcoming events to past winners',
+    'Projects built and shared by students',
+];
+
+function Logo() {
+    return (
+        <Link href={home()} className="inline-flex items-center gap-3">
+            <img
+                src="/newIcons/navbarIcon.png"
+                alt=""
+                className="size-8 object-contain"
+            />
+            <span className="text-sm font-semibold tracking-widest uppercase">
+                DEV-CRAFT
+            </span>
+        </Link>
+    );
+}
+
+// Split auth screen matching the welcome page: brand video panel on the left (desktop only),
+// form on the right. Always dark and uses the brand blue.
 export default function AuthSimpleLayout({
     children,
     title,
+    description,
 }: AuthLayoutProps) {
-    return (
-        <div className="flex min-h-svh flex-col items-center justify-center px-4 py-2 relative z-10 w-full overflow-hidden bg-background transition-colors">
-            <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] border hidden dark:block bg-cyan-900/10 rounded-full blur-[100px] -z-10 mix-blend-screen pointer-events-none"></div>
+    useForceDarkTheme();
 
-            <div className="w-full max-w-[380px] bg-card border border-border shadow-lg dark:border-cyan-400/40 dark:bg-[#0c121d]/90 p-6 sm:p-8 rounded-[14px] dark:shadow-[0_0_20px_1px_rgba(34,211,238,0.15)] relative backdrop-blur-md transition-colors">
-               
-                <div className="flex justify-center mb-4">
-                    <Link href={home()} className="inline-flex items-center gap-3 group -translate-x-[26px]">
-                        <img
-                            src="/newIcons/navbarIcon.png"
-                            alt="DEV-CRAFT"
-                            className="size-10 object-contain dark:drop-shadow-[0_0_8px_rgba(34,211,238,0.6)] dark:group-hover:drop-shadow-[0_0_12px_rgba(34,211,238,0.9)] transition-all"
-                        />
-                        <div className="flex flex-col mt-0.5">
-                            <span className="text-[15px] font-bold text-foreground dark:text-gray-100 tracking-wide leading-none mb-1 group-hover:text-primary dark:group-hover:text-cyan-50 transition-colors">DEV-CRAFT</span>
-                            <span className="text-[9px] text-muted-foreground dark:text-gray-400 tracking-[0.15em] leading-none group-hover:text-primary/70 dark:group-hover:text-cyan-200/70 transition-colors">CS COMMUNITY</span>
-                        </div>
+    return (
+        <div
+            className="grid min-h-svh bg-background text-foreground lg:grid-cols-2"
+            style={brandStyle}
+        >
+            {/* ── Brand panel ── */}
+            <aside className="relative isolate hidden flex-col justify-between overflow-hidden border-r border-border p-10 lg:flex xl:p-14">
+                <BrandVideoBackground
+                    overlayClassName="bg-linear-to-b from-background/80 via-background/70 to-background/95"
+                    fadeBottom={false}
+                />
+
+                <Logo />
+
+                <div>
+                    <h2 className="text-4xl font-semibold tracking-tight text-balance xl:text-5xl">
+                        Build. Share.
+                        <br />
+                        <span className="text-primary">Grow together.</span>
+                    </h2>
+                    <ul className="mt-8 space-y-3">
+                        {highlights.map((item) => (
+                            <li
+                                key={item}
+                                className="flex items-center gap-3 text-sm text-muted-foreground"
+                            >
+                                <CheckCircle2 className="size-4 shrink-0 text-primary" />
+                                {item}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+
+                <p className="text-xs text-muted-foreground">
+                    © {new Date().getFullYear()} DEV-CRAFT · Built by CS
+                    students, for CS students
+                </p>
+            </aside>
+
+            {/* ── Form panel ── */}
+            <main className="flex flex-col px-6 py-6 sm:px-10">
+                <div className="flex items-center justify-between lg:justify-end">
+                    <div className="lg:hidden">
+                        <Logo />
+                    </div>
+                    <Link
+                        href={home()}
+                        className="inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
+                    >
+                        <ArrowLeft className="size-4" />
+                        Back to home
                     </Link>
                 </div>
 
-                <div className="mb-5 text-center">
-                    <h1 className="text-xl font-bold text-foreground dark:text-white tracking-wide transition-colors">{title}</h1>
-                </div>
+                <div className="mx-auto my-auto w-full max-w-sm py-12">
+                    <div className="mb-8">
+                        <h1 className="text-3xl font-semibold tracking-tight">
+                            {title}
+                        </h1>
+                        {description && (
+                            <p className="mt-2 text-sm text-muted-foreground">
+                                {description}
+                            </p>
+                        )}
+                    </div>
 
-                {children}
-            </div>
+                    {children}
+                </div>
+            </main>
         </div>
     );
 }

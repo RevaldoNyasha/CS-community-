@@ -3,7 +3,7 @@ import { Head, Link } from '@inertiajs/react';
 export default function Terms() {
     return (
         <>
-            <Head title="Terms of Service — DEV-CRAFT" />
+            <Head title="Terms of Service" />
 
             <div className="bg-background min-h-screen">
                 <header className="border-b border-border px-6 py-4">

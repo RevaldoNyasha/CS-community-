@@ -3,7 +3,7 @@ import { Head, Link } from '@inertiajs/react';
 export default function Privacy() {
     return (
         <>
-            <Head title="Privacy Policy — DEV-CRAFT" />
+            <Head title="Privacy Policy" />
 
             <div className="bg-background min-h-screen">
                 <header className="border-b border-border px-6 py-4">

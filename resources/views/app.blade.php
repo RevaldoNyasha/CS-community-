@@ -61,7 +61,7 @@
                 height: 32px;
                 border-radius: 50%;
                 border: 3px solid rgba(100, 116, 139, 0.25);
-                border-top-color: #22d3ee;
+                border-top-color: #0042FF;
                 animation: app-splash-spin 0.7s linear infinite;
             }
             @keyframes app-splash-spin {
@@ -72,7 +72,7 @@
             }
         </style>
 
-        <title inertia>{{ config('app.name', 'CS') }}</title>
+        <title inertia>DEV-CRAFT</title>
 
         <link rel="icon" href="/newIcons/navbarIcon.png" type="image/png">
         <link rel="apple-touch-icon" href="/newIcons/navbarIcon.png">

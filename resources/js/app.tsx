@@ -5,10 +5,11 @@ import { createRoot } from 'react-dom/client';
 import '../css/app.css';
 import { initializeTheme } from './hooks/use-appearance';
 
-const appName = import.meta.env.VITE_APP_NAME || 'CS';
+const appName = 'DEV-CRAFT';
 
 createInertiaApp({
-    title: (title) => (title ? `${title} - ${appName}` : appName),
+    title: (title) =>
+        title && title !== appName ? `${title} · ${appName}` : appName,
     resolve: (name) =>
         resolvePageComponent(
             `./pages/${name}.tsx`,
@@ -33,8 +34,8 @@ createInertiaApp({
         });
     },
     progress: {
-        color: '#22d3ee',
-        showSpinner: true,
+        color: '#0042FF',
+        showSpinner: false,
     },
 });
 

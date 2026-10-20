@@ -1,224 +1,625 @@
 import { Head, Link, usePage } from '@inertiajs/react';
-import { BookOpen, FolderGit2, Menu, Moon, Sun, Trophy, X } from 'lucide-react';
-import { useState } from 'react';
-import { dashboard, login } from '@/routes';
-import { useAppearance } from '@/hooks/use-appearance';
+import {
+    ArrowRight,
+    BookOpen,
+    CheckCircle2,
+    Compass,
+    FolderGit2,
+    Menu,
+    MessageSquare,
+    SearchCheck,
+    Share2,
+    ShieldCheck,
+    Trophy,
+    UserPlus,
+    X,
+} from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import BrandVideoBackground from '@/components/brand-video-background';
+import { useForceDarkTheme } from '@/hooks/use-force-dark-theme';
+import { brandStyle } from '@/lib/brand';
+import { dashboard, login, register } from '@/routes';
 import type { SharedData } from '@/types';
 
+const navLinks = [
+    { label: 'Resources', href: '/resources' },
+    { label: 'Hackathons', href: '/hackathons' },
+    { label: 'Projects', href: '/projects' },
+];
 
+const features: {
+    icon: LucideIcon;
+    title: string;
+    description: string;
+    href?: string;
+}[] = [
+    {
+        icon: BookOpen,
+        title: 'Study resources',
+        description:
+            'Past papers, notes and guides, archived by course so nothing gets lost between semesters.',
+        href: '/resources',
+    },
+    {
+        icon: Trophy,
+        title: 'Hackathons',
+        description:
+            'Upcoming events with dates and registration details, plus an archive of past winners and their projects.',
+        href: '/hackathons',
+    },
+    {
+        icon: FolderGit2,
+        title: 'Projects',
+        description:
+            'Browse what fellow students are building and share your own work with the community.',
+        href: '/projects',
+    },
+    {
+        icon: SearchCheck,
+        title: 'Resource requests',
+        description:
+            'Missing a past paper or set of notes? Post a request and let the community help you find it.',
+    },
+    {
+        icon: MessageSquare,
+        title: 'Community feed',
+        description:
+            'Focused, academic discussion in one place instead of scattered messaging groups.',
+    },
+    {
+        icon: ShieldCheck,
+        title: 'Moderated content',
+        description:
+            'Every post is reviewed by an admin before it goes live, so the feed stays relevant and professional.',
+    },
+];
+
+const steps: {
+    icon: LucideIcon;
+    title: string;
+    description: string;
+    tags: string[];
+}[] = [
+    {
+        icon: UserPlus,
+        title: 'Create your account',
+        description: 'Sign up in seconds with Google, GitHub or email.',
+        tags: ['Google', 'GitHub', 'Email'],
+    },
+    {
+        icon: Compass,
+        title: 'Explore and request',
+        description:
+            'Find materials, browse hackathons and ask for anything that is missing.',
+        tags: ['Resources', 'Hackathons', 'Requests'],
+    },
+    {
+        icon: Share2,
+        title: 'Contribute back',
+        description:
+            'Share notes and projects so the next class has it easier than you did.',
+        tags: ['Notes', 'Projects', 'Past papers'],
+    },
+];
+
+const DECK_INTERVAL_MS = 4500;
+
+// Resting place of each card in the stack: 0 is the front card, later ones peek out above it.
+const stackPositions = [
+    { transform: 'translateY(0) scale(1)', opacity: 1, zIndex: 30 },
+    { transform: 'translateY(-20px) scale(0.95)', opacity: 0.7, zIndex: 20 },
+    { transform: 'translateY(-40px) scale(0.9)', opacity: 0.4, zIndex: 10 },
+];
+
+const exploreItems = [
+    { title: 'Resources', note: 'Past papers, notes and guides' },
+    { title: 'Hackathons', note: 'Upcoming events and past winners' },
+    { title: 'Projects', note: 'Built by students' },
+];
+
+// "How it works" as a shuffling card deck. Every few seconds the front card flies out and
+// tucks in behind the stack, bringing the next step forward.
+function HowItWorksDeck() {
+    const [active, setActive] = useState(0);
+    const [leaving, setLeaving] = useState<number | null>(null);
+    const [reduceMotion] = useState(
+        () =>
+            typeof window !== 'undefined' &&
+            window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+    );
+
+    useEffect(() => {
+        if (reduceMotion) return;
+
+        const timer = window.setTimeout(() => {
+            setLeaving(active);
+            setActive((active + 1) % steps.length);
+        }, DECK_INTERVAL_MS);
+
+        return () => window.clearTimeout(timer);
+    }, [active, reduceMotion]);
+
+    return (
+        <div>
+            <div className="mx-auto max-w-2xl text-center">
+                <p className="text-sm font-semibold text-primary">
+                    How it works
+                </p>
+                <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
+                    Up and running in three steps
+                </h2>
+            </div>
+
+            {/* The deck: extra top room so the cards behind can peek out */}
+            <div className="relative mx-auto mt-14 h-80 max-w-xl sm:h-72">
+                {steps.map((step, index) => {
+                    const position =
+                        (index - active + steps.length) % steps.length;
+                    const resting = stackPositions[position];
+                    const isFront = position === 0;
+                    const isLeaving = index === leaving && !reduceMotion;
+
+                    return (
+                        <article
+                            key={step.title}
+                            aria-hidden={!isFront}
+                            onAnimationEnd={() => setLeaving(null)}
+                            className={`absolute inset-x-0 bottom-0 flex h-[calc(100%-2.5rem)] flex-col overflow-hidden rounded-2xl border bg-card p-7 shadow-2xl shadow-black/40 transition-[transform,opacity,border-color] duration-500 ease-out motion-reduce:transition-none sm:p-8 ${
+                                isFront ? 'border-primary/40' : 'border-border'
+                            }`}
+                            style={
+                                {
+                                    transform: resting.transform,
+                                    opacity: resting.opacity,
+                                    zIndex: resting.zIndex,
+                                    '--deck-end': resting.transform,
+                                    '--deck-end-opacity': resting.opacity,
+                                    animation: isLeaving
+                                        ? 'deck-shuffle 850ms cubic-bezier(0.45, 0, 0.2, 1)'
+                                        : undefined,
+                                } as React.CSSProperties
+                            }
+                        >
+                            {/* Large faded step number in the corner */}
+                            <span
+                                aria-hidden="true"
+                                className="pointer-events-none absolute -right-2 -bottom-8 text-[9rem] leading-none font-bold text-foreground/[0.04] select-none"
+                            >
+                                {index + 1}
+                            </span>
+
+                            <div className="flex items-center justify-between">
+                                <span className="text-primary">
+                                    <step.icon
+                                        className="size-7"
+                                        strokeWidth={1.75}
+                                    />
+                                </span>
+                                <span className="text-xs font-medium text-muted-foreground">
+                                    Step {index + 1} of {steps.length}
+                                </span>
+                            </div>
+
+                            <h3 className="mt-6 text-2xl font-semibold tracking-tight">
+                                {step.title}
+                            </h3>
+                            <p className="mt-2 max-w-sm text-sm leading-6 text-muted-foreground">
+                                {step.description}
+                            </p>
+
+                            <div className="mt-auto flex flex-wrap gap-2 pt-5">
+                                {step.tags.map((tag) => (
+                                    <span
+                                        key={tag}
+                                        className="rounded-full border border-border bg-background/60 px-3 py-1 text-xs font-medium"
+                                    >
+                                        {tag}
+                                    </span>
+                                ))}
+                            </div>
+                        </article>
+                    );
+                })}
+            </div>
+        </div>
+    );
+}
 
 export default function Welcome() {
     const { auth } = usePage<SharedData>().props;
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-    const { resolvedAppearance, updateAppearance } = useAppearance();
+    useForceDarkTheme();
 
-    const toggleTheme = () => updateAppearance(resolvedAppearance === 'dark' ? 'light' : 'dark');
+    const primaryCta = auth.user
+        ? { label: 'Go to dashboard', href: dashboard().url }
+        : { label: 'Join the community', href: register().url };
 
     return (
         <>
-            <Head title="DEV-CRAFT — CS Community" />
+            <Head title="DEV-CRAFT" />
 
-            <div className="bg-background min-h-screen">
-                {/* ── Nav ── */}
-                <header className="absolute inset-x-0 top-0 z-50">
-                    <nav aria-label="Global" className="flex items-center justify-between p-6 lg:px-8">
-                        {/* Logo */}
-                        <div className="flex lg:flex-1">
-                            <Link href="/" className="-m-1.5 p-1.5 flex items-center gap-3">
-                                <img src="/newIcons/navbarIcon.png" alt="DEV-CRAFT" className="size-8 object-contain" />
-                                <span className="text-sm font-semibold text-foreground tracking-widest uppercase">DEV-CRAFT</span>
+            <div
+                className="relative min-h-screen overflow-x-hidden bg-background text-foreground"
+                style={brandStyle}
+            >
+                {/* Video backdrop spans the nav and hero */}
+                <div className="relative isolate">
+                    <BrandVideoBackground />
+
+                    {/* ── Nav ── */}
+                    <header className="relative z-50">
+                        <nav
+                            aria-label="Global"
+                            className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5 lg:px-8"
+                        >
+                            <Link
+                                href="/"
+                                className="-m-1.5 flex items-center gap-3 p-1.5"
+                            >
+                                <img
+                                    src="/newIcons/navbarIcon.png"
+                                    alt=""
+                                    className="size-8 object-contain"
+                                />
+                                <span className="text-sm font-semibold tracking-widest uppercase">
+                                    DEV-CRAFT
+                                </span>
                             </Link>
-                        </div>
 
-                        {/* Mobile hamburger */}
-                        <div className="flex lg:hidden">
+                            <div className="hidden items-center gap-8 lg:flex">
+                                {navLinks.map((link) => (
+                                    <Link
+                                        key={link.href}
+                                        href={link.href}
+                                        className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+                                    >
+                                        {link.label}
+                                    </Link>
+                                ))}
+                            </div>
+
+                            <div className="hidden items-center gap-5 lg:flex">
+                                {auth.user ? (
+                                    <Link
+                                        href={dashboard().url}
+                                        className="rounded-md bg-[#0042FF] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#0042FF]/90"
+                                    >
+                                        Dashboard
+                                    </Link>
+                                ) : (
+                                    <>
+                                        <Link
+                                            href={login().url}
+                                            className="text-sm font-semibold transition-colors hover:text-muted-foreground"
+                                        >
+                                            Log in
+                                        </Link>
+                                        <Link
+                                            href={register().url}
+                                            className="rounded-md bg-[#0042FF] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#0042FF]/90"
+                                        >
+                                            Get started
+                                        </Link>
+                                    </>
+                                )}
+                            </div>
+
                             <button
                                 type="button"
                                 onClick={() => setMobileMenuOpen(true)}
-                                className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-muted-foreground"
+                                className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-muted-foreground lg:hidden"
                             >
                                 <span className="sr-only">Open main menu</span>
                                 <Menu className="size-6" aria-hidden="true" />
                             </button>
-                        </div>
+                        </nav>
 
-
-
-                        {/* Desktop auth links */}
-                        <div className="hidden lg:flex lg:flex-1 lg:justify-end items-center gap-6">
-                            {auth.user ? (
-                                <Link href={dashboard().url} className="text-sm font-semibold text-foreground hover:text-muted-foreground transition-colors">
-                                    Dashboard <span aria-hidden="true">&rarr;</span>
-                                </Link>
-                            ) : (
-                                <Link href={login().url} className="text-sm font-semibold text-foreground hover:text-muted-foreground transition-colors">
-                                        Log in <span aria-hidden="true">&rarr;</span>
-                                    </Link>
-                            )}
-                            <button
-                                type="button"
-                                onClick={toggleTheme}
-                                className="text-muted-foreground hover:text-foreground transition-colors"
-                                aria-label="Toggle theme"
-                            >
-                                {resolvedAppearance === 'dark' ? <Sun className="size-4" /> : <Moon className="size-4" />}
-                            </button>
-                        </div>
-                    </nav>
-
-                    {/* Mobile menu panel */}
-                    {mobileMenuOpen && (
-                        <>
-                            <div className="fixed inset-0 z-40" onClick={() => setMobileMenuOpen(false)} />
-                            <div className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-background p-6 sm:max-w-sm sm:ring-1 sm:ring-border">
-                                <div className="flex items-center justify-between">
-                                    <Link href="/" className="-m-1.5 p-1.5 flex items-center gap-3">
-                                        <img src="/newIcons/navbarIcon.png" alt="DEV-CRAFT" className="size-8 object-contain" />
-                                        <span className="text-sm font-semibold text-foreground tracking-widest uppercase">DEV-CRAFT</span>
-                                    </Link>
-                                    <button
-                                        type="button"
-                                        onClick={() => setMobileMenuOpen(false)}
-                                        className="-m-2.5 rounded-md p-2.5 text-muted-foreground"
-                                    >
-                                        <span className="sr-only">Close menu</span>
-                                        <X className="size-6" aria-hidden="true" />
-                                    </button>
-                                </div>
-                                <div className="mt-6 flow-root">
-                                    <div className="-my-6 divide-y divide-border">
-
-                                        <div className="py-6 space-y-2">
-                                            <button
-                                                type="button"
-                                                onClick={toggleTheme}
-                                                className="-mx-3 flex items-center gap-2 rounded-lg px-3 py-2.5 text-base font-semibold text-foreground hover:bg-secondary/40 w-full"
-                                            >
-                                                {resolvedAppearance === 'dark' ? <Sun className="size-4" /> : <Moon className="size-4" />}
-                                                {resolvedAppearance === 'dark' ? 'Light mode' : 'Dark mode'}
-                                            </button>
-                                            {auth.user ? (
+                        {/* Mobile menu panel */}
+                        {mobileMenuOpen && (
+                            <>
+                                <div
+                                    className="fixed inset-0 z-40 bg-black/40"
+                                    onClick={() => setMobileMenuOpen(false)}
+                                />
+                                <div className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-background p-6 sm:max-w-sm sm:ring-1 sm:ring-border">
+                                    <div className="flex items-center justify-between">
+                                        <Link
+                                            href="/"
+                                            className="-m-1.5 flex items-center gap-3 p-1.5"
+                                        >
+                                            <img
+                                                src="/newIcons/navbarIcon.png"
+                                                alt=""
+                                                className="size-8 object-contain"
+                                            />
+                                            <span className="text-sm font-semibold tracking-widest uppercase">
+                                                DEV-CRAFT
+                                            </span>
+                                        </Link>
+                                        <button
+                                            type="button"
+                                            onClick={() =>
+                                                setMobileMenuOpen(false)
+                                            }
+                                            className="-m-2.5 rounded-md p-2.5 text-muted-foreground"
+                                        >
+                                            <span className="sr-only">
+                                                Close menu
+                                            </span>
+                                            <X
+                                                className="size-6"
+                                                aria-hidden="true"
+                                            />
+                                        </button>
+                                    </div>
+                                    <div className="mt-6 divide-y divide-border">
+                                        <div className="space-y-1 py-6">
+                                            {navLinks.map((link) => (
                                                 <Link
-                                                    href={dashboard().url}
-                                                    className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold text-foreground hover:bg-secondary/40"
+                                                    key={link.href}
+                                                    href={link.href}
+                                                    className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold hover:bg-secondary/40"
                                                 >
-                                                    Dashboard
+                                                    {link.label}
                                                 </Link>
-                                            ) : (
+                                            ))}
+                                        </div>
+                                        <div className="space-y-2 py-6">
+                                            {!auth.user && (
                                                 <Link
                                                     href={login().url}
-                                                    className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold text-foreground hover:bg-secondary/40"
+                                                    className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold hover:bg-secondary/40"
                                                 >
                                                     Log in
                                                 </Link>
                                             )}
+                                            <Link
+                                                href={primaryCta.href}
+                                                className="mt-2 block rounded-md bg-[#0042FF] px-4 py-3 text-center text-base font-semibold text-white hover:bg-[#0042FF]/90"
+                                            >
+                                                {auth.user
+                                                    ? 'Dashboard'
+                                                    : 'Get started'}
+                                            </Link>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </>
-                    )}
-                </header>
+                            </>
+                        )}
+                    </header>
 
-                {/* ── Hero ── */}
-                <div className="relative isolate px-6 pt-14 lg:px-8">
-                    {/* Top gradient blob */}
-                    <div
-                        aria-hidden="true"
-                        className="pointer-events-none absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
-                    >
-                        <div
-                            style={{
-                                clipPath: 'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
-                            }}
-                            className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-20 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"
-                        />
-                    </div>
-
-                    <div className="mx-auto max-w-2xl py-20 sm:py-24 lg:py-28">
-                        {/* Announcement pill */}
-                        <div className="hidden sm:mb-8 sm:flex sm:justify-center">
-                            <div className="relative rounded-full px-3 py-1 text-sm text-muted-foreground ring-1 ring-border hover:ring-primary/30">
-                                The CS community for CS students.{' '}
-                                <Link
-                                    href={login().url}
-                                    className="font-semibold text-primary hover:text-primary/80"
-                                >
-                                    <span aria-hidden="true" className="absolute inset-0" />
-                                    Join now <span aria-hidden="true">&rarr;</span>
-                                </Link>
-                            </div>
-                        </div>
-
-                        {/* Headline */}
-                        <div className="text-center">
-                            <h1 className="text-5xl font-semibold tracking-tight text-foreground sm:text-7xl text-balance">
-                                Build. Share. Grow together.
-                            </h1>
-                            <p className="mt-8 text-lg font-medium text-muted-foreground sm:text-xl leading-8 text-pretty">
-                                DEV-CRAFT is a platform for computer science students to share resources, collaborate on hackathons, and level up their skills together.
+                    {/* ── Hero ── */}
+                    <section className="mx-auto grid max-w-6xl items-center gap-14 px-6 pt-12 pb-20 sm:pt-20 lg:grid-cols-[1.15fr_1fr] lg:px-8 lg:pt-24 lg:pb-28">
+                        <div>
+                            <p className="text-sm font-semibold text-primary">
+                                The NUST computer science community
                             </p>
-
-                            {/* Section cards */}
-                            <div className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-4 text-left">
+                            <h1 className="mt-5 text-5xl font-semibold tracking-tight text-balance sm:text-6xl">
+                                Build. Share.
+                                <br />
+                                <span className="text-primary">
+                                    Grow together.
+                                </span>
+                            </h1>
+                            <p className="mt-6 max-w-xl text-lg leading-8 text-pretty text-muted-foreground">
+                                DEV-CRAFT is the home for CS students to find
+                                study materials, join hackathons and share what
+                                they build, all in one moderated, structured
+                                space.
+                            </p>
+                            <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
                                 <Link
-                                    href="/hackathons"
-                                    className="group flex flex-col gap-3 p-5 bg-card/60 border border-border rounded-xl hover:border-primary/40 hover:bg-card transition-all"
+                                    href={primaryCta.href}
+                                    className="group inline-flex items-center justify-center gap-2 rounded-md bg-[#0042FF] px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#0042FF]/90"
                                 >
-                                    <Trophy className="size-5 text-foreground" />
-                                    <div>
-                                        <h3 className="font-semibold text-foreground mb-1">Hackathons</h3>
-                                        <p className="text-xs text-muted-foreground leading-relaxed">Discover and join upcoming hackathons in the NUST CS community.</p>
-                                    </div>
-                                    <span className="text-xs font-semibold text-primary group-hover:underline mt-auto">Browse →</span>
+                                    {primaryCta.label}
+                                    <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
                                 </Link>
-
-                                <Link
-                                    href="/projects"
-                                    className="group flex flex-col gap-3 p-5 bg-card/60 border border-border rounded-xl hover:border-primary/40 hover:bg-card transition-all"
-                                >
-                                    <FolderGit2 className="size-5 text-foreground" />
-                                    <div>
-                                        <h3 className="font-semibold text-foreground mb-1">Projects</h3>
-                                        <p className="text-xs text-muted-foreground leading-relaxed">Browse community-built projects and share your own work with others.</p>
-                                    </div>
-                                    <span className="text-xs font-semibold text-primary group-hover:underline mt-auto">Explore →</span>
-                                </Link>
-
                                 <Link
                                     href="/resources"
-                                    className="group flex flex-col gap-3 p-5 bg-card/60 border border-border rounded-xl hover:border-primary/40 hover:bg-card transition-all"
+                                    className="inline-flex items-center justify-center rounded-md border border-border bg-card/60 px-5 py-3 text-sm font-semibold transition-colors hover:border-primary/40 hover:bg-card"
                                 >
-                                    <BookOpen className="size-5 text-foreground" />
-                                    <div>
-                                        <h3 className="font-semibold text-foreground mb-1">Resources</h3>
-                                        <p className="text-xs text-muted-foreground leading-relaxed">Access study materials and guides shared by fellow students.</p>
-                                    </div>
-                                    <span className="text-xs font-semibold text-primary group-hover:underline mt-auto">View all →</span>
+                                    Browse resources
                                 </Link>
                             </div>
                         </div>
-                    </div>
 
-                    {/* Bottom gradient blob */}
-                    <div
-                        aria-hidden="true"
-                        className="pointer-events-none absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]"
-                    >
+                        {/* Preview panel */}
                         <div
-                            style={{
-                                clipPath: 'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
-                            }}
-                            className="relative left-[calc(50%+3rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-20 sm:left-[calc(50%+36rem)] sm:w-[72.1875rem]"
-                        />
-                    </div>
+                            aria-hidden="true"
+                            className="rounded-xl border border-border bg-card/80 shadow-2xl shadow-black/20 backdrop-blur"
+                        >
+                            <div className="flex items-center gap-2 border-b border-border px-4 py-3">
+                                <span className="size-2.5 rounded-full bg-[#f85149]/80" />
+                                <span className="size-2.5 rounded-full bg-brutal-yellow/80" />
+                                <span className="size-2.5 rounded-full bg-[#39ff14]/70" />
+                                <span className="ml-3 text-xs font-medium text-muted-foreground">
+                                    DEV-CRAFT
+                                </span>
+                            </div>
+                            <div className="space-y-5 p-5 text-sm">
+                                <p className="font-semibold">
+                                    Explore the community
+                                </p>
+                                <ul className="space-y-3">
+                                    {exploreItems.map((item) => (
+                                        <li
+                                            key={item.title}
+                                            className="flex items-start gap-3"
+                                        >
+                                            <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-chart-1" />
+                                            <div>
+                                                <p className="font-medium">
+                                                    {item.title}
+                                                </p>
+                                                <p className="text-muted-foreground">
+                                                    {item.note}
+                                                </p>
+                                            </div>
+                                        </li>
+                                    ))}
+                                </ul>
+                                <div className="rounded-lg border border-border bg-background/60 p-4">
+                                    <p className="font-medium">
+                                        Request a resource:{' '}
+                                        <span className="text-primary">
+                                            "CS-301 past paper"
+                                        </span>
+                                    </p>
+                                    <p className="mt-1 text-muted-foreground">
+                                        Request posted. The community is on it.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
                 </div>
 
+                <main className="relative z-10">
+                    {/* ── Features ── */}
+                    <section className="border-y border-border bg-card/30">
+                        <div className="mx-auto max-w-6xl px-6 py-20 lg:px-8 lg:py-24">
+                            <div className="max-w-2xl">
+                                <p className="text-sm font-semibold text-primary">
+                                    What's inside
+                                </p>
+                                <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
+                                    Everything your class group chat was missing
+                                </h2>
+                                <p className="mt-4 text-base leading-7 text-muted-foreground">
+                                    No more lost notes or forgotten hackathon
+                                    results. One place, organised and kept
+                                    clean.
+                                </p>
+                            </div>
+
+                            <div className="mt-12 grid gap-px overflow-hidden rounded-xl border border-border bg-border sm:grid-cols-2 lg:grid-cols-3">
+                                {features.map((feature, index) => {
+                                    const content = (
+                                        <>
+                                            <div className="flex items-center justify-between">
+                                                <feature.icon className="size-5 text-primary" />
+                                                <span className="text-xs font-medium text-muted-foreground">
+                                                    {String(index + 1).padStart(
+                                                        2,
+                                                        '0',
+                                                    )}
+                                                </span>
+                                            </div>
+                                            <h3 className="mt-5 font-semibold">
+                                                {feature.title}
+                                            </h3>
+                                            <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                                                {feature.description}
+                                            </p>
+                                            {feature.href && (
+                                                <span className="mt-4 inline-flex items-center gap-1 text-xs font-semibold text-primary">
+                                                    Open{' '}
+                                                    <ArrowRight className="size-3 transition-transform group-hover:translate-x-0.5" />
+                                                </span>
+                                            )}
+                                        </>
+                                    );
+
+                                    return feature.href ? (
+                                        <Link
+                                            key={feature.title}
+                                            href={feature.href}
+                                            className="group flex flex-col bg-background p-6 transition-colors hover:bg-card"
+                                        >
+                                            {content}
+                                        </Link>
+                                    ) : (
+                                        <div
+                                            key={feature.title}
+                                            className="flex flex-col bg-background p-6"
+                                        >
+                                            {content}
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* ── How it works ── */}
+                    <section className="mx-auto max-w-6xl px-6 py-20 lg:px-8 lg:py-24">
+                        <HowItWorksDeck />
+                    </section>
+
+                    {/* ── Closing CTA ── */}
+                    <section className="mx-auto max-w-6xl px-6 pb-24 lg:px-8">
+                        <div className="relative px-6 py-14 text-center sm:px-12">
+                            <h2 className="relative text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
+                                Ready to join your CS community?
+                            </h2>
+                            <p className="relative mx-auto mt-4 max-w-xl text-base leading-7 text-muted-foreground">
+                                Free for students. Bring your notes, your
+                                projects and your questions.
+                            </p>
+                            <div className="relative mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+                                <Link
+                                    href={primaryCta.href}
+                                    className="inline-flex items-center justify-center gap-2 rounded-md bg-[#0042FF] px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#0042FF]/90"
+                                >
+                                    {primaryCta.label}
+                                    <ArrowRight className="size-4" />
+                                </Link>
+                                {!auth.user && (
+                                    <Link
+                                        href={login().url}
+                                        className="inline-flex items-center justify-center rounded-md border border-border px-5 py-3 text-sm font-semibold transition-colors hover:border-primary/40"
+                                    >
+                                        I already have an account
+                                    </Link>
+                                )}
+                            </div>
+                        </div>
+                    </section>
+                </main>
+
                 {/* ── Footer ── */}
-                <footer className="relative z-10 border-t border-border px-6 py-6 flex items-center justify-center gap-6">
-                    <span className="text-xs text-muted-foreground">© {new Date().getFullYear()} DEV-CRAFT</span>
-                    <Link href="/privacy" className="text-xs text-primary underline underline-offset-2 hover:text-primary/80 transition-colors">Privacy Policy</Link>
-                    <Link href="/terms" className="text-xs text-primary underline underline-offset-2 hover:text-primary/80 transition-colors">Terms of Service</Link>
+                <footer className="relative z-10 border-t border-border">
+                    <div className="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-8 sm:flex-row sm:items-center sm:justify-between lg:px-8">
+                        <div className="flex items-center gap-3">
+                            <img
+                                src="/newIcons/navbarIcon.png"
+                                alt=""
+                                className="size-6 object-contain"
+                            />
+                            <span className="text-xs text-muted-foreground">
+                                © {new Date().getFullYear()} DEV-CRAFT · Built
+                                by CS students, for CS students
+                            </span>
+                        </div>
+                        <nav
+                            aria-label="Footer"
+                            className="flex flex-wrap gap-x-6 gap-y-2"
+                        >
+                            {navLinks.map((link) => (
+                                <Link
+                                    key={link.href}
+                                    href={link.href}
+                                    className="text-xs text-muted-foreground transition-colors hover:text-foreground"
+                                >
+                                    {link.label}
+                                </Link>
+                            ))}
+                            <Link
+                                href="/privacy"
+                                className="text-xs text-primary underline underline-offset-2 transition-colors hover:text-primary/80"
+                            >
+                                Privacy Policy
+                            </Link>
+                            <Link
+                                href="/terms"
+                                className="text-xs text-primary underline underline-offset-2 transition-colors hover:text-primary/80"
+                            >
+                                Terms of Service
+                            </Link>
+                        </nav>
+                    </div>
                 </footer>
             </div>
         </>

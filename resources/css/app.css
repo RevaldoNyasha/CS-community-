@@ -441,3 +441,27 @@
     background: var(--border);
     margin: 0 4px;
 }
+/* ===== WELCOME: "How it works" card deck ===== */
+
+/* Front card flies out to the side, then tucks in behind the stack at --deck-end */
+@keyframes deck-shuffle {
+    0% {
+        transform: translateY(0) scale(1) rotate(0deg);
+        opacity: 1;
+        z-index: 40;
+    }
+    45% {
+        transform: translate(55%, 12px) scale(0.97) rotate(9deg);
+        opacity: 1;
+        z-index: 40;
+    }
+    55% {
+        z-index: 1;
+    }
+    100% {
+        transform: var(--deck-end);
+        opacity: var(--deck-end-opacity);
+        z-index: 1;
+    }
+}
+
