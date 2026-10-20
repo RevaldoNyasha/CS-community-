@@ -33,8 +33,8 @@ export function SidebarRow({
                 className={cn(
                     'flex size-9 shrink-0 items-center justify-center rounded-full transition-colors',
                     active
-                        ? 'bg-primary text-primary-foreground'
-                        : 'bg-secondary text-foreground',
+                        ? 'text-primary'
+                        : 'text-foreground',
                 )}
             >
                 <Icon className="size-[18px]" />

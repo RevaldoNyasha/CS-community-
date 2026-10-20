@@ -49,7 +49,7 @@ const memberTabs: Tab[] = [
 const guestTabs = memberTabs.slice(1, 4);
 
 const roundButton =
-    'relative flex size-10 items-center justify-center rounded-full bg-secondary text-foreground transition-colors hover:bg-secondary/70 data-[state=open]:bg-primary/20 data-[state=open]:text-primary';
+    'relative flex size-10 items-center justify-center rounded-full text-foreground transition-colors hover:text-primary data-[state=open]:text-primary';
 
 function Badge({ count }: { count: number }) {
     if (count <= 0) return null;
@@ -172,7 +172,7 @@ function SettingsButton() {
         <Link
             href={editProfile()}
             aria-current={active ? 'page' : undefined}
-            className={cn(roundButton, active && 'bg-primary/20 text-primary')}
+            className={cn(roundButton, active && 'text-primary')}
         >
             <span className="sr-only">Settings</span>
             <Settings className="size-5" />
