@@ -355,21 +355,6 @@ export default function Welcome() {
                                 they build, all in one moderated, structured
                                 space.
                             </p>
-                            <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
-                                <Link
-                                    href={primaryCta.href}
-                                    className="group inline-flex items-center justify-center gap-2 rounded-md bg-[#0042FF] px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#0042FF]/90"
-                                >
-                                    {primaryCta.label}
-                                    <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
-                                </Link>
-                                <Link
-                                    href="/resources"
-                                    className="inline-flex items-center justify-center rounded-md border border-border bg-card/60 px-5 py-3 text-sm font-semibold transition-colors hover:border-primary/40 hover:bg-card"
-                                >
-                                    Browse resources
-                                </Link>
-                            </div>
                         </div>
 
                         {/* Preview panel */}
