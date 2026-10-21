@@ -1,6 +1,6 @@
 import type { CSSProperties } from 'react';
 
-export const BRAND_BLUE = '#0042FF';
+export const BRAND_BLUE = '#1A66FF';
 
 // Put on a page's root element to swap the theme's primary for the brand blue on everything
 // inside. Utilities read --color-*, which resolve at :root, so those are overridden directly.

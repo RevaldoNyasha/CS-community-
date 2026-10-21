@@ -3,8 +3,11 @@
 namespace App\Http\Middleware;
 
 use App\Models\Conversation;
+use App\Models\Tag;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -49,8 +52,30 @@ class HandleInertiaRequests extends Middleware
             ],
             // Number of chats with unread messages, for the navbar badge.
             'unreadMessages' => fn () => $this->unreadConversationCount($request),
+            // Tags listed in the app sidebar. Changes slowly, so it is cached rather than queried on every visit.
+            'popularTags' => fn () => $this->popularTags(),
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
         ];
+    }
+
+    /**
+     * @return Collection<int, Tag>|array{}
+     */
+    private function popularTags(): mixed
+    {
+        try {
+            return Cache::remember(
+                'dashboard:popular-tags',
+                now()->addMinutes(10),
+                fn () => Tag::query()
+                    ->withCount('posts')
+                    ->orderByDesc('posts_count')
+                    ->limit(10)
+                    ->get(),
+            );
+        } catch (QueryException) {
+            return [];
+        }
     }
 
     private function unreadConversationCount(Request $request): int

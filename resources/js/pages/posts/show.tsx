@@ -17,7 +17,7 @@ type Props = { post: Post };
 
 /* Deterministic avatar colour from a name string */
 const AVATAR_COLORS = [
-    '#0042ff',
+    '#1a66ff',
     '#0891b2',
     '#a78bfa',
     '#fbbf24',

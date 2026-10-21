@@ -1,19 +1,9 @@
-import { Link, usePage } from '@inertiajs/react';
-import {
-    BookOpen,
-    FolderGit2,
-    House,
-    Lightbulb,
-    Menu,
-    MessageCircle,
-    Settings,
-    Trophy,
-} from 'lucide-react';
-import type { LucideIcon } from 'lucide-react';
-import type { ReactNode } from 'react';
+import { Link, router, usePage } from '@inertiajs/react';
+import { Bell, ChevronDown, Menu, Moon, Search, Sun, X } from 'lucide-react';
+import type { FormEvent, ReactNode } from 'react';
 import { useState } from 'react';
+import { AppSidebarContent, SidebarLogo } from '@/components/app-sidebar';
 import { InitialsAvatar } from '@/components/initials-avatar';
-import { SidebarRow } from '@/components/sidebar-row';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -28,40 +18,99 @@ import {
 } from '@/components/ui/sheet';
 import { Spinner } from '@/components/ui/spinner';
 import { UserMenuContent } from '@/components/user-menu-content';
-import { useCurrentUrl } from '@/hooks/use-current-url';
+import { useAppearance } from '@/hooks/use-appearance';
 import { useInitials } from '@/hooks/use-initials';
 import { timeAgo } from '@/lib/time-ago';
 import { cn } from '@/lib/utils';
-import { dashboard, home, login, register } from '@/routes';
-import { edit as editProfile } from '@/routes/profile';
+import { login, register } from '@/routes';
 import type { ConversationSummary, SharedData } from '@/types';
 
-type Tab = { title: string; href: string; icon: LucideIcon };
+const iconButton =
+    'relative flex size-10 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground data-[state=open]:bg-secondary data-[state=open]:text-foreground';
 
-const memberTabs: Tab[] = [
-    { title: 'Dashboard', href: dashboard().url, icon: House },
-    { title: 'Resources', href: '/resources', icon: BookOpen },
-    { title: 'Hackathons', href: '/hackathons', icon: Trophy },
-    { title: 'Projects', href: '/projects', icon: FolderGit2 },
-    { title: 'Suggestions', href: '/suggestions', icon: Lightbulb },
+// Listing pages search themselves; elsewhere, search goes to the dashboard (or resources for guests).
+const searchablePages = [
+    '/resources',
+    '/projects',
+    '/hackathons',
+    '/dashboard',
 ];
 
-const guestTabs = memberTabs.slice(1, 4);
+// Rendered with `key={current}`, so it starts over with the URL's term whenever another control
+// changes the search (e.g. "Clear filters").
+function GlobalSearch({ path, current }: { path: string; current: string }) {
+    const { auth } = usePage<SharedData>().props;
+    const [value, setValue] = useState(current);
 
-const roundButton =
-    'relative flex size-10 items-center justify-center rounded-full text-foreground transition-colors hover:text-primary data-[state=open]:text-primary';
+    const target = searchablePages.includes(path)
+        ? path
+        : auth.user
+          ? '/dashboard'
+          : '/resources';
 
-function Badge({ count }: { count: number }) {
-    if (count <= 0) return null;
+    const go = (search: string) => router.get(target, search ? { search } : {});
+
+    const submit = (event: FormEvent) => {
+        event.preventDefault();
+        go(value.trim());
+    };
 
     return (
-        <span className="absolute -top-1 -right-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-red-600 px-1 text-[11px] font-bold text-white">
-            {count > 20 ? '20+' : count}
-        </span>
+        <form
+            role="search"
+            onSubmit={submit}
+            className="relative w-full max-w-[370px]"
+        >
+            <Search className="pointer-events-none absolute top-1/2 left-3.5 size-[17px] -translate-y-1/2 text-muted-foreground" />
+            <input
+                type="search"
+                value={value}
+                onChange={(e) => setValue(e.target.value)}
+                placeholder="Search posts, tags, or topics..."
+                aria-label="Search posts, tags, or topics"
+                className="h-10 w-full rounded-full border border-border bg-card pr-9 pl-10 text-[13px] text-foreground placeholder:text-muted-foreground focus:border-primary/60 focus:ring-2 focus:ring-primary/25 focus:outline-none [&::-webkit-search-cancel-button]:hidden"
+            />
+            {value && (
+                <button
+                    type="button"
+                    onClick={() => {
+                        setValue('');
+                        if (current) go('');
+                    }}
+                    aria-label="Clear search"
+                    className="absolute top-1/2 right-3 -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground"
+                >
+                    <X className="size-3.5" />
+                </button>
+            )}
+        </form>
     );
 }
 
-function MessagesMenu() {
+function ThemeToggle() {
+    const { resolvedAppearance, updateAppearance } = useAppearance();
+    const dark = resolvedAppearance === 'dark';
+    const label = dark ? 'Switch to light theme' : 'Switch to dark theme';
+
+    return (
+        <button
+            type="button"
+            onClick={() => updateAppearance(dark ? 'light' : 'dark')}
+            className={iconButton}
+            title={label}
+        >
+            <span className="sr-only">{label}</span>
+            {dark ? (
+                <Sun className="size-5" strokeWidth={1.75} />
+            ) : (
+                <Moon className="size-5" strokeWidth={1.75} />
+            )}
+        </button>
+    );
+}
+
+// The bell lists recent chats; the red dot means some have unread messages.
+function NotificationsMenu() {
     const unread = usePage<SharedData>().props.unreadMessages ?? 0;
     // null while loading; fetched each time the menu opens so it is always fresh
     const [conversations, setConversations] = useState<
@@ -90,15 +139,20 @@ function MessagesMenu() {
     return (
         <DropdownMenu onOpenChange={load}>
             <DropdownMenuTrigger asChild>
-                <button type="button" className={roundButton}>
-                    <span className="sr-only">Messages</span>
-                    <MessageCircle className="size-5" />
-                    <Badge count={unread} />
+                <button type="button" className={iconButton}>
+                    <span className="sr-only">
+                        Notifications
+                        {unread > 0 ? ` (${unread} unread chats)` : ''}
+                    </span>
+                    <Bell className="size-5" strokeWidth={1.75} />
+                    {unread > 0 && (
+                        <span className="absolute top-2 right-2.5 size-2 rounded-full bg-red-500 ring-2 ring-background" />
+                    )}
                 </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-80 p-2">
                 <div className="flex items-center justify-between px-2 pt-1 pb-2">
-                    <p className="text-lg font-semibold">Chats</p>
+                    <p className="text-base font-semibold">Messages</p>
                     <Link
                         href="/messages"
                         className="text-sm font-medium text-primary hover:text-primary/80"
@@ -129,7 +183,7 @@ function MessagesMenu() {
                             <Link href={`/messages?c=${c.id}`}>
                                 <InitialsAvatar
                                     name={c.with.name}
-                                    className="size-12"
+                                    className="size-11"
                                 />
                                 <div className="min-w-0 flex-1">
                                     <p className="truncate text-sm font-medium">
@@ -164,154 +218,77 @@ function MessagesMenu() {
     );
 }
 
-function SettingsButton() {
-    const { url } = usePage();
-    const active = url.startsWith('/settings');
-
-    return (
-        <Link
-            href={editProfile()}
-            aria-current={active ? 'page' : undefined}
-            className={cn(roundButton, active && 'text-primary')}
-        >
-            <span className="sr-only">Settings</span>
-            <Settings className="size-5" />
-        </Link>
-    );
-}
-
-// Facebook-style top bar: logo on the left, page tabs in the centre, round action
-// buttons and the account menu on the right. Below lg, `mobileMenu` opens in a slide-out sheet.
-export function AppNavbar({ mobileMenu }: { mobileMenu?: ReactNode }) {
+// Top bar: the phone menu button, the search box, then the theme toggle, notifications and the
+// account menu. `sidebarSection` is passed on to the phone menu.
+export function AppNavbar({ sidebarSection }: { sidebarSection?: ReactNode }) {
     const { auth } = usePage<SharedData>().props;
-    const { isCurrentUrl } = useCurrentUrl();
     const getInitials = useInitials();
-    const tabs = auth.user ? memberTabs : guestTabs;
+    const { url } = usePage();
+    const [path, query = ''] = url.split('?');
+    const currentSearch = new URLSearchParams(query).get('search') ?? '';
 
     return (
-        <header className="sticky top-0 z-40 border-b border-border bg-card">
-            <div className="flex h-14 items-center justify-between gap-2 px-3 sm:px-4">
-                {/* Left */}
-                <div className="flex flex-1 items-center gap-2">
-                    <Sheet>
-                        <SheetTrigger asChild>
-                            <button
-                                type="button"
-                                className={cn(
-                                    roundButton,
-                                    mobileMenu ? 'lg:hidden' : 'md:hidden',
-                                )}
-                            >
-                                <span className="sr-only">Open menu</span>
-                                <Menu className="size-5" />
-                            </button>
-                        </SheetTrigger>
-                        <SheetContent
-                            side="left"
-                            className="w-80 overflow-y-auto p-3"
+        <header className="sticky top-0 z-40 border-b border-sidebar-border bg-background/90 backdrop-blur-md">
+            <div className="flex h-16 items-center gap-3 px-4 sm:px-6">
+                {/* On desktop the sidebar has the navigation; on phones it opens from here */}
+                <Sheet>
+                    <SheetTrigger asChild>
+                        <button
+                            type="button"
+                            className={cn(iconButton, 'shrink-0 lg:hidden')}
                         >
-                            <SheetTitle className="sr-only">Menu</SheetTitle>
-                            <div className="pt-8">
-                                {/* The centre tabs are hidden below md, so list them here */}
-                                <div className="space-y-1 md:hidden">
-                                    {tabs.map((tab) => (
-                                        <SidebarRow
-                                            key={tab.title}
-                                            icon={tab.icon}
-                                            label={tab.title}
-                                            href={tab.href}
-                                            active={isCurrentUrl(tab.href)}
-                                        />
-                                    ))}
-                                </div>
-                                {mobileMenu && (
-                                    <>
-                                        <hr className="mx-2 my-4 border-border md:hidden" />
-                                        {mobileMenu}
-                                    </>
-                                )}
-                            </div>
-                        </SheetContent>
-                    </Sheet>
-                    <Link
-                        href={auth.user ? dashboard() : home()}
-                        className="flex shrink-0 items-center gap-2"
+                            <span className="sr-only">Open menu</span>
+                            <Menu className="size-5" />
+                        </button>
+                    </SheetTrigger>
+                    <SheetContent
+                        side="left"
+                        className="w-72 gap-0 overflow-y-auto bg-sidebar p-0"
                     >
-                        <img
-                            src="/newIcons/navbarIcon.png"
-                            alt=""
-                            className="size-10 object-contain"
-                        />
-                        <span className="text-lg font-bold tracking-wide">
-                            DEV-CRAFT
-                        </span>
-                    </Link>
+                        <SheetTitle className="sr-only">Menu</SheetTitle>
+                        <SidebarLogo />
+                        <AppSidebarContent section={sidebarSection} />
+                    </SheetContent>
+                </Sheet>
+
+                <div className="min-w-0 flex-1">
+                    <GlobalSearch
+                        key={currentSearch}
+                        path={path}
+                        current={currentSearch}
+                    />
                 </div>
 
-                {/* Centre tabs */}
-                <nav
-                    aria-label="Main"
-                    className="hidden h-full items-stretch md:flex"
-                >
-                    {tabs.map((tab) => {
-                        const active = isCurrentUrl(tab.href);
-
-                        return (
-                            <Link
-                                key={tab.title}
-                                href={tab.href}
-                                prefetch
-                                title={tab.title}
-                                aria-current={active ? 'page' : undefined}
-                                className={cn(
-                                    'relative flex w-20 items-center justify-center transition-colors lg:w-28',
-                                    active
-                                        ? 'text-primary'
-                                        : 'text-muted-foreground hover:text-foreground',
-                                )}
-                            >
-                                <span
-                                    className={cn(
-                                        'flex h-12 w-full items-center justify-center rounded-lg',
-                                        !active && 'hover:bg-secondary/60',
-                                    )}
-                                >
-                                    <tab.icon className="size-6" />
-                                </span>
-                                <span className="sr-only">{tab.title}</span>
-                                {active && (
-                                    <span className="absolute inset-x-0 bottom-0 h-[3px] rounded-t bg-primary" />
-                                )}
-                            </Link>
-                        );
-                    })}
-                </nav>
-
-                {/* Right */}
-                <div className="flex flex-1 items-center justify-end gap-2">
+                <div className="flex shrink-0 items-center gap-1 sm:gap-2">
+                    <ThemeToggle />
                     {auth.user ? (
                         <>
-                            <MessagesMenu />
-                            <SettingsButton />
+                            <NotificationsMenu />
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
                                     <button
                                         type="button"
-                                        className="rounded-full transition-opacity hover:opacity-90"
+                                        className="group ml-1 flex items-center gap-1.5 rounded-full"
                                         data-test="user-menu-button"
                                     >
                                         <span className="sr-only">Account</span>
-                                        {auth.user.avatar ? (
-                                            <img
-                                                src={auth.user.avatar}
-                                                alt=""
-                                                className="size-10 rounded-full object-cover"
-                                            />
-                                        ) : (
-                                            <span className="flex size-10 items-center justify-center rounded-full bg-secondary text-sm font-semibold">
-                                                {getInitials(auth.user.name)}
-                                            </span>
-                                        )}
+                                        <span className="relative">
+                                            {auth.user.avatar ? (
+                                                <img
+                                                    src={auth.user.avatar}
+                                                    alt=""
+                                                    className="size-10 rounded-full object-cover"
+                                                />
+                                            ) : (
+                                                <span className="flex size-10 items-center justify-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">
+                                                    {getInitials(
+                                                        auth.user.name,
+                                                    )}
+                                                </span>
+                                            )}
+                                            <span className="absolute right-0 bottom-0 size-2.5 rounded-full bg-emerald-500 ring-2 ring-background" />
+                                        </span>
+                                        <ChevronDown className="hidden size-4 text-muted-foreground transition-transform group-data-[state=open]:rotate-180 sm:block" />
                                     </button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent
@@ -326,13 +303,13 @@ export function AppNavbar({ mobileMenu }: { mobileMenu?: ReactNode }) {
                         <>
                             <Link
                                 href={login()}
-                                className="px-2 text-sm font-semibold transition-colors hover:text-muted-foreground"
+                                className="px-2 text-sm font-semibold whitespace-nowrap transition-colors hover:text-muted-foreground"
                             >
                                 Log in
                             </Link>
                             <Link
                                 href={register()}
-                                className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+                                className="rounded-full bg-primary px-4 py-2 text-sm font-semibold whitespace-nowrap text-primary-foreground transition-colors hover:bg-primary/90"
                             >
                                 Sign up
                             </Link>

@@ -5,6 +5,7 @@ export type * from './navigation';
 export type * from './ui';
 
 import type { Auth } from './auth';
+import type { Tag } from './models';
 
 export type SharedData = {
     name: string;
@@ -15,5 +16,7 @@ export type SharedData = {
     };
     /** Chats with unread messages, for the navbar badge. */
     unreadMessages?: number;
+    /** Most used tags, listed in the app sidebar. */
+    popularTags?: Tag[];
     [key: string]: unknown;
 };

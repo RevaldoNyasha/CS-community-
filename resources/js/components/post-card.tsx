@@ -11,7 +11,7 @@ type Props = {
 
 /* Deterministic color for the squared avatar */
 const AVATAR_COLORS = [
-    { bg: '#0042ff', text: '#ffffff' }, // brand blue
+    { bg: '#1a66ff', text: '#ffffff' }, // brand blue
     { bg: '#0891b2', text: '#ffffff' }, // teal
     { bg: '#7c3aed', text: '#ffffff' }, // purple
     { bg: '#f59e0b', text: '#0a0a0a' }, // amber

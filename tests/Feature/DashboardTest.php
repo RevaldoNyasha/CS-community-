@@ -52,3 +52,58 @@ test('an unknown dashboard post type is ignored', function () {
             ->has('recentPosts', 2)
             ->where('filters.type', null));
 });
+
+test('the dashboard feed can be filtered by topic', function () {
+    $this->actingAs(User::factory()->create());
+    $tag = Tag::create(['name' => 'llm']);
+    Post::factory()->approved()->resource()->create(['title' => 'Prompting tips'])->tags()->attach($tag);
+    Post::factory()->approved()->resource()->create(['title' => 'Career fair']);
+
+    $this->get(route('dashboard', ['topic' => 'ai']))
+        ->assertInertia(fn (Assert $page) => $page
+            ->has('recentPosts', 1)
+            ->where('recentPosts.0.title', 'Prompting tips')
+            ->where('filters.topic', 'ai'));
+});
+
+test('the dashboard feed can be sorted by most liked', function () {
+    $this->actingAs(User::factory()->create());
+    Post::factory()->approved()->resource()->create(['title' => 'Quiet post']);
+    $liked = Post::factory()->approved()->resource()->create(['title' => 'Liked post', 'created_at' => now()->subDay()]);
+    $liked->likes()->create(['user_id' => User::factory()->create()->id]);
+
+    $this->get(route('dashboard', ['sort' => 'popular']))
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('recentPosts.0.title', 'Liked post')
+            ->where('filters.sort', 'popular'));
+});
+
+test('the dashboard shows community stats', function () {
+    $this->actingAs(User::factory()->create());
+    Post::factory(3)->approved()->resource()->create();
+
+    $this->get(route('dashboard'))
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('stats.posts', 3)
+            ->has('stats.members')
+            ->has('stats.topics')
+            ->has('stats.trending'));
+});
+
+test('the dashboard stats update as soon as the data changes', function () {
+    $this->actingAs($user = User::factory()->create());
+    $pending = Post::factory()->resource()->for($user)->create();
+    Post::factory()->approved()->resource()->for($user)->create();
+
+    $this->get(route('dashboard'))
+        ->assertInertia(fn (Assert $page) => $page->where('stats.posts', 1)->where('stats.trending', 0));
+
+    $pending->update(['status' => 'approved']);
+    $pending->likes()->create(['user_id' => User::factory()->create()->id]);
+
+    $this->get(route('dashboard'))
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('stats.posts', 2)
+            ->where('stats.members', User::count())
+            ->where('stats.trending', 1));
+});

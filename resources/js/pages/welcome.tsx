@@ -230,7 +230,7 @@ export default function Welcome() {
                                 {auth.user ? (
                                     <Link
                                         href={dashboard().url}
-                                        className="rounded-md bg-[#0042FF] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#0042FF]/90"
+                                        className="rounded-md bg-[#1A66FF] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#1A66FF]/90"
                                     >
                                         Dashboard
                                     </Link>
@@ -244,7 +244,7 @@ export default function Welcome() {
                                         </Link>
                                         <Link
                                             href={register().url}
-                                            className="rounded-md bg-[#0042FF] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#0042FF]/90"
+                                            className="rounded-md bg-[#1A66FF] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#1A66FF]/90"
                                         >
                                             Get started
                                         </Link>
@@ -323,7 +323,7 @@ export default function Welcome() {
                                             )}
                                             <Link
                                                 href={primaryCta.href}
-                                                className="mt-2 block rounded-md bg-[#0042FF] px-4 py-3 text-center text-base font-semibold text-white hover:bg-[#0042FF]/90"
+                                                className="mt-2 block rounded-md bg-[#1A66FF] px-4 py-3 text-center text-base font-semibold text-white hover:bg-[#1A66FF]/90"
                                             >
                                                 {auth.user
                                                     ? 'Dashboard'
@@ -427,7 +427,7 @@ export default function Welcome() {
                             <div className="relative mt-8 flex flex-col justify-center gap-3 sm:flex-row">
                                 <Link
                                     href={primaryCta.href}
-                                    className="inline-flex items-center justify-center gap-2 rounded-md bg-[#0042FF] px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#0042FF]/90"
+                                    className="inline-flex items-center justify-center gap-2 rounded-md bg-[#1A66FF] px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#1A66FF]/90"
                                 >
                                     {primaryCta.label}
                                     <ArrowRight className="size-4" />

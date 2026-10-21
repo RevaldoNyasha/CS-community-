@@ -26,10 +26,10 @@
         {{-- and to paint an instant loading splash before the JS bundle mounts --}}
         <style>
             html {
-                background-color: #c8cacd;
+                background-color: #f4f6fb;
             }
             html.dark {
-                background-color: #0d1117;
+                background-color: #121212;
             }
 
             #app-splash {
@@ -41,11 +41,11 @@
                 align-items: center;
                 justify-content: center;
                 gap: 20px;
-                background-color: #c8cacd;
+                background-color: #f4f6fb;
                 transition: opacity 0.3s ease;
             }
             html.dark #app-splash {
-                background-color: #0d1117;
+                background-color: #121212;
             }
             #app-splash.is-hidden {
                 opacity: 0;
@@ -61,7 +61,7 @@
                 height: 32px;
                 border-radius: 50%;
                 border: 3px solid rgba(100, 116, 139, 0.25);
-                border-top-color: #0042FF;
+                border-top-color: #1A66FF;
                 animation: app-splash-spin 0.7s linear infinite;
             }
             @keyframes app-splash-spin {

@@ -351,7 +351,7 @@ export default function Messages({ conversations, active }: Props) {
         <AppLayout sidebar={list} mainClassName="p-0 sm:p-0">
             <Head title="Messages" />
 
-            <div className="h-[calc(100svh-3.5rem)]">
+            <div className="h-[calc(100svh-4rem)]">
                 {active ? (
                     <Thread conversation={active} />
                 ) : (

@@ -1,7 +1,7 @@
 import { cn } from '@/lib/utils';
 
 const COLORS = [
-    '#0042ff',
+    '#1a66ff',
     '#0891b2',
     '#7c3aed',
     '#d97706',

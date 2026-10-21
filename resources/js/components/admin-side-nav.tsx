@@ -9,7 +9,7 @@ import {
     Users,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
-import { SidebarRow } from '@/components/sidebar-row';
+import { SidebarLink, SidebarSectionTitle } from '@/components/app-sidebar';
 
 const sections: { title: string; href: string; icon: LucideIcon }[] = [
     { title: 'Overview', href: '/admin', icon: LayoutDashboard },
@@ -21,7 +21,7 @@ const sections: { title: string; href: string; icon: LucideIcon }[] = [
     { title: 'Settings', href: '/admin/settings', icon: Settings },
 ];
 
-// Left sidebar for the admin area, in the same style as the dashboard sidebar.
+// Admin sections, shown in the app sidebar under the main links.
 export function AdminSideNav() {
     const path = usePage().url.split('?')[0];
 
@@ -32,19 +32,19 @@ export function AdminSideNav() {
             : path === href || path.startsWith(`${href}/`);
 
     return (
-        <nav aria-label="Admin">
-            <h2 className="px-2 pt-1 pb-3 text-2xl font-bold">Admin</h2>
+        <div>
+            <SidebarSectionTitle>Admin</SidebarSectionTitle>
             <div className="space-y-1">
                 {sections.map((section) => (
-                    <SidebarRow
+                    <SidebarLink
                         key={section.href}
                         icon={section.icon}
-                        label={section.title}
+                        title={section.title}
                         href={section.href}
                         active={isActive(section.href)}
                     />
                 ))}
             </div>
-        </nav>
+        </div>
     );
 }
