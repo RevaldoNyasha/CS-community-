@@ -1,6 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
 import {
-    Compass,
     Folder,
     FolderGit2,
     House,
@@ -20,11 +19,10 @@ type NavLink = {
     title: string;
     href: string;
     icon: LucideIcon;
-    isActive: (path: string, query: URLSearchParams) => boolean;
+    isActive: (path: string) => boolean;
     badge?: number;
 };
 
-const onDashboard = (path: string) => path === '/dashboard';
 const startsWith = (prefix: string) => (path: string) =>
     path === prefix || path.startsWith(`${prefix}/`);
 
@@ -34,15 +32,7 @@ function memberLinks(unread: number): NavLink[] {
             title: 'Dashboard',
             href: dashboard().url,
             icon: House,
-            isActive: (path, q) =>
-                onDashboard(path) && q.get('sort') !== 'popular',
-        },
-        {
-            title: 'Explore',
-            href: '/dashboard?sort=popular',
-            icon: Compass,
-            isActive: (path, q) =>
-                onDashboard(path) && q.get('sort') === 'popular',
+            isActive: (path) => path === '/dashboard',
         },
         {
             title: 'Hackathons',
@@ -225,8 +215,7 @@ type Props = {
 export function AppSidebarContent({ section }: Props) {
     const { auth, unreadMessages = 0 } = usePage<SharedData>().props;
     const { url } = usePage();
-    const [path, search = ''] = url.split('?');
-    const query = new URLSearchParams(search);
+    const path = url.split('?')[0];
     const links = auth.user ? memberLinks(unreadMessages) : guestLinks;
 
     return (
@@ -238,7 +227,7 @@ export function AppSidebarContent({ section }: Props) {
                         icon={link.icon}
                         title={link.title}
                         href={link.href}
-                        active={link.isActive(path, query)}
+                        active={link.isActive(path)}
                         badge={link.badge}
                     />
                 ))}
